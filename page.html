@@ -322,6 +322,33 @@
     </div>
   </div>
 
+  <!-- SLIDE 11: Finish -->
+  <div class="slide" data-slide="11">
+    <div class="slide-label">Mission Complete</div>
+
+    <h1>Nice work.<br>
+    You spotted the <span class="accent-word">risks.</span></h1>
+
+    <p style="margin-top:20px;font-size:16px;max-width:650px;">
+      Most people see a printer as just a machine that prints paper.
+      Engineers look deeper — at the <strong style="color:#f0f0f0">systems, data flows, and hidden risks</strong>.
+    </p>
+
+    <p style="margin-top:16px;font-size:15px;max-width:650px;color:#aaa;">
+      Today you identified vulnerabilities, traced real attacks, and thought about how to prevent them.
+      That mindset is what turns someone from a user of technology into someone who can
+      <span class="accent-word">design safer systems.</span>
+    </p>
+
+    <div class="purpose-box" style="margin-top:30px;">
+      <strong style="color:var(--accent)">Keep thinking like this.</strong><br>
+      Every device has hidden assumptions.  
+      The best engineers are the ones who question them before attackers do.
+    </div>
+
+    <button class="select-btn" onclick="goTo(1)">RESTART MISSION ↺</button>
+  </div>
+
 </div>
 
 <div class="bottom-nav">
@@ -331,7 +358,7 @@
 
 <script>
   let current = 1;
-  const total = 10;
+  const total = 11;
 
   function buildDots() {
     const bar = document.getElementById('progressBar');
