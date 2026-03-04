@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Engineering Misuse Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0d0d0d; --surface: #161616; --border: #2a2a2a;
+    --accent: #e8ff47; --accent2: #ff4747; --accent3: #47c8ff;
+    --text: #f0f0f0; --muted: #888;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+  .topbar-title { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
+  .slide-counter { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 2px; }
+  .progress-bar { display: flex; gap: 6px; align-items: center; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.3s ease; cursor: pointer; }
+  .dot.active { background: var(--accent); width: 20px; border-radius: 3px; }
+  .dot.visited { background: var(--muted); }
+
+  .slides-wrapper { flex: 1; overflow: hidden; position: relative; }
+  .slide { position: absolute; inset: 0; padding: 44px 64px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: translateX(60px); transition: all 0.45s cubic-bezier(0.4,0,0.2,1); pointer-events: none; overflow-y: auto; }
+  .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+  .slide.exit { opacity: 0; transform: translateX(-60px); }
+
+  .slide-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-size: clamp(30px,5vw,54px); font-weight: 800; line-height: 1.05; }
+  h2 { font-size: clamp(20px,3vw,36px); font-weight: 700; line-height: 1.1; }
+  p { font-size: 15px; line-height: 1.7; color: #ccc; max-width: 680px; }
+  .accent-word { color: var(--accent); }
+  .danger-word { color: var(--accent2); }
+
+  .bottom-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+  .nav-btn { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 24px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+  .nav-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+  .nav-btn.primary:hover { background: #d4e83e; }
+
+  /* SLIDE 1 */
+  .object-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 220px)); gap: 16px; margin-top: 32px; }
+  .object-card { border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 28px 24px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; overflow: hidden; }
+  .object-card:hover { border-color: var(--accent); transform: translateY(-3px); background: #1e1e1e; }
+  .object-card.selected { border-color: var(--accent); background: #1e1e00; }
+  .object-card .icon { font-size: 40px; margin-bottom: 14px; display: block; }
+  .object-card .name { font-size: 14px; font-weight: 700; }
+  .object-card .tag { margin-top: 8px; font-size: 10px; font-family: 'Space Mono', monospace; color: var(--muted); }
+  .object-card .soon { position: absolute; top: 10px; right: 10px; font-size: 9px; background: var(--border); color: var(--muted); padding: 2px 6px; border-radius: 3px; font-family: 'Space Mono', monospace; }
+  .select-btn { margin-top: 32px; display: inline-block; background: var(--accent); color: #000; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 14px 32px; border: none; cursor: pointer; transition: all 0.2s; border-radius: 4px; }
+  .select-btn:hover { background: #d4e83e; transform: translateY(-1px); }
+
+
+  /* SLIDE 3 — Components */
+  .purpose-box { border-left: 3px solid var(--accent); padding: 13px 18px; background: #161600; margin: 18px 0 20px; font-size: 14px; line-height: 1.7; color: #ccc; max-width: 720px; border-radius: 0 6px 6px 0; }
+  .components-list { display: flex; flex-direction: column; gap: 9px; max-width: 720px; }
+  .component-item { display: flex; gap: 15px; align-items: flex-start; padding: 11px 15px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; }
+  .component-item:hover { border-color: #444; }
+  .comp-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .comp-name { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 2px; font-family: 'Space Mono', monospace; }
+  .comp-desc { font-size: 13px; color: #aaa; line-height: 1.5; }
+
+  /* QUIZ shared */
+  .quiz-q { font-size: clamp(14px,1.8vw,18px); color: #bbb; margin: 16px 0 20px; max-width: 580px; line-height: 1.55; }
+  .options-grid { display: flex; flex-direction: column; gap: 10px; max-width: 580px; }
+  .option-btn { padding: 14px 20px; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; border-radius: 6px; transition: all 0.25s; display: flex; align-items: center; gap: 14px; }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent3); background: #0d1a1f; }
+  .option-btn.correct { border-color: var(--accent); background: #1a1e00; color: var(--accent); }
+  .option-btn.wrong { border-color: var(--accent2); background: #1a0000; color: var(--accent2); }
+  .option-letter { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); min-width: 20px; }
+  .feedback-box { margin-top: 14px; padding: 13px 17px; border-radius: 6px; font-size: 13px; line-height: 1.6; max-width: 580px; display: none; }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct-fb { background: #1a1e00; border: 1px solid var(--accent); color: var(--accent); }
+  .feedback-box.wrong-fb { background: #1a0000; border: 1px solid var(--accent2); color: #ff8888; }
+
+  /* ATTACK STORY */
+  .attack-card { max-width: 700px; margin-top: 20px; }
+  .attack-block { padding: 17px 21px; margin-bottom: 9px; border-radius: 6px; border-left: 3px solid transparent; }
+  .attack-block.setup { background: #0d1219; border-color: var(--accent3); }
+  .attack-block.payload { background: #1a0d0d; border-color: var(--accent2); }
+  .attack-block.result { background: #0d1200; border-color: var(--accent); }
+  .attack-tag { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 7px; }
+  .attack-block.setup .attack-tag { color: var(--accent3); }
+  .attack-block.payload .attack-tag { color: var(--accent2); }
+  .attack-block.result .attack-tag { color: var(--accent); }
+  .attack-block p { font-size: 14px; color: #ccc; max-width: none; }
+
+  /* TEASER */
+  .teaser-big { font-size: clamp(32px,4.5vw,56px); font-weight: 800; line-height: 1.05; margin: 16px 0 20px; }
+  .hint-box { margin-top: 26px; padding: 15px 20px; border: 1px dashed var(--border); border-radius: 6px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--muted); max-width: 500px; }
+  .hint-box span { color: var(--accent); }
+
+  /* FIX */
+  .think-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 740px; margin-top: 22px; }
+  .think-card { padding: 17px 19px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+  .think-card.good { border-color: rgba(232,255,71,0.3); background: #131600; }
+  .think-card.wasteful { border-color: rgba(255,150,0,0.3); background: #150a00; }
+  .think-title { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 9px; }
+  .think-card.good .think-title { color: var(--accent); }
+  .think-card.wasteful .think-title { color: #ff9600; }
+  .think-card p { font-size: 13px; color: #bbb; line-height: 1.6; }
+
+  /* LEARNINGS */
+  .learning-list { display: flex; flex-direction: column; gap: 9px; max-width: 660px; margin-top: 22px; }
+  .learning-item { display: flex; gap: 18px; align-items: flex-start; padding: 13px 17px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; animation: fadeUp 0.4s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  .learning-num { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--accent); min-width: 28px; line-height: 1; }
+  .learning-text { font-size: 14px; color: #ccc; line-height: 1.6; }
+  .learning-text strong { color: var(--text); }
+
+  .cbs-highlight { margin-top: 14px; padding: 13px 17px; background: #0a0a0a; border: 1px solid #333; border-radius: 6px; font-size: 13px; color: #999; max-width: 680px; line-height: 1.7; }
+  .cbs-highlight strong { color: var(--accent); }
+
+  .slide::-webkit-scrollbar { width: 4px; }
+  .slide::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Engineering Misuse · Prototype v0.1</div>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="slide-counter" id="slideCounter">01 / 10</div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- SLIDE 1: Choose Object -->
+<div class="slide active" data-slide="1">
+    <div class="slide-label">Step 01 — The Mission</div>
+    
+    <h1>Which device<br>do you want to<br><span class="accent-word">explore?</span></h1>
+    
+    <div class="purpose-box" style="margin-top: 20px; border-color: var(--accent3);">
+      <p style="font-size: 14px; font-weight: 700; color: var(--accent3); margin-bottom: 5px;">YOUR MISSION:</p>
+      <ul style="list-style: none; font-size: 13px; color: #bbb;">
+        <li>• Identify how everyday devices can be <span class="danger-word">misused</span>.</li>
+        <li>• Spot the risks before they become <span class="danger-word">attacks</span>.</li>
+        <li>• See what others <span class="accent-word">overlook</span>.</li>
+      </ul>
+    </div>
+
+    <div class="object-grid">
+      <div class="object-card selected" onclick="selectCard(this)">
+        <span class="icon">🖨️</span>
+        <div class="name">Office Printer</div>
+        <div class="tag">Multi-Function Device</div>
+      </div>
+      <div class="object-card" style="opacity:0.4;pointer-events:none;">
+        <span class="soon">SOON</span>
+        <span class="icon">📡</span>
+        <div class="name">Wi-Fi Router</div>
+        <div class="tag">Network Device</div>
+      </div>
+      <div class="object-card" style="opacity:0.4;pointer-events:none;">
+        <span class="soon">SOON</span>
+        <span class="icon">🔒</span>
+        <div class="name">Smart Lock</div>
+        <div class="tag">IoT Device</div>
+      </div>
+    </div>
+    
+    <button class="select-btn" onclick="goNext()">CONTINUE →</button>
+  </div>
+
+
+
+  <!-- SLIDE 3: Components -->
+  <div class="slide" data-slide="3">
+    <div class="slide-label">Step 03 — What is a Printer?</div>
+    <h2>The Office <span class="accent-word">Printer</span></h2>
+    <div class="purpose-box">
+      A printer's primary purpose is to <strong style="color:#f0f0f0">convert digital data into a permanent physical document</strong> on paper. In an office it is a shared hub for printing, scanning, and copying.
+    </div>
+    <div class="components-list">
+      <div class="component-item">
+        <span class="comp-icon">⚙️</span>
+        <div><div class="comp-name">Mechanical Engine</div><div class="comp-desc">Uses a laser and 180°C fuser to bond toner to paper at high speeds.</div></div>
+      </div>
+      <div class="component-item">
+        <span class="comp-icon">🌐</span>
+        <div><div class="comp-name">Internet Connectivity</div><div class="comp-desc">Connects to the office network so any user can print or scan remotely.</div></div>
+      </div>
+      <div class="component-item">
+        <span class="comp-icon">💾</span>
+        <div><div class="comp-name">Hard Disk Storage</div><div class="comp-desc">Buffers large print jobs and retains a copy of every document processed.</div></div>
+      </div>
+      <div class="component-item">
+        <span class="comp-icon">🧠</span>
+        <div><div class="comp-name">Embedded SoC</div><div class="comp-desc">The "brain" — runs the OS, processes images, coordinates mechanical timing.</div></div>
+      </div>
+      <div class="component-item">
+        <span class="comp-icon">📷</span>
+        <div><div class="comp-name">Image Sensor (Scanner)</div><div class="comp-desc">Converts physical pages into digital files for email or cloud storage.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: QUIZ 1 -->
+  <div class="slide" data-slide="4">
+    <div class="slide-label">Step 04 — Challenge #1</div>
+    <h2>The printer is <em>live</em> in<br>the office. Which components<br>make it <span class="danger-word">vulnerable?</span></h2>
+    <p class="quiz-q">An attacker wants to spy on documents while the printer is actively used. Which combination gives them a way in?</p>
+    <div class="options-grid" id="quiz1Options">
+      <button class="option-btn" onclick="quiz1Answer(this,'A')"><span class="option-letter">A</span> Mechanical Engine &amp; Fuser</button>
+      <button class="option-btn" onclick="quiz1Answer(this,'B')"><span class="option-letter">B</span> Internet Connectivity &amp; Hard Disk Storage</button>
+      <button class="option-btn" onclick="quiz1Answer(this,'C')"><span class="option-letter">C</span> Image Sensor only</button>
+    </div>
+    <div class="feedback-box" id="quiz1Feedback"></div>
+  </div>
+
+  <!-- SLIDE 5: Story 1 — Network Attack -->
+  <div class="slide" data-slide="5">
+    <div class="slide-label">Step 05 — Story #1</div>
+    <h2>The <span class="danger-word">Invisible Proxy</span> Attack</h2>
+    <p style="font-size:14px;color:#aaa;margin-top:8px;">Printers on office Wi-Fi or Ethernet are a silent entry point into the entire network.</p>
+    <div class="attack-card">
+      <div class="attack-block setup">
+        <div class="attack-tag">🔍 The Attack</div>
+        <p>Hackers scan the network for printers with default admin passwords like <code style="color:var(--accent3);background:#0d0d0d;padding:2px 6px;border-radius:3px;">admin / 1111</code>. Once inside, they install a small malicious script — without ever touching the hardware.</p>
+      </div>
+      <div class="attack-block payload">
+        <div class="attack-tag">💣 The Payload</div>
+        <p>The printer is reprogrammed to <strong style="color:#ff8888">BCC (Carbon Copy)</strong> every outgoing scan and every incoming print job to an external server the attacker controls.</p>
+      </div>
+      <div class="attack-block result">
+        <div class="attack-tag">📋 The Result</div>
+        <p>The hacker receives a digital copy of every sensitive contract as it is signed — while employees see a perfectly normal printer doing its job.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Teaser -->
+  <div class="slide" data-slide="6">
+    <div class="slide-label">Step 06 — Round 2</div>
+    <p style="color:var(--muted);font-size:14px;">But the story doesn't end there —</p>
+    <div class="teaser-big">What happens<br>when the printer<br><span class="accent-word">leaves</span> the building?</div>
+    <p style="font-size:15px;color:var(--muted);max-width:500px;line-height:1.7;">The network attack needs the printer to be online. But the <em>second</em> vulnerability exists even after the machine is powered off, unplugged, and thrown away.</p>
+    <div class="hint-box">Think: <span>Which component stores a permanent copy of every document ever printed or scanned?</span></div>
+  </div>
+
+  <!-- SLIDE 7: QUIZ 2 -->
+  <div class="slide" data-slide="7">
+    <div class="slide-label">Step 07 — Challenge #2</div>
+    <h2>The printer is <em>discarded</em>.<br>Which component still<br>holds <span class="danger-word">all the secrets?</span></h2>
+    <p class="quiz-q">A company sells its old printer for $50. An attacker buys it. Without any network, which single component lets them recover years of sensitive documents?</p>
+    <div class="options-grid" id="quiz2Options">
+      <button class="option-btn" onclick="quiz2Answer(this,'A')"><span class="option-letter">A</span> Internet Connectivity</button>
+      <button class="option-btn" onclick="quiz2Answer(this,'B')"><span class="option-letter">B</span> Hard Disk Storage</button>
+      <button class="option-btn" onclick="quiz2Answer(this,'C')"><span class="option-letter">C</span> Mechanical Engine</button>
+    </div>
+    <div class="feedback-box" id="quiz2Feedback"></div>
+  </div>
+
+  <!-- SLIDE 8: Story 2 — Discarded Goldmine -->
+  <div class="slide" data-slide="8">
+    <div class="slide-label">Step 08 — Story #2</div>
+    <h2>The <span class="danger-word">Discarded</span> Goldmine</h2>
+    <div class="attack-card">
+      <div class="attack-block setup">
+        <div class="attack-tag">📦 The Setup</div>
+        <p>When a company's lease ends or the machine breaks, the printer is sold at auction or sent to a recycler — hard drive still inside, full of data.</p>
+      </div>
+      <div class="attack-block payload">
+        <div class="attack-tag">💣 The Attack</div>
+        <p>An attacker buys the machine for <strong style="color:#ff8888">$50</strong>, pulls the hard drive out, plugs it into a cheap SATA-to-USB adapter, and uses free forensic software to recover every scan, fax, and print job ever stored.</p>
+      </div>
+      <div class="attack-block result">
+        <div class="attack-tag">📋 The Result</div>
+        <p>Every sensitive document that ever passed through that printer is now in the attacker's hands — for the price of a pizza.</p>
+      </div>
+    </div>
+    <div class="cbs-highlight">
+      🎙️ <strong>Real World:</strong> A CBS News investigation bought used printers from a warehouse and recovered thousands of pages of medical records, social security numbers, and police warrants still sitting on the drives.
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Fix -->
+  <div class="slide" data-slide="9">
+    <div class="slide-label">Step 09 — What's the Fix?</div>
+    <h2>How do you <span class="accent-word">solve</span> this?</h2>
+    <div class="think-grid">
+      <div class="think-card good">
+        <div class="think-title">✅ During Use</div>
+        <p>Use <strong style="color:var(--accent)">Disk Overwrite Kits</strong> — electronically shred every bit of data the moment each print job finishes.</p>
+      </div>
+      <div class="think-card good">
+        <div class="think-title">✅ End of Life</div>
+        <p><strong style="color:var(--accent)">Physically destroy</strong> the hard drive with a drill before the machine leaves the building permanently.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Learnings -->
+  <div class="slide" data-slide="10">
+    <div class="slide-label">Step 10 — Key Takeaways</div>
+    <h2>What did we <span class="accent-word">learn?</span></h2>
+    <div class="learning-list">
+      <div class="learning-item" style="animation-delay:0.05s">
+        <div class="learning-num">01</div>
+        <div class="learning-text"><strong>Clearly define the main objective</strong> and side objectives of your engineering tool.</div>
+      </div>
+      <div class="learning-item" style="animation-delay:0.1s">
+        <div class="learning-num">02</div>
+        <div class="learning-text"><strong>Clearly list out all the components</strong> required for that tool.</div>
+      </div>
+      <div class="learning-item" style="animation-delay:0.15s">
+        <div class="learning-num">03</div>
+        <div class="learning-text"><strong>Understand each component's functioning</strong> — not just what it does, but how it stores and transmits data.</div>
+      </div>
+      <div class="learning-item" style="animation-delay:0.2s">
+        <div class="learning-num">04</div>
+        <div class="learning-text"><strong>Research past misuse</strong> of those components in the real world before you deploy.</div>
+      </div>
+      <div class="learning-item" style="animation-delay:0.25s">
+        <div class="learning-num">05</div>
+        <div class="learning-text"><strong>Think of possible future misuses</strong> in your system — both while active <em>and</em> at end of life.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()" disabled>← PREV</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+</div>
+
+<script>
+  let current = 1;
+  const total = 10;
+
+  function buildDots() {
+    const bar = document.getElementById('progressBar');
+    bar.innerHTML = '';
+    for (let i = 1; i <= total; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === current ? ' active' : i < current ? ' visited' : '');
+      d.onclick = () => goTo(i);
+      bar.appendChild(d);
+    }
+  }
+
+  function updateUI() {
+    document.getElementById('slideCounter').textContent =
+      String(current).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    document.getElementById('prevBtn').disabled = current === 1;
+    document.getElementById('nextBtn').textContent = current === total ? 'FINISH ✓' : 'NEXT →';
+    buildDots();
+  }
+
+  function goTo(n) {
+    if (n === current) return;
+    const slides = document.querySelectorAll('.slide');
+    slides.forEach(s => {
+      s.classList.remove('active','exit');
+      if (parseInt(s.dataset.slide) === n) s.classList.add('active');
+      else if (parseInt(s.dataset.slide) === current) s.classList.add('exit');
+    });
+    current = n;
+    updateUI();
+    setTimeout(() => document.querySelectorAll('.slide.exit').forEach(s => s.classList.remove('exit')), 500);
+  }
+
+  function goNext() { if (current < total && current == 1) goTo(current + 2);
+                      else if(current < total) goTo(current + 1);
+  }
+  function goPrev() { if (current > 1) goTo(current - 1); }
+
+  function selectCard(el) {
+    document.querySelectorAll('.object-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  /* QUIZ 1 — correct: B (Internet + Hard Disk) */
+  function quiz1Answer(btn, key) {
+    document.querySelectorAll('#quiz1Options .option-btn').forEach(b => b.disabled = true);
+    const fb = document.getElementById('quiz1Feedback');
+    if (key === 'B') {
+      btn.classList.add('correct');
+      fb.className = 'feedback-box show correct-fb';
+      fb.textContent = '✓ Correct! Internet Connectivity gives the attacker a way in, and Hard Disk Storage silently holds every document they want to steal. Together they are the attack surface.';
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('#quiz1Options .option-btn')[1].classList.add('correct');
+      fb.className = 'feedback-box show wrong-fb';
+      fb.textContent = key === 'A'
+        ? '✗ The Mechanical Engine is purely physical — heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
+        : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing — it needs a disk and a network to become dangerous.';
+    }
+  }
+
+  /* QUIZ 2 — correct: B (Hard Disk only) */
+  function quiz2Answer(btn, key) {
+    document.querySelectorAll('#quiz2Options .option-btn').forEach(b => b.disabled = true);
+    const fb = document.getElementById('quiz2Feedback');
+    if (key === 'B') {
+      btn.classList.add('correct');
+      fb.className = 'feedback-box show correct-fb';
+      fb.textContent = '✓ Correct! The Hard Disk retains every document even after the printer is powered off and discarded. No network needed — just a $5 adapter and free software is enough to recover everything.';
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('#quiz2Options .option-btn')[1].classList.add('correct');
+      fb.className = 'feedback-box show wrong-fb';
+      fb.textContent = key === 'A'
+        ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant — but the hard disk keeps all data regardless.'
+        : '✗ The Mechanical Engine is all moving parts — drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
+    }
+  }
+
+  updateUI();
+</script>
+</body>
+</html>
