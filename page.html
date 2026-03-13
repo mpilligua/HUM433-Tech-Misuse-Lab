@@ -185,6 +185,96 @@
   .quiz-img-item { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
   .quiz-img-item img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 10px; border: 1px solid var(--border); background: #0d0d0d; transition: opacity 0.2s; }
   .quiz-img-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent3); letter-spacing: 3px; text-transform: uppercase; text-align: center; }
+
+  /* ── SLIDE 5: Component Drag & Drop ── */
+  .drag-drop-container { width: 100%; max-width: 1200px; display: flex; gap: 48px; align-items: flex-start; }
+  .drag-drop-left { flex: 1; display: flex; flex-direction: column; }
+  .drag-drop-right { flex: 1; display: flex; flex-direction: column; }
+  .component-label { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .components-pool { display: flex; flex-wrap: wrap; gap: 12px; min-height: 200px; padding: 16px; background: var(--surface); border: 2px dashed var(--border); border-radius: 8px; }
+  .draggable-component { padding: 14px 18px; background: var(--accent); color: #000; border-radius: 6px; cursor: grab; user-select: none; font-weight: 600; font-size: 14px; font-family: 'Syne', sans-serif; transition: all 0.2s; flex-shrink: 0; }
+  .draggable-component:active { cursor: grabbing; }
+  .draggable-component.dragging { opacity: 0.6; }
+  .drop-zones { display: flex; flex-direction: column; gap: 12px; }
+  .drop-zone { min-height: 56px; padding: 14px 18px; border: 2px dashed var(--border); border-radius: 8px; background: transparent; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 13px; color: var(--muted); transition: all 0.3s; position: relative; }
+  .drop-zone.active { border-color: var(--accent3); background: rgba(71,200,255,0.05); }
+  .drop-zone.filled { border-color: var(--accent); background: rgba(232,255,71,0.05); }
+  .dropped-item { padding: 10px 16px; background: var(--accent); color: #000; border-radius: 6px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .dropped-item .remove-btn { margin-left: auto; cursor: pointer; font-weight: 700; background: rgba(0,0,0,0.3); padding: 0 6px; border-radius: 3px; }
+  .drag-drop-footer { margin-top: 24px; display: flex; gap: 12px; }
+  .check-btn { background: var(--accent); color: #000; padding: 12px 32px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 2px; transition: all 0.2s; }
+  .check-btn:hover:not(:disabled) { background: #d4e83e; transform: translateY(-2px); }
+  .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .reset-btn { background: transparent; color: var(--text); padding: 12px 32px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-weight: 700; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 2px; transition: all 0.2s; }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .results-panel { margin-top: 32px; display: none; padding: 24px; border-radius: 8px; font-size: 16px; line-height: 1.7; }
+  .results-panel.show { display: block; }
+  .results-panel.success { border: 1px solid var(--accent); background: #1a1e00; color: var(--accent); }
+  .results-panel.incomplete { border: 1px solid rgba(255,71,71,0.3); background: #1a0000; color: #ff8888; }
+  .result-item { display: flex; gap: 12px; align-items: center; margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 4px; font-size: 14px; }
+  .result-item.correct { color: var(--accent); }
+  .result-item.incorrect { color: #ff8888; }
+  .result-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* ── Image-based Drag & Drop ── */
+  .image-drag-container { 
+    width: 100%; 
+    max-width: 1100px; 
+    display: flex; 
+    gap: 40px; 
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  .printer-pool { 
+    flex: 1;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 20px;
+  }
+  .printer-canvas { 
+    position: relative; 
+    display: inline-block; 
+    width: 100%;
+    max-width: 600px;
+  }
+  .printer-canvas img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border); }
+  .components-sidebar {
+    flex: 0 0 300px;
+    background: var(--surface);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .component-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .drop-overlay { position: absolute; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; background: rgba(232,255,71,0.05); border-radius: 4px; }
+  .drop-overlay:hover { background: rgba(232,255,71,0.15); border-color: var(--accent3); }
+  .drop-overlay.filled { background: rgba(232,255,71,0.25); border-color: var(--accent); }
+  .drop-overlay::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; border-radius: 4px; transition: opacity 0.4s ease; opacity: 1; pointer-events: none; }
+  .drop-overlay.correct::before { opacity: 0; }
+  .component-label-overlay { position: absolute; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; z-index: 2; }
+  .drop-overlay:hover .component-label-overlay { opacity: 0.6; }
+  .drop-overlay.correct .component-label-overlay { opacity: 1; }
+  .placed-component { padding: 12px 14px; background: var(--accent); color: #000; border-radius: 6px; cursor: grab; user-select: none; font-weight: 600; font-size: 13px; font-family: 'Syne', sans-serif; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
+  .placed-component:active { cursor: grabbing; }
+  .placed-component.placed { display: none; }
+  .placed-component.error { background: #ff4747 !important; }
+  .placed-component.correct-placed { background: #000 !important; color: #666; cursor: default; }\n  .placed-component.correct-placed .remove-badge { display: none; }
+  @keyframes pulse-red { 0%, 100% { background: #ff4747; } 50% { background: #ff8888; } }
+  .flash-error { animation: flash-screen 0.6s ease-in-out; }
+  @keyframes flash-screen { 0% { background: rgba(255, 71, 71, 0.2); } 50% { background: rgba(255, 71, 71, 0.05); } 100% { background: transparent; } }
+  .flash-success { animation: flash-screen-green 0.6s ease-in-out; }
+  @keyframes flash-screen-green { 0% { background: rgba(71, 255, 150, 0.2); } 50% { background: rgba(71, 255, 150, 0.05); } 100% { background: transparent; } }
+  .completion-message { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--accent); color: #000; padding: 40px 60px; border-radius: 12px; font-size: 36px; font-weight: 800; letter-spacing: 2px; z-index: 1000; animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .completion-message.show { display: block; }
+  @keyframes pop-in { from { transform: translate(-50%, -50%) scale(0.6); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
 </style>
 </head>
 <body>
@@ -208,20 +298,20 @@
       </div>
       <div class="obj-item">
         <div class="obj-num">02</div>
-        <div class="obj-text"><strong>Understand how each component works</strong> — including how it stores, moves, and exposes data.</div>
+        <div class="obj-text"><strong>Ponder upon the possible missuses of each component</strong> and <strong> how it might show up in your design </div>
       </div>
       <div class="obj-item">
         <div class="obj-num">03</div>
-        <div class="obj-text"><strong>Identify real-world misuse patterns</strong> that have already been exploited by attackers.</div>
+        <div class="obj-text"><strong>Explore real-world misuse patterns</strong> that have already been exploited by attackers.</div>
       </div>
-      <div class="obj-item">
+      <!-- <div class="obj-item">
         <div class="obj-num">04</div>
         <div class="obj-text"><strong>Think critically about your own designs</strong> — spotting vulnerabilities before others do.</div>
-      </div>
-      <div class="obj-item">
-        <div class="obj-num">05</div>
-        <div class="obj-text"><strong>Apply a repeatable framework</strong> for misuse analysis to any device you design or use.</div>
-      </div>
+      </div> -->
+      <!-- <div class="obj-item"> -->
+        <!-- <div class="obj-num">05</div> -->
+        <!-- <div class="obj-text"><strong>Apply a repeatable framework</strong> for misuse analysis to any device you design or use.</div> -->
+      <!-- </div> -->
     </div>
   </div>
 
@@ -269,7 +359,7 @@
         A printer's primary purpose is to <strong style="color:#f0f0f0">convert digital data into a permanent physical document</strong> on paper. In an office it is a shared hub for printing, scanning, and copying.
       </div>
     </div>
-    <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:560px;">
+    <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:200px;">
       <img src="images/image.png" alt="Printer components diagram" class="printer-image" style="max-height:480px; width:100%; object-fit:contain;"
            onerror="this.style.display='none'; document.getElementById('imgPlaceholder').style.display='flex';" />
       <div id="imgPlaceholder" class="img-placeholder" style="display:none; height:400px;">
@@ -279,8 +369,33 @@
     </div>
   </div>
 
-  <!-- ═══ SLIDE 5: QUIZ 1 ═══ -->
+  <!-- ═══ SLIDE 5: Component Drag & Drop (Image-based) ═══ -->
   <div class="slide" data-slide="5" style="padding:36px 5%; align-items:center; justify-content:center;">
+    <div style="width:100%; max-width:1200px;">
+      <h2 style="margin-bottom:8px;">Match the <span class="accent-word">Components</span></h2>
+      <p style="font-size:16px;color:var(--muted);margin-bottom:28px;">Drag components from the list onto the printer image. When you place a component correctly, the label will appear and it will be removed from the list.</p>
+      
+      <div class="image-drag-container">
+        <div class="printer-pool">
+          <div class="printer-canvas" id="printerCanvas">
+            <img src="images/image.png" alt="Printer with component zones" />
+            <div class="completion-message" id="completionMessage">Well done!</div>
+          </div>
+          <div class="drag-drop-footer">
+            <button class="reset-btn" onclick="resetImageGame()">RESET</button>
+          </div>
+        </div>
+        
+        <div class="components-sidebar">
+          <div class="sidebar-label">Components to Place</div>
+          <div class="component-list" id="componentList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 6: QUIZ 1 ═══ -->
+  <div class="slide" data-slide="6" style="padding:36px 5%; align-items:center; justify-content:center;">
     <div class="quiz-layout">
       <div class="quiz-left">
         <!-- <div class="slide-label">Challenge #1</div> -->
@@ -297,8 +412,8 @@
     </div>
   </div>
 
-    <!-- ═══ SLIDE 6: Story 1 ═══ -->
-  <div class="slide" data-slide="6" style="flex-direction:column; align-items:center; justify-content:center; gap:20px; padding:36px 8%; text-align:center;">
+    <!-- ═══ SLIDE 7: Story 1 ═══ -->
+  <div class="slide" data-slide="7" style="flex-direction:column; align-items:center; justify-content:center; gap:20px; padding:36px 8%; text-align:center;">
     <div>
       <!-- <div class="slide-label">Story #1</div> -->
       <h2>The <span class="danger-word">Invisible Proxy</span> Attack</h2>
@@ -314,8 +429,8 @@
     </div>
   </div>
 
-    <!-- SLIDE 6: Teaser -->
-  <div class="slide" data-slide="7">
+    <!-- SLIDE 8: Teaser -->
+  <div class="slide" data-slide="8">
     <!-- <div class="slide-label">Round 2</div> -->
     <p style="color:var(--muted);font-size:26px;">But the story doesn't end there —</p>
     <div class="teaser-big">What happens<br>when the printer<br><span class="accent-word">leaves</span> the building?</div>
@@ -323,8 +438,8 @@
     <!-- <div class="hint-box">Think: <span>Which component stores a permanent copy of every document ever printed or scanned?</span></div> -->
   </div>
 
-  <!-- SLIDE 7: QUIZ 2 -->
-  <div class="slide" data-slide="8" style="padding:36px 5%; align-items:center; justify-content:center;">
+  <!-- SLIDE 9: QUIZ 2 -->
+  <div class="slide" data-slide="9" style="padding:36px 5%; align-items:center; justify-content:center;">
     <div class="quiz-layout">
       <div class="quiz-left">
         <!-- <div class="slide-label">Challenge #2</div> -->
@@ -341,8 +456,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 8: Story 2 — Discarded Goldmine -->
-  <div class="slide" data-slide="9">
+  <!-- SLIDE 10: Story 2 — Discarded Goldmine -->
+  <div class="slide" data-slide="10">
     <!-- <div class="slide-label">Story #2</div> -->
     <h2> <span class="danger-word">Real World</span> Story</h2>
     <img src="images/real_story.png" alt="Real story illustration" style="max-width: 700px; width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-top: 24px;" onerror="this.style.display='none';" />
@@ -384,15 +499,15 @@
     </div>
   </div> -->
 
-  <!-- SLIDE 10: Learnings -->
-  <div class="slide" data-slide="10">
+  <!-- SLIDE 11: Learnings -->
+  <div class="slide" data-slide="11">
     <!-- <div class="slide-label">Key Takeaways</div> -->
     <h2>Rate what you <span class="accent-word">learned</span></h2>
     <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1–5 stars based on how well you understood it.</p>
     <div class="learning-list">
       <div class="learning-item" style="animation-delay:0.05s">
         <div class="learning-num">01</div>
-        <div class="learning-text">Define the tool's purpose</div>
+        <div class="learning-text">List all components</div>
         <div class="star-row" data-item="1">
           <span class="star" onclick="rateLearning(1,1)">★</span>
           <span class="star" onclick="rateLearning(1,2)">★</span>
@@ -403,7 +518,7 @@
       </div>
       <div class="learning-item" style="animation-delay:0.1s">
         <div class="learning-num">02</div>
-        <div class="learning-text">List all components</div>
+        <div class="learning-text">Spot future misuse risks</div>
         <div class="star-row" data-item="2">
           <span class="star" onclick="rateLearning(2,1)">★</span>
           <span class="star" onclick="rateLearning(2,2)">★</span>
@@ -414,7 +529,9 @@
       </div>
       <div class="learning-item" style="animation-delay:0.15s">
         <div class="learning-num">03</div>
-        <div class="learning-text">Spot future misuse risks</div>
+        <div class="learning-text">
+          Identify how each component might be misused
+        </div>
         <div class="star-row" data-item="3">
           <span class="star" onclick="rateLearning(3,1)">★</span>
           <span class="star" onclick="rateLearning(3,2)">★</span>
@@ -426,8 +543,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 11: Finish -->
-  <div class="slide" data-slide="11">
+  <!-- SLIDE 12: Finish -->
+  <div class="slide" data-slide="12">
     <h1>Nice work.<br></h1>
     <h2>You spotted the <span class="accent-word">risks.</span></h2>
 
@@ -462,7 +579,7 @@
 
 <script>
   let current = 1;
-  const total = 11;
+  const total = 12;
 
   function buildDots() {
     const bar = document.getElementById('progressBar');
@@ -574,6 +691,221 @@
 
   document.querySelector('[data-slide="1"]').classList.add('active');
   updateUI();
+
+  /* ══════════════════════════════════════════════════════════════ */
+  /* DRAG & DROP: Component Matching on Printer Image */
+  /* ══════════════════════════════════════════════════════════════ */
+
+  const CORRECT_COMPONENTS_IMAGE = {
+    'Internet Connectivity': { y: [38, 199], x: [706, 966] },
+    'Hard Disk Storage': { y: [228, 427], x: [706, 966] },
+    'Embedded SoC': { y: [498, 711], x: [706, 966] },
+    'Image Sensor': { y: [782, 944], x: [706, 966] },
+    'Mechanical Engine': { y: [782, 951], x: [33, 281] }
+  };
+
+  const INCORRECT_COMPONENTS = ['GPU', 'CD reader', 'GPS', 'Vacuum Pump', 'Windows OS'];
+  const ALL_COMPONENTS_LIST = [...Object.keys(CORRECT_COMPONENTS_IMAGE), ...INCORRECT_COMPONENTS].sort(() => Math.random() - 0.5);
+
+  let gameState = {
+    placedComponents: {} // { componentName: zoneIndex }
+  };
+
+  function initImageDragGame() {
+    const canvas = document.getElementById('printerCanvas');
+    const componentList = document.getElementById('componentList');
+    const img = canvas.querySelector('img');
+
+    if (!canvas || !componentList) return;
+
+    // Crucial: Wait for image to have dimensions
+    if (img.naturalWidth === 0) {
+      img.onload = initImageDragGame; // Retry once loaded
+      return;
+    }
+
+    gameState.placedComponents = {};
+    componentList.innerHTML = '';
+
+    // Get canvas and image dimensions
+    const rect = img.getBoundingClientRect();
+    const imgWidth = rect.width;
+    const imgHeight = rect.height;
+
+    // Create drop zone overlays on the image
+    Object.entries(CORRECT_COMPONENTS_IMAGE).forEach(([componentName, coords], zoneIdx) => {
+      // Convert normalized coords (0-1000 scale) to pixel coords
+      const y_min = (coords.y[0] / 1000) * imgHeight;
+      const y_max = (coords.y[1] / 1000) * imgHeight;
+      const x_min = (coords.x[0] / 1000) * imgWidth;
+      const x_max = (coords.x[1] / 1000) * imgWidth;
+
+      const zone = document.createElement('div');
+      zone.className = 'drop-overlay';
+      zone.dataset.componentName = componentName;
+      zone.dataset.zoneIndex = zoneIdx;
+      zone.style.top = y_min + 'px';
+      zone.style.left = x_min + 'px';
+      zone.style.width = (x_max - x_min) + 'px';
+      zone.style.height = (y_max - y_min) + 'px';
+
+      zone.innerHTML = `
+        <div class="component-label-overlay">${componentName}</div>
+      `;
+
+      // Drag events for drop zones
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        zone.classList.add('active');
+      });
+
+      zone.addEventListener('dragleave', (e) => {
+        zone.classList.remove('active');
+      });
+
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('active');
+        const draggedComponentName = e.dataTransfer.getData('componentName');
+        placeComponentOnZone(zone, draggedComponentName);
+      });
+
+      canvas.appendChild(zone);
+    });
+
+    // Create draggable component list sidebar
+    ALL_COMPONENTS_LIST.forEach((comp) => {
+      const compEl = document.createElement('div');
+      compEl.className = 'placed-component';
+      compEl.draggable = true;
+      compEl.dataset.componentName = comp;
+      compEl.innerHTML = `
+        <span>${comp}</span>
+        <span class="remove-badge" onclick="removeComponentFromAnywhere(event, '${comp}')">×</span>
+      `;
+
+      compEl.addEventListener('dragstart', (e) => {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('componentName', comp);
+        compEl.classList.add('dragging');
+      });
+
+      compEl.addEventListener('dragend', (e) => {
+        compEl.classList.remove('dragging');
+      });
+
+      componentList.appendChild(compEl);
+    });
+  }
+
+  function placeComponentOnZone(zone, componentName) {
+    const expectedComponent = zone.dataset.componentName;
+    const compEl = document.querySelector(`[data-component-name="${componentName}"]`);
+    
+    // Check if it's the correct component for this zone
+    if (componentName === expectedComponent) {
+      // CORRECT placement
+      zone.dataset.placedComponent = componentName;
+      gameState.placedComponents[componentName] = zone.dataset.zoneIndex;
+      
+      // Uncover the label by removing the black overlay
+      zone.classList.add('filled', 'correct');
+      
+      // Remove component from the list completely
+      if (compEl) {
+        compEl.remove();
+      }
+      
+      // Flash green screen
+      const slide = document.querySelector('[data-slide="5"].active');
+      if (slide) {
+        slide.classList.add('flash-success');
+        setTimeout(() => slide.classList.remove('flash-success'), 600);
+      }
+      
+      // Check if all components are placed
+      if (Object.keys(gameState.placedComponents).length === 5) {
+        const completion = document.getElementById('completionMessage');
+        if (completion) {
+          completion.classList.add('show');
+        }
+      }
+    } else {
+      // INCORRECT placement
+      if (compEl) {
+        // Keep red on the component permanently
+        compEl.classList.add('error');
+      }
+      
+      // Flash red screen
+      const slide = document.querySelector('[data-slide="5"].active');
+      if (slide) {
+        slide.classList.add('flash-error');
+        setTimeout(() => slide.classList.remove('flash-error'), 600);
+      }
+    }
+  }
+
+  function removeComponentFromAnywhere(event, componentName) {
+    event.stopPropagation();
+    const zone = document.querySelector(`[data-placed-component="${componentName}"]`);
+    if (zone) {
+      zone.removeAttribute('data-placed-component');
+      zone.classList.remove('filled', 'correct');
+    }
+    delete gameState.placedComponents[componentName];
+    const compEl = document.querySelector(`[data-component-name="${componentName}"]`);
+    if (compEl) {
+      compEl.classList.remove('placed', 'error', 'correct-placed');
+      compEl.draggable = true;
+      compEl.style.display = '';  // Show it again
+    }
+    
+    // Hide completion message if showing
+    const completion = document.getElementById('completionMessage');
+    if (completion) {
+      completion.classList.remove('show');
+    }
+  }
+
+  function resetImageGame() {
+    gameState.placedComponents = {};
+    document.querySelectorAll('.drop-overlay').forEach(zone => {
+      zone.removeAttribute('data-placed-component');
+      zone.classList.remove('filled', 'correct');
+    });
+    
+    // Hide completion message
+    const completion = document.getElementById('completionMessage');
+    if (completion) {
+      completion.classList.remove('show');
+    }
+    
+    // Recreate the component list to show all components again
+    const componentList = document.getElementById('componentList');
+    const sidebardel = document.querySelector('.components-sidebar');
+    if (sidebardel) {
+      initImageDragGame();
+    }
+  }
+
+  // Initialize when slide 5 is active
+  const observer = new MutationObserver(() => {
+    const slide5 = document.querySelector('[data-slide="5"]');
+    if (slide5 && slide5.classList.contains('active')) {
+      if (!document.getElementById('componentList').innerHTML) {
+        setTimeout(initImageDragGame, 100);
+      }
+    }
+  });
+
+  observer.observe(document.body, { attributes: true, subtree: true });
+  setTimeout(initImageDragGame, 500);
+
+
 </script>
 </body>
 </html>
+
+
