@@ -166,14 +166,14 @@
   .quiz-layout { display: flex; flex-direction: row; width: 100%; max-width: 1160px; gap: 48px; align-items: flex-start; text-align: left; }
   .quiz-left { flex: 0 0 460px; display: flex; flex-direction: column; }
   .quiz-heading { font-size: clamp(20px,2.8vw,34px); font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
-  .quiz-q { font-size: 16px; color: #bbb; margin-bottom: 22px; line-height: 1.55; max-width: 100%; }
+  .quiz-q { font-size: 20px; color: #bbb; margin-bottom: 22px; line-height: 1.55; max-width: 100%; }
   .quiz-right {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
+    min-height: 460px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
@@ -183,9 +183,8 @@
   }
   .quiz-right.active { border-color: var(--accent3); background: #0a1419; }
   .quiz-img-item { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
-  .quiz-img-item img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 10px; border: 1px solid var(--border); background: #0d0d0d; transition: opacity 0.2s; }
+  .quiz-img-item img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 10px; border: 1px solid var(--border); background: #0d0d0d; transition: opacity 0.2s; }
   .quiz-img-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent3); letter-spacing: 3px; text-transform: uppercase; text-align: center; }
-  .quiz-img-hint { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; text-align: center; line-height: 1.8; }
 </style>
 </head>
 <body>
@@ -240,7 +239,7 @@
 
   <!-- ═══ SLIDE 3: Choose Device ═══ -->
   <div class="slide" data-slide="3">
-    <div class="slide-label">Step 01 — The Mission</div>
+    <!-- <div class="slide-label">The Mission</div> -->
     <h2>Which device do you<br>want to <span class="accent-word">explore?</span></h2>
     <div class="object-grid">
       <div class="object-card selected" onclick="selectCard(this)">
@@ -264,7 +263,7 @@
   <!-- ═══ SLIDE 4: Components ═══ -->
   <div class="slide" data-slide="4" style="flex-direction:row; align-items:center; justify-content:center; gap:48px; padding:36px 6%; text-align:left;">
     <div style="flex:0 0 auto; max-width:340px;">
-      <div class="slide-label">Step 02 — What is a Printer?</div>
+      <!-- <div class="slide-label">What is a Printer?</div> -->
       <h2>The Office <span class="accent-word">Printer</span></h2>
       <div class="purpose-box" style="margin-top:20px;">
         A printer's primary purpose is to <strong style="color:#f0f0f0">convert digital data into a permanent physical document</strong> on paper. In an office it is a shared hub for printing, scanning, and copying.
@@ -284,7 +283,7 @@
   <div class="slide" data-slide="5" style="padding:36px 5%; align-items:center; justify-content:center;">
     <div class="quiz-layout">
       <div class="quiz-left">
-        <div class="slide-label">Step 03 — Challenge #1</div>
+        <!-- <div class="slide-label">Challenge #1</div> -->
         <div class="quiz-heading">The printer is <em>live</em> in the office.<br>Which components make it <span class="danger-word">vulnerable?</span></div>
         <p class="quiz-q">An attacker wants to spy on documents while the printer is actively used. Which combination gives them a way in?</p>
         <div class="options-grid" id="quiz1Options">
@@ -294,21 +293,19 @@
         </div>
         <div class="feedback-box" id="quiz1Feedback"></div>
       </div>
-      <div class="quiz-right" id="quiz1Panel">
-        <div class="quiz-img-hint">Hover an option<br>to see the component</div>
-      </div>
+      <div class="quiz-right" id="quiz1Panel"></div>
     </div>
   </div>
 
     <!-- ═══ SLIDE 6: Story 1 ═══ -->
-  <div class="slide" data-slide="6" style="flex-direction:row; align-items:center; justify-content:center; gap:48px; padding:36px 6%; text-align:left;">
-    <div style="flex:0 0 auto; max-width:320px;">
-      <div class="slide-label">Step 04 — Story #1</div>
+  <div class="slide" data-slide="6" style="flex-direction:column; align-items:center; justify-content:center; gap:20px; padding:36px 8%; text-align:center;">
+    <div>
+      <!-- <div class="slide-label">Story #1</div> -->
       <h2>The <span class="danger-word">Invisible Proxy</span> Attack</h2>
-      <p class="story-intro">Printers on office Wi-Fi or Ethernet are a silent entry point into the entire network.</p>
+      <p class="story-intro" style="text-align:center; margin-bottom:0;">Printers on office Wi-Fi or Ethernet are a silent entry point into the entire network.</p>
     </div>
-    <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:600px;">
-      <img src="images/story1.png" alt="Invisible Proxy Attack diagram" style="width:100%; max-height:480px; object-fit:contain; border-radius:8px; border:1px solid var(--border);"
+    <div style="width:100%; display:flex; align-items:center; justify-content:center;">
+      <img src="images/story1.png" alt="Invisible Proxy Attack diagram" style="width:100%; max-height:520px; object-fit:contain; border-radius:8px; border:1px solid var(--border);"
            onerror="this.style.display='none'; document.getElementById('story1Placeholder').style.display='flex';" />
       <div id="story1Placeholder" class="img-placeholder" style="display:none; height:400px;">
         <span>🖼️</span>
@@ -319,7 +316,7 @@
 
     <!-- SLIDE 6: Teaser -->
   <div class="slide" data-slide="7">
-    <div class="slide-label">Step 06 — Round 2</div>
+    <!-- <div class="slide-label">Round 2</div> -->
     <p style="color:var(--muted);font-size:26px;">But the story doesn't end there —</p>
     <div class="teaser-big">What happens<br>when the printer<br><span class="accent-word">leaves</span> the building?</div>
     <!-- <p style="font-size:15px;color:var(--muted);max-width:500px;line-height:1.7;">The network attack needs the printer to be online. But the <em>second</em> vulnerability exists even after the machine is powered off, unplugged, and thrown away.</p> -->
@@ -330,7 +327,7 @@
   <div class="slide" data-slide="8" style="padding:36px 5%; align-items:center; justify-content:center;">
     <div class="quiz-layout">
       <div class="quiz-left">
-        <div class="slide-label">Step 07 — Challenge #2</div>
+        <!-- <div class="slide-label">Challenge #2</div> -->
         <div class="quiz-heading">The printer is <em>discarded</em>. Which component still holds <span class="danger-word">all the secrets?</span></div>
         <p class="quiz-q" style="margin-top:14px;">Imagine a company sells its old printer for $50. An attacker buys it. Without any network, which single component lets them recover years of sensitive documents?</p>
         <div class="options-grid" id="quiz2Options">
@@ -340,15 +337,13 @@
         </div>
         <div class="feedback-box" id="quiz2Feedback"></div>
       </div>
-      <div class="quiz-right" id="quiz2Panel">
-        <div class="quiz-img-hint">Hover an option<br>to see the component</div>
-      </div>
+      <div class="quiz-right" id="quiz2Panel"></div>
     </div>
   </div>
 
   <!-- SLIDE 8: Story 2 — Discarded Goldmine -->
   <div class="slide" data-slide="9">
-    <div class="slide-label">Step 08 — Story #2</div>
+    <!-- <div class="slide-label">Story #2</div> -->
     <h2> <span class="danger-word">Real World</span> Story</h2>
     <img src="images/real_story.png" alt="Real story illustration" style="max-width: 700px; width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-top: 24px;" onerror="this.style.display='none';" />
     <!-- <div class="attack-card">
@@ -391,9 +386,9 @@
 
   <!-- SLIDE 10: Learnings -->
   <div class="slide" data-slide="10">
-    <div class="slide-label">Step 10 — Key Takeaways</div>
+    <!-- <div class="slide-label">Key Takeaways</div> -->
     <h2>Rate what you <span class="accent-word">learned</span></h2>
-    <p style="font-size:14px;color:var(--muted);margin-top:8px;">Give each concept 1–5 stars based on how well you understood it.</p>
+    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1–5 stars based on how well you understood it.</p>
     <div class="learning-list">
       <div class="learning-item" style="animation-delay:0.05s">
         <div class="learning-num">01</div>
@@ -419,7 +414,7 @@
       </div>
       <div class="learning-item" style="animation-delay:0.15s">
         <div class="learning-num">03</div>
-        <div class="learning-text">Understand how data moves</div>
+        <div class="learning-text">Spot future misuse risks</div>
         <div class="star-row" data-item="3">
           <span class="star" onclick="rateLearning(3,1)">★</span>
           <span class="star" onclick="rateLearning(3,2)">★</span>
@@ -428,35 +423,11 @@
           <span class="star" onclick="rateLearning(3,5)">★</span>
         </div>
       </div>
-      <div class="learning-item" style="animation-delay:0.2s">
-        <div class="learning-num">04</div>
-        <div class="learning-text">Research past misuses</div>
-        <div class="star-row" data-item="4">
-          <span class="star" onclick="rateLearning(4,1)">★</span>
-          <span class="star" onclick="rateLearning(4,2)">★</span>
-          <span class="star" onclick="rateLearning(4,3)">★</span>
-          <span class="star" onclick="rateLearning(4,4)">★</span>
-          <span class="star" onclick="rateLearning(4,5)">★</span>
-        </div>
-      </div>
-      <div class="learning-item" style="animation-delay:0.25s">
-        <div class="learning-num">05</div>
-        <div class="learning-text">Spot future misuse risks</div>
-        <div class="star-row" data-item="5">
-          <span class="star" onclick="rateLearning(5,1)">★</span>
-          <span class="star" onclick="rateLearning(5,2)">★</span>
-          <span class="star" onclick="rateLearning(5,3)">★</span>
-          <span class="star" onclick="rateLearning(5,4)">★</span>
-          <span class="star" onclick="rateLearning(5,5)">★</span>
-        </div>
-      </div>
     </div>
   </div>
 
   <!-- SLIDE 11: Finish -->
   <div class="slide" data-slide="11">
-    <div class="slide-label">Mission Complete</div>
-
     <h1>Nice work.<br></h1>
     <h2>You spotted the <span class="accent-word">risks.</span></h2>
 
@@ -597,10 +568,11 @@
       const panel = document.getElementById(btn.dataset.panel);
       if (!panel) return;
       panel.classList.remove('active');
-      panel.innerHTML = '<div class="quiz-img-hint">Hover an option<br>to see the component</div>';
+      panel.innerHTML = '';
     });
   });
 
+  document.querySelector('[data-slide="1"]').classList.add('active');
   updateUI();
 </script>
 </body>
