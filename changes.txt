@@ -1,0 +1,7 @@
+
+
+
+
+Components of priter slide
+1.Show the users 10 components, let them drag them into the empty boxes and ance they are done show them the functionality along with result(correct/incorrect).
+2.You have an acitve hint for the functionality and you have to choose the correct component out of the 10 given components(do this 5 times)
