@@ -7,7 +7,6 @@ function buildDots() {
   for (let i = 1; i <= total; i++) {
     const d = document.createElement('div');
     d.className = 'dot' + (i === current ? ' active' : i < current ? ' visited' : '');
-    d.onclick = () => goTo(i);
     bar.appendChild(d);
   }
 }
@@ -119,7 +118,7 @@ updateUI();
 const CORRECT_COMPONENTS_IMAGE = {
   'Internet Connectivity': { y: [38, 199], x: [708, 980] },
   'Hard Disk Storage': { y: [228+50, 389+50], x: [708, 980] },
-  'Embedded SoC': { y: [498+25, 659+25], x: [708, 980] },
+  'CPU': { y: [498+25, 659+25], x: [708, 980] },
   'Image Sensor': { y: [782, 944], x: [708, 980] },
   'Mechanical Engine': { y: [782, 951], x: [10, 281] }
 };
@@ -127,19 +126,16 @@ const CORRECT_COMPONENTS_IMAGE = {
 const HIGHLIGHT_IMAGES = {
   'Internet Connectivity': 'images/components_highlighted/internet.png',
   'Hard Disk Storage': 'images/components_highlighted/storage.png',
-  'Embedded SoC': 'images/components_highlighted/cpu.png',
+  'CPU': 'images/components_highlighted/cpu.png',
   'Image Sensor': 'images/components_highlighted/sensor.png',
   'Mechanical Engine': 'images/components_highlighted/engine.png',
   // Distractors fall back to a neutral overlay
   default: 'images/components_highlighted/nothing.png',
-  'GPU': 'images/components_highlighted/nothing.png',
-  'CD reader': 'images/components_highlighted/nothing.png',
   'GPS': 'images/components_highlighted/nothing.png',
-  'Vacuum Pump': 'images/components_highlighted/nothing.png',
-  'Windows OS': 'images/components_highlighted/nothing.png'
+  'Vacuum Pump': 'images/components_highlighted/nothing.png'
 };
 
-const INCORRECT_COMPONENTS = ['GPU', 'CD reader', 'GPS', 'Vacuum Pump', 'Windows OS'];
+const INCORRECT_COMPONENTS = ['GPS', 'Vacuum Pump'];
 const ALL_COMPONENTS_LIST = [...Object.keys(CORRECT_COMPONENTS_IMAGE), ...INCORRECT_COMPONENTS].sort(() => Math.random() - 0.5);
 
 let gameState = {

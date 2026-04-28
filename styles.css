@@ -12,7 +12,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-seri
 .topbar-brand { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 2px; font-weight: 700; }
 .slide-counter { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 2px; }
 .progress-bar { display: flex; gap: 6px; align-items: center; }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.3s ease; cursor: pointer; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.3s ease; }
 .dot.active { background: var(--accent); width: 20px; border-radius: 3px; }
 .dot.visited { background: var(--muted); }
 
@@ -138,7 +138,7 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 .learning-num { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; color: var(--accent); min-width: 28px; flex-shrink: 0; }
 .learning-text { font-size: 16px; color: var(--text); font-weight: 700; flex: 1; line-height: 1.3; }
 .star-row { display: flex; gap: 5px; flex-shrink: 0; }
-.star { font-size: 22px; cursor: pointer; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
+.star { font-size: 22px; cursor: pointer; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; color: #ffffff9e;} /*Set star color here*/
 .star:hover { transform: scale(1.2); }
 .star.filled { color: var(--accent); }
 
