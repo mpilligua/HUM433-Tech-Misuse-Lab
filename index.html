@@ -66,7 +66,10 @@
       data.products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'object-card';
-        card.innerHTML = `<span class="icon">${p.icon}</span><div class="name">${p.name}</div>`;
+        const iconMarkup = p.image
+          ? `<img class="icon-img" src="${p.image}" alt="${p.name} icon">`
+          : `<span class="icon">${p.icon}</span>`;
+        card.innerHTML = `${iconMarkup}<div class="name">${p.name}</div>`;
         card.onclick = () => { window.location.href = p.file; };
         grid.appendChild(card);
       });
@@ -78,12 +81,18 @@
         </div>
         <div class="object-card" onclick="window.location.href='products/genai.html'">
           <span class="icon">🤖</span><div class="name">Generative AI</div>
+        </div>
+        <div class="object-card" onclick="window.location.href='products/social_media.html'">
+          <span class="icon">📱</span><div class="name">Social Media</div>
         </div>`;
     }
   }
 
   loadProducts();
   initSlides(3);
+  if (window.location.hash === '#slide-3') {
+    goTo(3);
+  }
 </script>
 </body>
 </html>

@@ -64,12 +64,13 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 .mission-points { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .mission-points li { font-size: 18px; color: #ccc; display: flex; gap: 10px; align-items: flex-start; }
 .mission-points li::before { content: '→'; color: var(--accent3); font-family: 'Space Mono', monospace; flex-shrink: 0; }
-.object-grid { display: flex; gap: 24px; margin-top: 40px; justify-content: center; }
-.object-card { border: 1px solid var(--border); background: var(--surface); border-radius: 14px; padding: 44px 48px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; overflow: hidden; min-width: 200px; }
+.object-grid { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 40px; justify-content: center; }
+.object-card { border: 1px solid var(--border); background: var(--surface); border-radius: 14px; padding: 42px 36px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; overflow: hidden; width: 260px; min-height: 220px; display: grid; grid-template-rows: 76px auto; align-content: center; align-items: center; justify-items: center; row-gap: 18px; }
 .object-card:hover { border-color: var(--accent); transform: translateY(-4px); background: #1e1e1e; }
 .object-card.selected { border-color: var(--accent); background: #1e1e00; }
-.object-card .icon { font-size: 56px; margin-bottom: 18px; display: block; }
-.object-card .name { font-size: 18px; font-weight: 700; }
+.object-card .icon { font-size: 56px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.object-card .icon-img { width: 64px; height: 64px; object-fit: cover; border-radius: 14px; display: block; }
+.object-card .name { font-size: 18px; font-weight: 700; line-height: 1.2; }
 .object-card .tag { margin-top: 8px; font-size: 10px; font-family: 'Space Mono', monospace; color: var(--muted); }
 .object-card .soon { position: absolute; top: 12px; right: 12px; font-size: 16px; background: var(--border); padding: 3px 8px; border-radius: 3px; font-family: 'Space Mono', monospace; }
 .select-btn { margin-top: 28px; background: var(--accent); color: #000; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; padding: 15px 36px; border: none; cursor: pointer; transition: all 0.2s; border-radius: 5px; }

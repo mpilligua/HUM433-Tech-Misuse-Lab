@@ -11,6 +11,12 @@
       "name": "Generative AI",
       "icon": "🤖",
       "file": "products/genai.html"
+    },
+    {
+      "id": "social_media",
+      "name": "Social Media",
+      "icon": "📱",
+      "file": "products/social_media.html"
     }
   ]
 }
