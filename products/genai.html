@@ -17,6 +17,26 @@
     transition: color 0.2s;
   }
   .topbar-home:hover { color: var(--accent); }
+
+  /* Persona card states */
+  .persona-card.error {
+    background: var(--accent2) !important;
+    color: #fff !important;
+    animation: shake 0.35s ease;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
+  }
+  /* Cards placed inside a zone look locked-in */
+  .drop-zone .persona-card {
+    cursor: default;
+    opacity: 0.8;
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  .drop-zone .persona-card:hover { transform: none; box-shadow: none; }
 </style>
 </head>
 <body>
@@ -41,10 +61,7 @@
         </div>
       </div>
       <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
-        <div class="img-placeholder" style="height:280px;">
-          <span>🤖</span>
-          <span>GenAI interface visualization</span>
-        </div>
+        <img src="../images/GenAI.png" alt="Generative AI interface" style="width:100%; max-height:420px; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);" onerror="this.style.display='none';"/>
       </div>
     </div>
   </div>
@@ -110,28 +127,37 @@
   <div class="slide" data-slide="6">
     <div class="quiz-layout">
       <div class="quiz-left">
-        <div class="quiz-heading">A politician wants to win an election. Which GenAI features make this <span style="color:var(--accent2)">dangerous?</span></div>
-        <div class="quiz-sub" style="font-size:16px;color:#bbb;margin-bottom:22px;line-height:1.55;">Think about what they want and what the tool enables.</div>
-        <div class="options-grid">
-          <div class="option" onclick="pick(this, true)"><span class="opt-key">A</span> Generates convincing text at scale</div>
-          <div class="option" onclick="pick(this, true)"><span class="opt-key">B</span> Can produce realistic fake images</div>
-          <div class="option" onclick="pick(this, false)"><span class="opt-key">C</span> Has a dark mode interface</div>
+        <div class="quiz-heading">A politician wants to win an election. Which GenAI capability makes this <span style="color:var(--accent2)">most dangerous?</span></div>
+        <p class="quiz-q">Think about what creates the most visceral, trust-breaking impact on voters.</p>
+        <div class="options-grid" id="genaiQuiz1Options">
+          <div class="option" data-key="A" data-image="../images/Gen_solveMath.png" data-panel="genaiQuiz1Panel" onclick="answerGenaiQuiz(this,1,'A')"><span class="opt-key">A</span> Can solve math equations quickly</div>
+          <div class="option" data-key="B" data-image="../images/Gen_Deepfake.png"  data-panel="genaiQuiz1Panel" onclick="answerGenaiQuiz(this,1,'B')"><span class="opt-key">B</span> Can produce realistic fake images and video</div>
+          <div class="option" data-key="C" data-image="../images/Gen_Darkmode.png"  data-panel="genaiQuiz1Panel" onclick="answerGenaiQuiz(this,1,'C')"><span class="opt-key">C</span> Has a dark mode interface</div>
         </div>
+        <div class="feedback-box" id="genaiQuiz1Feedback"></div>
       </div>
-      <div class="quiz-right" style="min-height:200px; display:flex; align-items:center; justify-content:center; color:var(--muted); font-family:'Space Mono',monospace; font-size:12px; letter-spacing:1px;">
-        [ VIDEO / IMAGE PLACEHOLDER ]
-      </div>
+      <div class="quiz-right" id="genaiQuiz1Panel"></div>
     </div>
   </div>
 
   <!-- SLIDE 7: Real World Story — Deepfakes -->
   <div class="slide" data-slide="7">
-    <h2 style="font-size:28px; margin-bottom:28px;"><span class="danger-word">Real World</span> Story</h2>
-    <div class="news-card" style="background:#fff; color:#111; max-width:500px; padding:24px 28px; font-family:Georgia,serif; margin:0 auto;">
-      <div class="news-source" style="font-size:10px; color:#888; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; font-family:'Space Mono',monospace;">The Guardian</div>
-      <div class="news-title" style="font-size:22px; font-weight:900; line-height:1.2; margin-bottom:6px; font-family:'Arial Black',sans-serif;">AI deepfakes of politicians are influencing elections worldwide</div>
-      <div class="news-byline" style="font-size:11px; color:#666; margin-bottom:14px; font-family:'Space Mono',monospace;">2024</div>
-      <div class="news-body" style="font-size:13px; line-height:1.6; color:#333;">A deepfake video of a political opponent spreads virally 72 hours before an election, depicting them in a compromising scenario. The video is AI-generated using tools available to anyone with a laptop.</div>
+    <div style="display:flex; flex-direction:row; align-items:center; gap:48px; width:100%; max-width:1100px; padding:0 4%;">
+
+      <!-- News clipping -->
+      <div class="news-card" style="flex:0 0 auto; width:380px;">
+        <div class="news-source">Wired</div>
+        <div class="news-title">Slovakia's Election Deepfakes Show AI Is a Danger to Democracy</div>
+        <div class="news-byline">October 2023 — Matteo Wong</div>
+        <div class="news-body">Days before Slovakia's parliamentary election, a fabricated audio clip spread on Facebook depicting opposition leader Michal Šimečka discussing how to buy votes. It was AI-generated. By the time fact-checkers flagged it, the election was over.</div>
+        <a href="https://www.wired.com/story/slovakias-election-deepfakes-show-ai-is-a-danger-to-democracy/" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; font-size:11px; font-family:'Space Mono',monospace; color:#c00; letter-spacing:1px; text-decoration:none; border-bottom:1px solid #c00;">READ ARTICLE →</a>
+      </div>
+
+      <!-- Image -->
+      <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+        <img src="../images/Gen_RealWorldPolitics.png" alt="Slovakia election deepfake story" style="width:100%; max-height:460px; object-fit:contain; border-radius:12px; box-shadow:0 20px 48px rgba(0,0,0,0.4);"/>
+      </div>
+
     </div>
   </div>
 
@@ -140,16 +166,15 @@
     <div class="quiz-layout">
       <div class="quiz-left">
         <div class="quiz-heading">A scammer wants money. What's their <span style="color:var(--accent2)">worst move</span> with GenAI?</div>
-        <div class="quiz-sub" style="font-size:16px;color:#bbb;margin-bottom:22px;line-height:1.55;">Pick the option that causes the most harm at scale.</div>
-        <div class="options-grid">
-          <div class="option" onclick="pick(this, true)"><span class="opt-key">A</span> Generate personalized phishing emails at scale</div>
-          <div class="option" onclick="pick(this, false)"><span class="opt-key">B</span> Use it to write a résumé</div>
-          <div class="option" onclick="pick(this, false)"><span class="opt-key">C</span> Ask it to summarize news articles</div>
+        <p class="quiz-q">Pick the option that causes the most harm at scale.</p>
+        <div class="options-grid" id="genaiQuiz2Options">
+          <div class="option" data-key="A" data-image="../images/gen_phishing.png" data-panel="genaiQuiz2Panel" onclick="answerGenaiQuiz(this,2,'A')"><span class="opt-key">A</span> Generate personalized phishing emails at scale</div>
+          <div class="option" data-key="B" data-image="../images/Gen_resume.png"   data-panel="genaiQuiz2Panel" onclick="answerGenaiQuiz(this,2,'B')"><span class="opt-key">B</span> Use it to write a résumé</div>
+          <div class="option" data-key="C" data-image="../images/Gen_news.png"     data-panel="genaiQuiz2Panel" onclick="answerGenaiQuiz(this,2,'C')"><span class="opt-key">C</span> Ask it to summarize news articles</div>
         </div>
+        <div class="feedback-box" id="genaiQuiz2Feedback"></div>
       </div>
-      <div class="quiz-right" style="min-height:200px; display:flex; align-items:center; justify-content:center; color:var(--muted); font-family:'Space Mono',monospace; font-size:12px; letter-spacing:1px;">
-        [ IMAGE PLACEHOLDER ]
-      </div>
+      <div class="quiz-right" id="genaiQuiz2Panel"></div>
     </div>
   </div>
 
@@ -204,67 +229,164 @@
 
 <script src="../js/core.js"></script>
 <script>
-/* ── Quiz option feedback ── */
-function pick(el, correct) {
-  const siblings = el.parentElement.querySelectorAll('.option');
-  siblings.forEach(s => s.classList.remove('correct', 'wrong'));
-  el.classList.add(correct ? 'correct' : 'wrong');
+/* ── Quiz answer logic ── */
+const GENAI_QUIZ_CONFIG = {
+  1: {
+    correct: 'B',
+    feedback: {
+      correct: '✓ Correct. Deepfakes create visual "evidence" — fake videos of opponents saying or doing things they never did. People trust what they see more than what they read, so fabricated images spread faster and are nearly impossible to debunk before election day.',
+      A: '✗ Solving math has nothing to do with winning elections or manipulating voters. The correct answer is B: realistic fake images and video that voters believe are real.',
+      C: '✗ Dark mode only changes how the screen looks. It has zero bearing on harm potential. The most dangerous capability for a politician is B: producing fake images and video that voters believe are real.'
+    }
+  },
+  2: {
+    correct: 'A',
+    feedback: {
+      correct: '✓ Correct. Before GenAI, phishing emails were generic and easy to spot. Now a scammer can craft millions of emails, each personalized with the victim\'s name, employer, and context — making them indistinguishable from legitimate messages. Click rates skyrocket.',
+      B: '✗ Writing a résumé is a legitimate, zero-harm use. It helps the scammer get a job, not steal money. The answer is A: personalized phishing at scale is what turns GenAI into a weapon for fraud.',
+      C: '✗ Summarizing news is a benign task anyone might use. The real threat is A — AI that can write thousands of perfectly tailored phishing emails per hour, each designed to fool a specific person.'
+    }
+  }
+};
+
+function answerGenaiQuiz(el, quizNum, key) {
+  const config = GENAI_QUIZ_CONFIG[quizNum];
+  const grid = el.closest('.options-grid');
+  const fb = document.getElementById(`genaiQuiz${quizNum}Feedback`);
+
+  // Lock all options
+  grid.querySelectorAll('.option').forEach(o => {
+    o.style.pointerEvents = 'none';
+    o.style.cursor = 'default';
+  });
+
+  if (key === config.correct) {
+    el.classList.add('correct');
+    fb.className = 'feedback-box show correct-fb';
+    fb.textContent = config.feedback.correct;
+  } else {
+    el.classList.add('wrong');
+    grid.querySelector(`[data-key="${config.correct}"]`).classList.add('correct');
+    fb.className = 'feedback-box show wrong-fb';
+    fb.textContent = config.feedback[key];
+  }
 }
 
-/* ── Persona drag & drop ── */
+/* ══════════════════════════════════════════════
+   PERSONA DRAG & DROP
+   ══════════════════════════════════════════════ */
+
+const PERSONA_CORRECT_ZONE = {
+  student:    'zone-everyday',
+  journalist: 'zone-everyday',
+  researcher: 'zone-everyday',
+  hr:         'zone-everyday',
+  politician: 'zone-risky',
+  troll:      'zone-risky',
+  scammer:    'zone-risky',
+  agency:     'zone-risky'
+};
+
 let draggedPersona = null;
 
+function flashSlide(slideNum, type) {
+  const slide = document.querySelector(`[data-slide="${slideNum}"]`);
+  if (!slide) return;
+  const cls = type === 'correct' ? 'flash-success' : 'flash-error';
+  slide.classList.add(cls);
+  setTimeout(() => slide.classList.remove(cls), 600);
+}
+
 function initPersonaDragDrop() {
-  document.querySelectorAll('.persona-card').forEach(card => {
-    card.addEventListener('dragstart', () => { draggedPersona = card; card.classList.add('dragging'); });
-    card.addEventListener('dragend',   () => card.classList.remove('dragging'));
+  document.querySelectorAll('#persona-pool .persona-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      draggedPersona = card;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend', () => {
+      if (draggedPersona) draggedPersona.classList.remove('dragging');
+      draggedPersona = null;
+    });
   });
+
   document.querySelectorAll('.drop-zone').forEach(zone => {
-    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('active'); });
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('active'); });
     zone.addEventListener('dragleave', () => zone.classList.remove('active'));
     zone.addEventListener('drop', e => {
       e.preventDefault();
       zone.classList.remove('active');
-      if (draggedPersona) { zone.appendChild(draggedPersona); draggedPersona = null; }
+      if (!draggedPersona) return;
+
+      const card = draggedPersona;
+      draggedPersona = null;
+      card.classList.remove('dragging');
+
+      const correctZone = PERSONA_CORRECT_ZONE[card.dataset.id];
+
+      if (correctZone === zone.id) {
+        // Correct — move into zone, lock it
+        card.setAttribute('draggable', 'false');
+        zone.appendChild(card);
+        flashSlide(3, 'correct');
+      } else {
+        // Wrong — shake & flash red, leave card in pool
+        card.classList.add('error');
+        card.addEventListener('animationend', () => card.classList.remove('error'), { once: true });
+        flashSlide(3, 'wrong');
+      }
     });
   });
 }
 
-/* ── Rank drag & drop ── */
+/* ══════════════════════════════════════════════
+   RANK DRAG & DROP
+   ══════════════════════════════════════════════ */
+
 let draggedRank = null;
 
 function initRankDrag() {
   const list = document.getElementById('rankList');
   if (!list) return;
   list.querySelectorAll('.rank-item').forEach(item => {
+    item.setAttribute('draggable', 'true');
     item.addEventListener('dragstart', () => { draggedRank = item; item.style.opacity = '0.5'; });
     item.addEventListener('dragend',   () => { draggedRank = null; item.style.opacity = ''; });
-    item.addEventListener('dragover',  e => {
+    item.addEventListener('dragover', e => {
       e.preventDefault();
       if (!draggedRank || draggedRank === item) return;
       const rect = item.getBoundingClientRect();
-      const after = e.clientY > rect.top + rect.height / 2;
-      list.insertBefore(draggedRank, after ? item.nextSibling : item);
+      list.insertBefore(draggedRank, e.clientY > rect.top + rect.height / 2 ? item.nextSibling : item);
     });
   });
-  list.querySelectorAll('.rank-item').forEach(item => item.setAttribute('draggable', true));
 }
 
-/* ── Observers to init interactions when slides become active ── */
-const genaiObserver = new MutationObserver(() => {
-  const slide3 = document.querySelector('[data-slide="3"]');
-  if (slide3 && slide3.classList.contains('active')) {
-    setTimeout(initPersonaDragDrop, 100);
-  }
-  const slide5 = document.querySelector('[data-slide="5"]');
-  if (slide5 && slide5.classList.contains('active')) {
-    setTimeout(initRankDrag, 100);
-  }
-});
-genaiObserver.observe(document.body, { attributes: true, subtree: true });
+/* ── Option image hover panels (mirrors printer behaviour) ── */
+function initOptionHovers() {
+  document.querySelectorAll('.option[data-image]').forEach(opt => {
+    opt.addEventListener('mouseenter', () => {
+      const panel = document.getElementById(opt.dataset.panel);
+      if (!panel) return;
+      panel.classList.add('active');
+      panel.innerHTML = `
+        <div class="quiz-img-item">
+          <img src="${opt.dataset.image}" alt="">
+        </div>`;
+    });
+    opt.addEventListener('mouseleave', () => {
+      const panel = document.getElementById(opt.dataset.panel);
+      if (!panel) return;
+      panel.classList.remove('active');
+      panel.innerHTML = '';
+    });
+  });
+}
 
-/* ── Init ── */
+/* ── Init everything at page load — no MutationObserver needed ── */
 initSlides(10);
+initPersonaDragDrop();
+initRankDrag();
+initOptionHovers();
 </script>
 </body>
 </html>
