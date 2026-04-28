@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tech Misuses Lab — Office Printer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  .topbar-home {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .topbar-home:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-home" href="../index.html">← HOME</a>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="slide-counter" id="slideCounter">01 / 10</div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- SLIDE 1: Intro -->
+  <div class="slide" data-slide="1">
+    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:48px; padding:36px 6%; text-align:left;">
+      <div style="flex:0 0 auto; max-width:340px;">
+        <h2>The Office <span class="accent-word">Printer</span></h2>
+        <div class="purpose-box" style="margin-top:20px;">
+          A printer's primary purpose is to <strong style="color:#f0f0f0">convert digital data into a permanent physical document</strong> on paper. In an office it is a shared hub for printing, scanning, and copying.
+        </div>
+      </div>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
+        <video src="../images/34594-402634196.mp4" controls autoplay loop muted playsinline style="max-height:480px; width:100%; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);" onerror="this.style.display='none';"></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Strategy -->
+  <div class="slide" data-slide="2">
+    <div style="width:100%; padding:36px 8%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:left; gap:18px;">
+      <div style="display:flex; align-items:center; justify-content:center; width:100%; height:70%;">
+        <p style="font-size:24px; color:#ccc; line-height:1.7; max-width:900px; text-align:center;">One nice strategy to spot misuse early is to break the tool into its parts and ask what each could leak or enable.</p>
+      </div>
+      <p>So as a first task, let's break the printer into its components.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Match the Components (drag & drop) -->
+  <div class="slide" data-slide="3">
+    <div style="width:100%; padding:36px 5%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <div style="width:100%; max-width:1200px;">
+        <h2 style="margin-bottom:8px;">Match the <span class="accent-word">Components</span></h2>
+        <p style="font-size:16px;color:var(--muted);margin-bottom:28px;">Drag components from the list onto the printer image. When you place a component correctly, the label will appear. You have as many tries as you want.</p>
+
+        <div class="image-drag-container">
+          <div class="printer-pool">
+            <div class="printer-canvas" id="printerCanvas">
+              <img id="printerBaseImage" src="../images/components_highlighted/nothing.png" alt="Printer component diagram"/>
+              <img id="componentHighlight" class="highlight-overlay" src="../images/components_highlighted/nothing.png" alt="" aria-hidden="true"/>
+              <div class="completion-message" id="completionMessage">Well done!</div>
+            </div>
+            <div class="drag-drop-footer">
+              <button class="reset-btn" onclick="resetImageGame()">RESET</button>
+            </div>
+          </div>
+
+          <div class="components-sidebar">
+            <div class="sidebar-label">Components to Place</div>
+            <div class="component-list" id="componentList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Quiz 1 — Vulnerable components -->
+  <div class="slide" data-slide="4">
+    <div class="quiz-layout">
+      <div class="quiz-left">
+        <div class="quiz-heading">The printer is <em>live</em> in the office.<br>Which components make it <span class="danger-word">vulnerable?</span></div>
+        <p class="quiz-q">An attacker wants to spy on documents while the printer is actively used. Which combination gives them a way in?</p>
+        <div class="options-grid" id="quiz1Options">
+          <button class="option-btn" onclick="quiz1Answer(this,'A')" data-images="../images/mechanical_engine.png" data-labels="Mechanical Engine" data-panel="quiz1Panel"><span class="option-letter">A</span> Mechanical Engine &amp; Fuser</button>
+          <button class="option-btn" onclick="quiz1Answer(this,'B')" data-images="../images/internet_disk.png" data-labels="Internet Connectivity,Hard Disk Storage" data-panel="quiz1Panel"><span class="option-letter">B</span> Internet Connectivity &amp; Hard Disk Storage</button>
+          <button class="option-btn" onclick="quiz1Answer(this,'C')" data-images="../images/sensor.png" data-labels="Image Sensor" data-panel="quiz1Panel"><span class="option-letter">C</span> Image Sensor only</button>
+        </div>
+        <div class="feedback-box" id="quiz1Feedback"></div>
+      </div>
+      <div class="quiz-right" id="quiz1Panel"></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: The Invisible Proxy Attack -->
+  <div class="slide" data-slide="5">
+    <div style="width:100%; padding:36px 8%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center;">
+      <h2>The <span class="danger-word">Invisible Proxy</span> Attack</h2>
+      <p class="story-intro" style="text-align:center; margin-bottom:0;">Printers on office Wi-Fi or Ethernet are a silent entry point into the entire network.</p>
+      <img src="../images/story1.png" alt="Invisible Proxy Attack diagram" style="width:100%; max-height:520px; object-fit:contain; border-radius:8px; border:1px solid var(--border);" onerror="this.style.display='none';"/>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Teaser -->
+  <div class="slide" data-slide="6">
+    <p style="color:var(--muted);font-size:26px;">But the story doesn't end there —</p>
+    <div class="teaser-big">What happens<br>when the printer<br><span class="accent-word">leaves</span> the building?</div>
+  </div>
+
+  <!-- SLIDE 7: Quiz 2 — Discarded printer -->
+  <div class="slide" data-slide="7">
+    <div class="quiz-layout">
+      <div class="quiz-left">
+        <div class="quiz-heading">The printer is <em>discarded</em>. Which component still holds <span class="danger-word">all the secrets?</span></div>
+        <p class="quiz-q" style="margin-top:14px;">Imagine a company sells its old printer for $50. An attacker buys it. Without any network, which single component lets them recover years of sensitive documents?</p>
+        <div class="options-grid" id="quiz2Options">
+          <button class="option-btn" onclick="quiz2Answer(this,'A')" data-images="../images/internet.png" data-labels="Internet Connectivity" data-panel="quiz2Panel"><span class="option-letter">A</span> Internet Connectivity</button>
+          <button class="option-btn" onclick="quiz2Answer(this,'B')" data-images="../images/storage.png" data-labels="Hard Disk Storage" data-panel="quiz2Panel"><span class="option-letter">B</span> Hard Disk Storage</button>
+          <button class="option-btn" onclick="quiz2Answer(this,'C')" data-images="../images/mechanical_engine.png" data-labels="Mechanical Engine" data-panel="quiz2Panel"><span class="option-letter">C</span> Mechanical Engine</button>
+        </div>
+        <div class="feedback-box" id="quiz2Feedback"></div>
+      </div>
+      <div class="quiz-right" id="quiz2Panel"></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Real World Story -->
+  <div class="slide" data-slide="8">
+    <h2><span class="danger-word">Real World</span> Story</h2>
+    <img src="../images/real_story.png" alt="Real story illustration" style="max-width:700px; width:100%; border-radius:8px; border:1px solid var(--border); margin-top:24px;" onerror="this.style.display='none';"/>
+  </div>
+
+  <!-- SLIDE 9: Rate what you learned -->
+  <div class="slide" data-slide="9">
+    <h2>Rate what you <span class="accent-word">learned</span></h2>
+    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1–5 stars based on how well you understood it.</p>
+    <div class="learning-list">
+      <div class="learning-item" style="animation-delay:0.05s">
+        <div class="learning-num">01</div>
+        <div class="learning-text">Identify potential misuse scenarios</div>
+        <div class="star-row" data-item="1">
+          <span class="star" onclick="rateLearning(1,1)">★</span>
+          <span class="star" onclick="rateLearning(1,2)">★</span>
+          <span class="star" onclick="rateLearning(1,3)">★</span>
+          <span class="star" onclick="rateLearning(1,4)">★</span>
+          <span class="star" onclick="rateLearning(1,5)">★</span>
+        </div>
+      </div>
+      <div class="learning-item" style="animation-delay:0.1s">
+        <div class="learning-num">02</div>
+        <div class="learning-text">Identify how each component might be misused</div>
+        <div class="star-row" data-item="2">
+          <span class="star" onclick="rateLearning(2,1)">★</span>
+          <span class="star" onclick="rateLearning(2,2)">★</span>
+          <span class="star" onclick="rateLearning(2,3)">★</span>
+          <span class="star" onclick="rateLearning(2,4)">★</span>
+          <span class="star" onclick="rateLearning(2,5)">★</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Finish -->
+  <div class="slide" data-slide="10">
+    <h1>Nice work.<br></h1>
+    <h2>You spotted the <span class="accent-word">risks.</span></h2>
+    <div class="purpose-box" style="margin-top:30px;">
+      <strong style="color:var(--accent)">Keep thinking like this.</strong>
+      Every device has hidden assumptions.
+      The best engineers are the ones who question them before malicious users do.
+    </div>
+    <button class="select-btn" onclick="window.location.href='../index.html'">← EXPLORE ANOTHER DEVICE</button>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()">← PREV</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+</div>
+
+<script src="../js/core.js"></script>
+<script>
+/* ── Quiz 1 — correct: B ── */
+function quiz1Answer(btn, key) {
+  document.querySelectorAll('#quiz1Options .option-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('quiz1Feedback');
+  if (key === 'B') {
+    btn.classList.add('correct');
+    fb.className = 'feedback-box show correct-fb';
+    fb.textContent = '✓ Correct! Internet Connectivity gives the attacker a way in, and Hard Disk Storage silently holds every document they want to steal. Together they are the attack surface.';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#quiz1Options .option-btn')[1].classList.add('correct');
+    fb.className = 'feedback-box show wrong-fb';
+    fb.textContent = key === 'A'
+      ? '✗ The Mechanical Engine is purely physical — heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
+      : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing — it needs a disk and a network to become dangerous.';
+  }
+}
+
+/* ── Quiz 2 — correct: B ── */
+function quiz2Answer(btn, key) {
+  document.querySelectorAll('#quiz2Options .option-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('quiz2Feedback');
+  if (key === 'B') {
+    btn.classList.add('correct');
+    fb.className = 'feedback-box show correct-fb';
+    fb.textContent = '✓ Correct! The Hard Disk retains every document even after the printer is powered off and discarded. No network needed — just a $5 adapter and free software is enough to recover everything.';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#quiz2Options .option-btn')[1].classList.add('correct');
+    fb.className = 'feedback-box show wrong-fb';
+    fb.textContent = key === 'A'
+      ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant — but the hard disk keeps all data regardless.'
+      : '✗ The Mechanical Engine is all moving parts — drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
+  }
+}
+
+/* ── Quiz option image hover panel ── */
+document.querySelectorAll('.option-btn[data-images]').forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    const panel = document.getElementById(btn.dataset.panel);
+    if (!panel) return;
+    const srcs   = btn.dataset.images.split(',');
+    const labels = btn.dataset.labels ? btn.dataset.labels.split(',') : srcs.map(() => '');
+    panel.classList.add('active');
+    panel.innerHTML = srcs.map((src, i) => `
+      <div class="quiz-img-item">
+        <img src="${src.trim()}" alt="${labels[i] || ''}">
+        <div class="quiz-img-label">${labels[i] || ''}</div>
+      </div>`).join('');
+  });
+  btn.addEventListener('mouseleave', () => {
+    const panel = document.getElementById(btn.dataset.panel);
+    if (!panel) return;
+    panel.classList.remove('active');
+    panel.innerHTML = '';
+  });
+});
+
+/* ══════════════════════════════════════════════
+   DRAG & DROP: Component Matching on Printer Image
+   ══════════════════════════════════════════════ */
+
+const CORRECT_COMPONENTS_IMAGE = {
+  'Internet Connectivity': { y: [38, 199],   x: [708, 980] },
+  'Hard Disk Storage':     { y: [278, 439],  x: [708, 980] },
+  'CPU':                   { y: [523, 684],  x: [708, 980] },
+  'Image Sensor':          { y: [782, 944],  x: [708, 980] },
+  'Mechanical Engine':     { y: [782, 951],  x: [10,  281] }
+};
+
+const HIGHLIGHT_IMAGES = {
+  'Internet Connectivity': '../images/components_highlighted/internet.png',
+  'Hard Disk Storage':     '../images/components_highlighted/storage.png',
+  'CPU':                   '../images/components_highlighted/cpu.png',
+  'Image Sensor':          '../images/components_highlighted/sensor.png',
+  'Mechanical Engine':     '../images/components_highlighted/engine.png',
+  'default':               '../images/components_highlighted/nothing.png',
+  'GPS':                   '../images/components_highlighted/nothing.png',
+  'Vacuum Pump':           '../images/components_highlighted/nothing.png'
+};
+
+const INCORRECT_COMPONENTS = ['GPS', 'Vacuum Pump'];
+const ALL_COMPONENTS_LIST = [...Object.keys(CORRECT_COMPONENTS_IMAGE), ...INCORRECT_COMPONENTS].sort(() => Math.random() - 0.5);
+
+let gameState = { placedComponents: {} };
+
+function setHighlight(componentName) {
+  const img = document.getElementById('componentHighlight');
+  if (!img) return;
+  img.src = HIGHLIGHT_IMAGES[componentName] || HIGHLIGHT_IMAGES.default;
+  img.classList.add('show');
+}
+
+function clearHighlight() {
+  const img = document.getElementById('componentHighlight');
+  if (!img) return;
+  img.src = HIGHLIGHT_IMAGES.default;
+  img.classList.remove('show');
+}
+
+function initImageDragGame() {
+  const canvas = document.getElementById('printerCanvas');
+  const componentList = document.getElementById('componentList');
+  const baseImg = document.getElementById('printerBaseImage');
+  if (!canvas || !componentList) return;
+
+  if (baseImg.naturalWidth === 0) { baseImg.onload = initImageDragGame; return; }
+
+  clearHighlight();
+  gameState.placedComponents = {};
+  componentList.innerHTML = '';
+  canvas.querySelectorAll('.drop-overlay').forEach(el => el.remove());
+
+  const rect = baseImg.getBoundingClientRect();
+
+  Object.entries(CORRECT_COMPONENTS_IMAGE).forEach(([name, coords], zoneIdx) => {
+    const y0 = (coords.y[0] / 1000) * rect.height;
+    const y1 = (coords.y[1] / 1000) * rect.height;
+    const x0 = (coords.x[0] / 1000) * rect.width;
+    const x1 = (coords.x[1] / 1000) * rect.width;
+
+    const zone = document.createElement('div');
+    zone.className = 'drop-overlay';
+    zone.dataset.componentName = name;
+    zone.dataset.zoneIndex = zoneIdx;
+    zone.style.top  = y0 + 'px';
+    zone.style.left = x0 + 'px';
+    zone.style.width  = (x1 - x0) + 'px';
+    zone.style.height = (y1 - y0) + 'px';
+    zone.innerHTML = `<div class="component-label-overlay">${name}</div>`;
+
+    zone.addEventListener('mouseenter', () => setHighlight(name));
+    zone.addEventListener('mouseleave', () => clearHighlight());
+    zone.addEventListener('dragover',  e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; zone.classList.add('active'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('active'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('active');
+      placeComponentOnZone(zone, e.dataTransfer.getData('componentName'));
+    });
+    canvas.appendChild(zone);
+  });
+
+  ALL_COMPONENTS_LIST.forEach(comp => {
+    const el = document.createElement('div');
+    el.className = 'placed-component';
+    el.draggable = true;
+    el.dataset.componentName = comp;
+    el.innerHTML = `<span>${comp}</span>`;
+    el.addEventListener('dragstart', e => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('componentName', comp);
+      el.classList.add('dragging');
+      setHighlight(comp);
+    });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); clearHighlight(); });
+    componentList.appendChild(el);
+  });
+}
+
+function placeComponentOnZone(zone, componentName) {
+  const expected = zone.dataset.componentName;
+  const compEl = document.querySelector(`[data-component-name="${componentName}"]`);
+
+  if (componentName === expected) {
+    zone.dataset.placedComponent = componentName;
+    gameState.placedComponents[componentName] = zone.dataset.zoneIndex;
+    zone.classList.add('filled', 'correct');
+    if (compEl) compEl.remove();
+
+    const slide = document.querySelector('[data-slide="3"].active');
+    if (slide) { slide.classList.add('flash-success'); setTimeout(() => slide.classList.remove('flash-success'), 600); }
+
+    if (Object.keys(gameState.placedComponents).length === Object.keys(CORRECT_COMPONENTS_IMAGE).length) {
+      const msg = document.getElementById('completionMessage');
+      if (msg) msg.classList.add('show');
+    }
+  } else {
+    if (compEl) compEl.classList.add('error');
+    const slide = document.querySelector('[data-slide="3"].active');
+    if (slide) { slide.classList.add('flash-error'); setTimeout(() => slide.classList.remove('flash-error'), 600); }
+  }
+}
+
+function resetImageGame() {
+  gameState.placedComponents = {};
+  document.querySelectorAll('.drop-overlay').forEach(z => {
+    z.removeAttribute('data-placed-component');
+    z.classList.remove('filled', 'correct');
+  });
+  clearHighlight();
+  const msg = document.getElementById('completionMessage');
+  if (msg) msg.classList.remove('show');
+  initImageDragGame();
+}
+
+const dragObserver = new MutationObserver(() => {
+  const slide3 = document.querySelector('[data-slide="3"]');
+  if (slide3 && slide3.classList.contains('active') && !document.getElementById('componentList').innerHTML) {
+    setTimeout(initImageDragGame, 100);
+  }
+});
+dragObserver.observe(document.body, { attributes: true, subtree: true });
+setTimeout(initImageDragGame, 500);
+
+/* ── Init ── */
+initSlides(10);
+</script>
+</body>
+</html>

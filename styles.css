@@ -279,3 +279,106 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 .completion-message { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--accent); color: #000; padding: 40px 60px; border-radius: 12px; font-size: 36px; font-weight: 800; letter-spacing: 2px; z-index: 1000; animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .completion-message.show { display: block; }
 @keyframes pop-in { from { transform: translate(-50%, -50%) scale(0.6); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+/* ══════════════════════════════════════════════════════════════ */
+/* GENAI SPECIFIC STYLES */
+/* ══════════════════════════════════════════════════════════════ */
+
+/* Persona Cards */
+.persona-cards { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 32px; }
+.persona-card {
+  background: var(--accent);
+  color: #000;
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: grab;
+  user-select: none;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.persona-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(232,255,71,0.2); }
+.persona-card:active { cursor: grabbing; }
+.persona-card.dragging { opacity: 0.6; }
+
+/* Drop Zones */
+.drop-zones { display: flex; gap: 20px; width: 100%; justify-content: center; max-width: 800px; margin: 0 auto; }
+.drop-zone {
+  flex: 1;
+  border: 1px dashed var(--muted);
+  min-height: 120px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.drop-zone .zone-label { font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; font-family: 'Space Mono', monospace; }
+.drop-zone.everyday { border-color: #333; }
+.drop-zone.risky { border-color: var(--accent2); }
+.drop-zone.risky .zone-label { color: var(--accent2); }
+.drop-zone.active { background: rgba(232,255,71,0.05); border-color: var(--accent); }
+.drop-zone.active.risky { background: rgba(255,71,71,0.05); border-color: var(--accent2); }
+
+/* Rank Items */
+.rank-list { display: flex; flex-direction: column; gap: 10px; max-width: 440px; }
+.rank-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: grab;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.rank-item:hover { border-color: var(--accent); transform: translateX(4px); }
+.rank-item:active { cursor: grabbing; }
+.rank-handle { color: var(--muted); font-size: 16px; }
+.rank-label { font-size: 13px; font-family: 'Syne', sans-serif; flex: 1; }
+.rank-hint { font-size: 10px; color: var(--muted); letter-spacing: 1px; font-family: 'Syne', sans-serif; }
+
+/* Option styling for GenAI quizzes */
+.option {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  transition: border-color 0.15s;
+  border-radius: 6px;
+}
+.option:hover { border-color: var(--accent); }
+.option.correct { border-color: var(--accent); background: #1a1e00; }
+.option.wrong { border-color: var(--accent2); opacity: 0.5; }
+.option .opt-key { color: var(--muted); font-size: 11px; font-weight: 900; flex-shrink: 0; }
+
+/* News Card */
+.news-card {
+  background: #fff;
+  color: #111;
+  max-width: 500px;
+  padding: 24px 28px;
+  font-family: Georgia, serif;
+  border-radius: 6px;
+}
+.news-source { font-size: 10px; color: #888; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-family: 'Space Mono', monospace; }
+.news-title { font-size: 22px; font-weight: 900; line-height: 1.2; margin-bottom: 6px; font-family: 'Arial Black', sans-serif; }
+.news-byline { font-size: 11px; color: #666; margin-bottom: 14px; font-family: 'Space Mono', monospace; }
+.news-body { font-size: 13px; line-height: 1.6; color: #333; }
+
+/* Utility */
+.body-text { font-size: 16px; color: var(--muted); line-height: 1.6; font-family: 'Syne', sans-serif; }
+.quiz-sub { font-size: 16px; color: #bbb; margin-bottom: 22px; line-height: 1.55; }
+
+/* Mode Content Conditional Display (legacy — kept for compatibility) */
+.mode-content { display: none !important; }
+.mode-content.active { display: flex !important; }

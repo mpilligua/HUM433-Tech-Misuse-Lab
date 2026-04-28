@@ -1,0 +1,16 @@
+{
+  "products": [
+    {
+      "id": "printer",
+      "name": "Office Printer",
+      "icon": "🖨️",
+      "file": "products/printer.html"
+    },
+    {
+      "id": "genai",
+      "name": "Generative AI",
+      "icon": "🤖",
+      "file": "products/genai.html"
+    }
+  ]
+}

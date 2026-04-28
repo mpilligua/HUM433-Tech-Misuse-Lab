@@ -1,5 +1,6 @@
 let current = 1;
 const total = 13;
+let selectedMode = null; // 'printer' or 'genai'
 
 function buildDots() {
   const bar = document.getElementById('progressBar');
@@ -9,6 +10,18 @@ function buildDots() {
     d.className = 'dot' + (i === current ? ' active' : i < current ? ' visited' : '');
     bar.appendChild(d);
   }
+}
+
+function updateModeContent() {
+  if (!selectedMode) return;
+  
+  // Hide all mode content, then show only selected mode
+  document.querySelectorAll('.mode-content').forEach(el => {
+    el.classList.remove('active');
+    if (el.dataset.mode === selectedMode) {
+      el.classList.add('active');
+    }
+  });
 }
 
 function updateUI() {
@@ -21,10 +34,16 @@ function updateUI() {
   const prevBtn = document.getElementById('prevBtn');
   prevBtn.style.visibility = current === 1 ? 'hidden' : 'visible';
   buildDots();
+  updateModeContent();
 }
 
 function goTo(n) {
   if (n === current) return;
+  // Reset to device selection if going back to slide 3
+  if (n === 3) {
+    selectedMode = null;
+    document.querySelectorAll('.object-card').forEach(c => c.classList.remove('selected'));
+  }
   const slides = document.querySelectorAll('.slide');
   slides.forEach(s => {
     s.classList.remove('active','exit');
@@ -39,9 +58,12 @@ function goTo(n) {
 function goNext() { if (current < total) goTo(current + 1); }
 function goPrev() { if (current > 1) goTo(current - 1); }
 
-function selectCard(el) {
+function selectDevice(el, mode) {
   document.querySelectorAll('.object-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
+  selectedMode = mode;
+  updateModeContent();
+  goNext(); // Navigate to slide 4
 }
 
 /* QUIZ 1 — correct: B */
@@ -355,3 +377,69 @@ const observer = new MutationObserver(() => {
 
 observer.observe(document.body, { attributes: true, subtree: true });
 setTimeout(initImageDragGame, 500);
+
+/* ══════════════════════════════════════════════════════════════ */
+/* GENAI PERSONA DRAG & DROP */
+/* ══════════════════════════════════════════════════════════════ */
+
+let draggedPersona = null;
+
+function initPersonaDragDrop() {
+  const personaCards = document.querySelectorAll('.persona-card');
+  const dropZones = document.querySelectorAll('.drop-zone');
+
+  personaCards.forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      draggedPersona = card;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+    });
+  });
+
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      zone.classList.add('active');
+    });
+
+    zone.addEventListener('dragleave', () => {
+      zone.classList.remove('active');
+    });
+
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      zone.classList.remove('active');
+      if (draggedPersona) {
+        zone.appendChild(draggedPersona);
+        draggedPersona = null;
+      }
+    });
+  });
+}
+
+// Initialize persona drag when entering genai path
+const personaObserver = new MutationObserver(() => {
+  const slide6 = document.querySelector('[data-slide="6"]');
+  const personaPool = document.getElementById('persona-pool');
+  if (slide6 && slide6.classList.contains('active') && selectedMode === 'genai' && personaPool && personaPool.innerHTML) {
+    // Small delay to ensure DOM is ready
+    setTimeout(initPersonaDragDrop, 100);
+  }
+});
+
+personaObserver.observe(document.body, { attributes: true, subtree: true });
+
+/* ══════════════════════════════════════════════════════════════ */
+/* GENAI QUIZ FUNCTIONS */
+/* ══════════════════════════════════════════════════════════════ */
+
+function pick(el, correct) {
+  const siblings = el.parentElement.querySelectorAll('.option');
+  siblings.forEach(s => s.classList.remove('correct','wrong'));
+  el.classList.add(correct ? 'correct' : 'wrong');
+}

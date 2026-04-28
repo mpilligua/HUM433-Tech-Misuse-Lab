@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tech Misuses Lab — Generative AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  .topbar-home {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .topbar-home:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-home" href="../index.html">← HOME</a>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="slide-counter" id="slideCounter">01 / 10</div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- SLIDE 1: Intro -->
+  <div class="slide" data-slide="1">
+    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:48px; padding:36px 6%; text-align:left;">
+      <div style="flex:1; max-width:420px;">
+        <h2>Generative<br><span class="accent-word">AI</span></h2>
+        <div class="purpose-box" style="margin-top:20px;">
+          <p style="margin-bottom:12px;">A digital tool that <strong style="color:#f0f0f0">generates text or images</strong> on demand. It uses vast internet data to respond to any prompt.</p>
+          <p style="margin-bottom:12px;">It can <strong style="color:#f0f0f0">learn from previous inputs</strong> to improve responses.</p>
+          <p>Asking it an explicit question can yield instant research results.</p>
+        </div>
+      </div>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
+        <div class="img-placeholder" style="height:280px;">
+          <span>🤖</span>
+          <span>GenAI interface visualization</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Strategy -->
+  <div class="slide" data-slide="2">
+    <div style="width:100%; padding:36px 8%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:18px;">
+      <div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
+        <p style="font-size:24px; color:#ccc; line-height:1.7; max-width:900px;">One strategy to spot misuse early is to <strong style="color:var(--accent)">think about who</strong> will actually use this tool — and who might exploit it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Who uses GenAI? (persona drag & drop) -->
+  <div class="slide" data-slide="3">
+    <div style="width:100%; max-width:900px; text-align:center;">
+      <h2 style="margin-bottom:20px;">Who uses <span class="accent-word">Generative AI?</span></h2>
+      <p class="body-text" style="margin-bottom:28px;">Drag each persona into the right category.</p>
+      <div class="persona-cards" id="persona-pool">
+        <div class="persona-card" draggable="true" data-id="student">Student</div>
+        <div class="persona-card" draggable="true" data-id="journalist">Journalist</div>
+        <div class="persona-card" draggable="true" data-id="politician">Politician</div>
+        <div class="persona-card" draggable="true" data-id="agency">Marketing Agency</div>
+        <div class="persona-card" draggable="true" data-id="scammer">Scammer</div>
+        <div class="persona-card" draggable="true" data-id="researcher">Researcher</div>
+        <div class="persona-card" draggable="true" data-id="troll">Troll</div>
+        <div class="persona-card" draggable="true" data-id="hr">HR Manager</div>
+      </div>
+      <div class="drop-zones">
+        <div class="drop-zone everyday" id="zone-everyday">
+          <div class="zone-label">Everyday Users</div>
+        </div>
+        <div class="drop-zone risky" id="zone-risky">
+          <div class="zone-label">⚠ Potentially Problematic</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Can't catch everyone -->
+  <div class="slide" data-slide="4">
+    <div style="text-align:center; max-width:600px;">
+      <div class="line1" style="color:var(--muted);font-size:26px;">It's not humanly possible to anticipate every user.</div>
+      <div class="line2" style="font-size:38px; font-weight:900; line-height:1.1; margin-top:20px;">So designers focus on the <span style="color:var(--accent)">biggest holes</span> first — ranked by misuse impact.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Rank the risk -->
+  <div class="slide" data-slide="5">
+    <h2 style="font-size:30px; margin-bottom:8px;">Rank these users by <span class="danger-word">risk they pose</span></h2>
+    <p class="body-text" style="margin-bottom:24px;">Drag to reorder — most dangerous at the top.</p>
+    <div class="rank-list" id="rankList" style="margin:0 auto;">
+      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Politician</span></div>
+      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Scammer</span></div>
+      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Troll</span></div>
+      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Overworked Student</span></div>
+      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Marketing Agency</span></div>
+    </div>
+    <p class="rank-hint" style="margin-top:16px; text-align:center;">No right answer yet — commit to your ranking.</p>
+  </div>
+
+  <!-- SLIDE 6: Quiz — Politician -->
+  <div class="slide" data-slide="6">
+    <div class="quiz-layout">
+      <div class="quiz-left">
+        <div class="quiz-heading">A politician wants to win an election. Which GenAI features make this <span style="color:var(--accent2)">dangerous?</span></div>
+        <div class="quiz-sub" style="font-size:16px;color:#bbb;margin-bottom:22px;line-height:1.55;">Think about what they want and what the tool enables.</div>
+        <div class="options-grid">
+          <div class="option" onclick="pick(this, true)"><span class="opt-key">A</span> Generates convincing text at scale</div>
+          <div class="option" onclick="pick(this, true)"><span class="opt-key">B</span> Can produce realistic fake images</div>
+          <div class="option" onclick="pick(this, false)"><span class="opt-key">C</span> Has a dark mode interface</div>
+        </div>
+      </div>
+      <div class="quiz-right" style="min-height:200px; display:flex; align-items:center; justify-content:center; color:var(--muted); font-family:'Space Mono',monospace; font-size:12px; letter-spacing:1px;">
+        [ VIDEO / IMAGE PLACEHOLDER ]
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Real World Story — Deepfakes -->
+  <div class="slide" data-slide="7">
+    <h2 style="font-size:28px; margin-bottom:28px;"><span class="danger-word">Real World</span> Story</h2>
+    <div class="news-card" style="background:#fff; color:#111; max-width:500px; padding:24px 28px; font-family:Georgia,serif; margin:0 auto;">
+      <div class="news-source" style="font-size:10px; color:#888; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; font-family:'Space Mono',monospace;">The Guardian</div>
+      <div class="news-title" style="font-size:22px; font-weight:900; line-height:1.2; margin-bottom:6px; font-family:'Arial Black',sans-serif;">AI deepfakes of politicians are influencing elections worldwide</div>
+      <div class="news-byline" style="font-size:11px; color:#666; margin-bottom:14px; font-family:'Space Mono',monospace;">2024</div>
+      <div class="news-body" style="font-size:13px; line-height:1.6; color:#333;">A deepfake video of a political opponent spreads virally 72 hours before an election, depicting them in a compromising scenario. The video is AI-generated using tools available to anyone with a laptop.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Quiz — Scammer -->
+  <div class="slide" data-slide="8">
+    <div class="quiz-layout">
+      <div class="quiz-left">
+        <div class="quiz-heading">A scammer wants money. What's their <span style="color:var(--accent2)">worst move</span> with GenAI?</div>
+        <div class="quiz-sub" style="font-size:16px;color:#bbb;margin-bottom:22px;line-height:1.55;">Pick the option that causes the most harm at scale.</div>
+        <div class="options-grid">
+          <div class="option" onclick="pick(this, true)"><span class="opt-key">A</span> Generate personalized phishing emails at scale</div>
+          <div class="option" onclick="pick(this, false)"><span class="opt-key">B</span> Use it to write a résumé</div>
+          <div class="option" onclick="pick(this, false)"><span class="opt-key">C</span> Ask it to summarize news articles</div>
+        </div>
+      </div>
+      <div class="quiz-right" style="min-height:200px; display:flex; align-items:center; justify-content:center; color:var(--muted); font-family:'Space Mono',monospace; font-size:12px; letter-spacing:1px;">
+        [ IMAGE PLACEHOLDER ]
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Rate what you learned -->
+  <div class="slide" data-slide="9">
+    <h2>Rate what you <span class="accent-word">learned</span></h2>
+    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1–5 stars based on how well you understood it.</p>
+    <div class="learning-list">
+      <div class="learning-item" style="animation-delay:0.05s">
+        <div class="learning-num">01</div>
+        <div class="learning-text">Identify potential misuse scenarios</div>
+        <div class="star-row" data-item="1">
+          <span class="star" onclick="rateLearning(1,1)">★</span>
+          <span class="star" onclick="rateLearning(1,2)">★</span>
+          <span class="star" onclick="rateLearning(1,3)">★</span>
+          <span class="star" onclick="rateLearning(1,4)">★</span>
+          <span class="star" onclick="rateLearning(1,5)">★</span>
+        </div>
+      </div>
+      <div class="learning-item" style="animation-delay:0.1s">
+        <div class="learning-num">02</div>
+        <div class="learning-text">Identify how each user type might exploit the tool</div>
+        <div class="star-row" data-item="2">
+          <span class="star" onclick="rateLearning(2,1)">★</span>
+          <span class="star" onclick="rateLearning(2,2)">★</span>
+          <span class="star" onclick="rateLearning(2,3)">★</span>
+          <span class="star" onclick="rateLearning(2,4)">★</span>
+          <span class="star" onclick="rateLearning(2,5)">★</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Finish -->
+  <div class="slide" data-slide="10">
+    <h1>Nice work.<br></h1>
+    <h2>You thought like a <span class="accent-word">designer.</span></h2>
+    <div class="purpose-box" style="margin-top:30px;">
+      <strong style="color:var(--accent)">Keep thinking like this.</strong>
+      Every tool will reach people you didn't design for.
+      The best designers ask <em>who</em> before <em>what</em>.
+    </div>
+    <button class="select-btn" onclick="window.location.href='../index.html'">← EXPLORE ANOTHER DEVICE</button>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()">← PREV</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+</div>
+
+<script src="../js/core.js"></script>
+<script>
+/* ── Quiz option feedback ── */
+function pick(el, correct) {
+  const siblings = el.parentElement.querySelectorAll('.option');
+  siblings.forEach(s => s.classList.remove('correct', 'wrong'));
+  el.classList.add(correct ? 'correct' : 'wrong');
+}
+
+/* ── Persona drag & drop ── */
+let draggedPersona = null;
+
+function initPersonaDragDrop() {
+  document.querySelectorAll('.persona-card').forEach(card => {
+    card.addEventListener('dragstart', () => { draggedPersona = card; card.classList.add('dragging'); });
+    card.addEventListener('dragend',   () => card.classList.remove('dragging'));
+  });
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('active'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('active'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('active');
+      if (draggedPersona) { zone.appendChild(draggedPersona); draggedPersona = null; }
+    });
+  });
+}
+
+/* ── Rank drag & drop ── */
+let draggedRank = null;
+
+function initRankDrag() {
+  const list = document.getElementById('rankList');
+  if (!list) return;
+  list.querySelectorAll('.rank-item').forEach(item => {
+    item.addEventListener('dragstart', () => { draggedRank = item; item.style.opacity = '0.5'; });
+    item.addEventListener('dragend',   () => { draggedRank = null; item.style.opacity = ''; });
+    item.addEventListener('dragover',  e => {
+      e.preventDefault();
+      if (!draggedRank || draggedRank === item) return;
+      const rect = item.getBoundingClientRect();
+      const after = e.clientY > rect.top + rect.height / 2;
+      list.insertBefore(draggedRank, after ? item.nextSibling : item);
+    });
+  });
+  list.querySelectorAll('.rank-item').forEach(item => item.setAttribute('draggable', true));
+}
+
+/* ── Observers to init interactions when slides become active ── */
+const genaiObserver = new MutationObserver(() => {
+  const slide3 = document.querySelector('[data-slide="3"]');
+  if (slide3 && slide3.classList.contains('active')) {
+    setTimeout(initPersonaDragDrop, 100);
+  }
+  const slide5 = document.querySelector('[data-slide="5"]');
+  if (slide5 && slide5.classList.contains('active')) {
+    setTimeout(initRankDrag, 100);
+  }
+});
+genaiObserver.observe(document.body, { attributes: true, subtree: true });
+
+/* ── Init ── */
+initSlides(10);
+</script>
+</body>
+</html>
