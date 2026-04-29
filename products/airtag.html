@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tech Misuses Lab — AirTag</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  .topbar-home { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+  .topbar-home:hover { color: var(--accent); }
+
+  /* ── Generic AirTag layout ── */
+  .airtag-stack { display: flex; flex-direction: column; gap: 18px; max-width: 760px; width: 100%; text-align: left; }
+  .airtag-stack.center { text-align: center; align-items: center; }
+  .airtag-prose { font-size: 17px; line-height: 1.65; color: #ddd; }
+  .airtag-prose strong { color: var(--text); }
+
+  /* ── Screen 1 product card ── */
+  .at-product { display: flex; gap: 22px; align-items: center; padding: 16px; background: var(--surface); border-radius: 10px; border: 1px solid var(--border); width: 100%; max-width: 720px; }
+  .at-product .img { width: 120px; height: 120px; border-radius: 10px; background: #0d0d0d; display: flex; align-items: center; justify-content: center; font-size: 64px; flex-shrink: 0; overflow: hidden; }
+  .at-product .img img { width: 100%; height: 100%; object-fit: cover; }
+  .at-product .name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .at-product .desc { font-size: 14px; color: #bbb; line-height: 1.5; }
+
+  /* ── MAO row (Screens 2 + 7) ── */
+  .at-mao-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 760px; }
+  .at-mao-card { background: #1a1a1a; border-radius: 8px; padding: 18px; opacity: 0; transform: translateY(8px); }
+  .at-mao-card.in { animation: at-fade-up 0.5s ease forwards; }
+  .at-mao-card .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-bottom: 10px; }
+  .at-mao-card .label { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .at-mao-card .def { font-size: 13px; color: #999; line-height: 1.5; }
+  .at-mao-final { font-size: 16px; line-height: 1.6; color: #ddd; opacity: 0; transform: translateY(6px); margin-top: 4px; max-width: 760px; text-align: center; }
+  .at-mao-final.in { animation: at-fade-up 0.5s ease forwards; }
+  @keyframes at-fade-up { to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Screen 3 scenario picker ── */
+  .at-pick-grid { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 760px; }
+  .at-pick-card { background: #fff; color: #111; border: 1.5px solid #d8d8d8; border-radius: 12px; padding: 16px 18px; cursor: pointer; font-size: 16px; line-height: 1.5; position: relative; transition: border-color 0.2s, background 0.2s, opacity 0.2s; }
+  .at-pick-card:hover:not(.locked):not(.selected) { border-color: #999; }
+  .at-pick-card.selected { border: 2px solid var(--accent3); background: #e6f4fb; padding: 15px 17px; }
+  .at-pick-card.locked { opacity: 0.45; cursor: not-allowed; }
+  .at-pick-card .soon { position: absolute; top: 10px; right: 12px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; padding: 3px 7px; background: #eaeaea; color: #666; border-radius: 4px; }
+
+  /* ── Screen 4 comic + tagging ── */
+  .at-scene-label { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--accent3); text-transform: uppercase; }
+  .at-comic-wrap { width: 100%; max-width: 720px; background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+  .at-comic-wrap img { width: 100%; height: auto; display: block; }
+
+  .at-tag-block { width: 100%; max-width: 720px; }
+  .at-tag-q { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
+  .at-tag-rows { display: flex; flex-direction: column; gap: 10px; }
+  .at-tag-row { display: grid; grid-template-columns: 36px minmax(220px, 1fr) auto; column-gap: 14px; row-gap: 0; align-items: center; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; transition: background 0.3s, border-color 0.3s, opacity 0.3s; }
+  .at-tag-row .row-dot { grid-row: 1; }
+  .at-tag-row .row-label { grid-row: 1; }
+  .at-tag-row .row-buttons { grid-row: 1; }
+  .at-tag-row .row-diagnosis { grid-row: 2; grid-column: 2 / 4; }
+  .at-tag-row.present { border-color: var(--accent3); background: #0a1419; }
+  .at-tag-row.absent { opacity: 0.55; }
+  .at-tag-row .row-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--muted); justify-self: center; transition: background 0.3s, border-color 0.3s; }
+  .at-tag-row.present .row-dot { background: var(--accent3); border-color: var(--accent3); }
+  .at-tag-row.absent .row-dot { background: transparent; border-color: var(--muted); }
+  .at-tag-row .row-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .at-tag-row .row-label-title { font-size: 15px; font-weight: 700; }
+  .at-tag-row .row-label-question { font-size: 13px; color: #999; font-weight: 400; line-height: 1.4; }
+  .at-tag-row .row-diagnosis { font-size: 13px; color: #aaa; line-height: 1.5; opacity: 0; max-height: 0; overflow: hidden; transition: opacity 0.4s ease, max-height 0.4s ease; }
+  .at-tag-row.revealed .row-diagnosis { opacity: 1; max-height: 200px; margin-top: 6px; }
+  .at-tag-row .row-correction { display: block; margin-bottom: 4px; color: #ffb6b6; }
+  .at-tag-row .row-buttons { display: flex; gap: 8px; }
+  .at-tag-btn { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 7px 14px; border-radius: 5px; cursor: pointer; background: transparent; color: #bbb; border: 1px solid var(--border); transition: all 0.2s; }
+  .at-tag-btn:hover:not(:disabled) { border-color: var(--accent3); color: var(--accent3); }
+  .at-tag-btn.active { background: var(--accent3); color: #000; border-color: var(--accent3); }
+  .at-tag-btn:disabled { cursor: default; opacity: 0.5; }
+
+  .at-reveal-btn { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; padding: 11px 26px; border-radius: 5px; cursor: pointer; background: var(--accent); color: #000; border: 1px solid var(--accent); font-weight: 700; text-transform: uppercase; transition: all 0.2s; opacity: 0; pointer-events: none; }
+  .at-reveal-btn.show { opacity: 1; pointer-events: all; }
+  .at-reveal-btn:hover { background: #d4e83e; }
+
+  .at-punchline { font-size: 17px; line-height: 1.6; color: #ddd; padding: 16px 20px; border-radius: 10px; background: #131600; border: 1px solid rgba(232,255,71,0.3); width: 100%; max-width: 720px; opacity: 0; transform: translateY(6px); }
+  .at-punchline.in { animation: at-fade-up 0.5s ease forwards; }
+  .at-punchline strong { color: var(--accent); }
+  .at-punchline .pulse-dots { display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle; }
+  .at-punchline .pulse-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); opacity: 0.25; }
+  .at-punchline.in .pulse-dots span { animation: at-pulse 1.4s ease infinite; }
+  .at-punchline.in .pulse-dots span:nth-child(2) { animation-delay: 0.25s; }
+  .at-punchline.in .pulse-dots span:nth-child(3) { animation-delay: 0.5s; }
+  @keyframes at-pulse { 0%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+
+  .at-next-scene { margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-home" href="../index.html">← HOME</a>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="slide-counter" id="slideCounter">01 / 05</div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- ═══ Screen 1: What's an AirTag ═══ -->
+  <div class="slide" data-slide="1">
+    <div class="airtag-stack center" style="gap:24px;">
+      <div class="at-product">
+        <div class="img"><img src="../images/AirTag.png" alt="Apple AirTag"/></div>
+        <div>
+          <div class="name">Apple AirTag</div>
+          <div class="desc">A small Bluetooth tracker that helps people find lost belongings like keys or bags.</div>
+        </div>
+      </div>
+      <p class="airtag-prose" style="max-width:680px;">It's coin-sized, sticks to or slips inside almost anything, and reports its location through a network of nearby Apple devices. <strong>That last part is what makes it interesting for this lesson.</strong></p>
+    </div>
+  </div>
+
+  <!-- ═══ Screen 2: What's scenario-based misuse analysis ═══ -->
+  <div class="slide" data-slide="2">
+    <div class="airtag-stack center" style="gap:28px;">
+      <h2>Scenario-based misuse analysis</h2>
+      <p class="airtag-prose" style="max-width:680px;">Most product reviews ask what a product does. This one asks who's around it. You imagine real situations — people, tensions, relationships — and check whether the product changes what's possible in those situations. Misuse rarely shows up in the spec sheet. It shows up in the scenario.</p>
+
+      <div class="at-mao-row" id="screen2MaoRow">
+        <div class="at-mao-card" data-stagger="0">
+          <div class="dot"></div>
+          <div class="label">Motive</div>
+          <div class="def">A reason to misuse it.</div>
+        </div>
+        <div class="at-mao-card" data-stagger="400">
+          <div class="dot"></div>
+          <div class="label">Access</div>
+          <div class="def">Proximity to the target.</div>
+        </div>
+        <div class="at-mao-card" data-stagger="800">
+          <div class="dot"></div>
+          <div class="label">Opportunity</div>
+          <div class="def">What the product newly enables.</div>
+        </div>
+      </div>
+      <p class="at-mao-final" id="screen2Final" data-stagger="1400">When all three line up, a product becomes a misuse vector.</p>
+    </div>
+  </div>
+
+  <!-- ═══ Screen 3: Pick a scenario ═══ -->
+  <div class="slide" data-slide="3">
+    <div class="airtag-stack center" style="gap:22px;">
+      <h2>Pick a scenario to investigate</h2>
+      <p class="airtag-prose" style="max-width:620px; text-align:center;">Three situations. Which would you investigate first for possible misuse?</p>
+
+      <div class="at-pick-grid">
+        <div class="at-pick-card" data-pick="breakup" onclick="atPick(this)">
+          A couple recently ended their relationship and are still exchanging belongings.
+        </div>
+        <div class="at-pick-card locked">
+          <span class="soon">SOON</span>
+          A parent in a custody dispute wants to know where their child goes after school.
+        </div>
+        <div class="at-pick-card locked">
+          <span class="soon">SOON</span>
+          A journalist meets a confidential source in a public location.
+        </div>
+      </div>
+
+      <button class="at-reveal-btn" id="atInvestigateBtn" onclick="atInvestigate()" disabled style="opacity:0.4;">Investigate</button>
+    </div>
+  </div>
+
+  <!-- ═══ Screen 4 (originally Screen 4): Breakup video + MAO tagging ═══ -->
+  <div class="slide" data-slide="4">
+    <div class="airtag-stack center" style="gap:18px;">
+      <div class="at-scene-label">Scenario 1 of 3</div>
+      <div class="at-comic-wrap">
+        <img src="../images/Airtag_scenario1.png" alt="Comic illustrating the breakup scenario"/>
+      </div>
+
+      <div class="at-tag-block" id="breakupTagBlock">
+        <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
+        <div class="at-tag-rows" id="breakupTagRows">
+          <div class="at-tag-row" data-row="motive">
+            <div class="row-dot"></div>
+            <div class="row-label">
+              <div class="row-label-title">Motive</div>
+              <div class="row-label-question">Does he have a motive?</div>
+            </div>
+            <div class="row-diagnosis"></div>
+            <div class="row-buttons">
+              <button class="at-tag-btn" onclick="atTagAnswer(this,'motive','present')">Present</button>
+              <button class="at-tag-btn" onclick="atTagAnswer(this,'motive','absent')">Absent</button>
+            </div>
+          </div>
+          <div class="at-tag-row" data-row="access">
+            <div class="row-dot"></div>
+            <div class="row-label">
+              <div class="row-label-title">Access</div>
+              <div class="row-label-question">Does he have access?</div>
+            </div>
+            <div class="row-diagnosis"></div>
+            <div class="row-buttons">
+              <button class="at-tag-btn" onclick="atTagAnswer(this,'access','present')">Present</button>
+              <button class="at-tag-btn" onclick="atTagAnswer(this,'access','absent')">Absent</button>
+            </div>
+          </div>
+          <div class="at-tag-row" data-row="opportunity">
+            <div class="row-dot"></div>
+            <div class="row-label">
+              <div class="row-label-title">Opportunity</div>
+              <div class="row-label-question">Does he have the opportunity?</div>
+            </div>
+            <div class="row-diagnosis"></div>
+            <div class="row-buttons">
+              <button class="at-tag-btn" onclick="atTagAnswer(this,'opportunity','present')">Present</button>
+              <button class="at-tag-btn" onclick="atTagAnswer(this,'opportunity','absent')">Absent</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:center; margin-top:18px;">
+          <button class="at-reveal-btn" id="breakupRevealBtn" onclick="atReveal()">Reveal</button>
+        </div>
+      </div>
+
+      <div class="at-punchline" id="breakupPunchline" style="display:none;">
+        <strong>All three present.</strong> Motive plus access plus opportunity. This is the misuse vector.
+        <span class="pulse-dots"><span></span><span></span><span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Screen 7 (sequential 5 here): Wrap ═══ -->
+  <div class="slide" data-slide="5">
+    <div class="airtag-stack center" style="gap:24px;">
+      <h2>That was scenario-based misuse analysis.</h2>
+      <p class="airtag-prose" style="max-width:680px;">You watched a situation and checked it against the same lens. When you're designing a new product — or evaluating one — don't start with the features. Start with the people around it, and ask: <strong>motive, access, opportunity</strong>. If all three line up somewhere, you've found a misuse vector before it finds you.</p>
+
+      <div class="at-mao-row" id="screen7MaoRow">
+        <div class="at-mao-card" data-stagger="0">
+          <div class="dot"></div>
+          <div class="label">Motive</div>
+          <div class="def">A reason to misuse it.</div>
+        </div>
+        <div class="at-mao-card" data-stagger="400">
+          <div class="dot"></div>
+          <div class="label">Access</div>
+          <div class="def">Proximity to the target.</div>
+        </div>
+        <div class="at-mao-card" data-stagger="800">
+          <div class="dot"></div>
+          <div class="label">Opportunity</div>
+          <div class="def">What the product newly enables.</div>
+        </div>
+      </div>
+
+      <button class="select-btn" onclick="window.location.href='../index.html'">Go back to home page</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()">← PREV</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+</div>
+
+<script src="../js/core.js"></script>
+<script>
+  /* ── Screen 2 / 7 staggered MAO reveal ── */
+  function atStaggerMao(rowId, finalId) {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    row.querySelectorAll('.at-mao-card').forEach(c => c.classList.remove('in'));
+    row.querySelectorAll('.at-mao-card').forEach(c => {
+      const delay = parseInt(c.dataset.stagger || '0', 10);
+      setTimeout(() => c.classList.add('in'), delay);
+    });
+    if (finalId) {
+      const final = document.getElementById(finalId);
+      if (final) {
+        final.classList.remove('in');
+        const delay = parseInt(final.dataset.stagger || '0', 10);
+        setTimeout(() => final.classList.add('in'), delay);
+      }
+    }
+  }
+
+  /* Re-trigger stagger when screens 2 or 5 (wrap) become active.
+     Hook into goTo so we don't need a global observer (which would loop on every class change). */
+  const _origGoTo = goTo;
+  goTo = function(n) {
+    _origGoTo(n);
+    if (n === 2) atStaggerMao('screen2MaoRow', 'screen2Final');
+    if (n === 5) atStaggerMao('screen7MaoRow', null);
+  };
+  // First-load case: if slide 2 or 5 is somehow the initial slide
+  if (document.querySelector('[data-slide="2"]').classList.contains('active')) atStaggerMao('screen2MaoRow', 'screen2Final');
+  if (document.querySelector('[data-slide="5"]').classList.contains('active')) atStaggerMao('screen7MaoRow', null);
+
+  /* ── Screen 3: pick a scenario (only "breakup" is live) ── */
+  let atPickedScenario = null;
+
+  function atPick(card) {
+    if (card.classList.contains('locked')) return;
+    document.querySelectorAll('.at-pick-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    atPickedScenario = card.dataset.pick;
+    const btn = document.getElementById('atInvestigateBtn');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.classList.add('show');
+  }
+
+  function atInvestigate() {
+    if (!atPickedScenario) return;
+    goNext();
+  }
+
+  /* ── Screen 4: MAO tagging + reveal ── */
+  const BREAKUP_TRUTH = {
+    motive: { state: 'present', diagnosis: 'A recent breakup creates a clear surveillance motive — knowing where the ex is, who they’re with.' },
+    access: { state: 'present', diagnosis: 'They’re still exchanging belongings. The bag, the box, the jacket — all of it passes through the suspect’s hands before going back.' },
+    opportunity: { state: 'present', diagnosis: 'A coin-sized tracker reporting through Apple’s network turns a returned item into continuous covert location tracking.' }
+  };
+
+  const atTagAnswers = { motive: null, access: null, opportunity: null };
+  let atRevealed = false;
+
+  function atTagAnswer(btn, row, value) {
+    if (atRevealed) return;
+    atTagAnswers[row] = value;
+
+    const rowEl = document.querySelector(`.at-tag-row[data-row="${row}"]`);
+    rowEl.classList.remove('present', 'absent');
+    rowEl.classList.add(value);
+
+    rowEl.querySelectorAll('.at-tag-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const allAnswered = Object.values(atTagAnswers).every(v => v !== null);
+    document.getElementById('breakupRevealBtn').classList.toggle('show', allAnswered);
+  }
+
+  function atReveal() {
+    if (atRevealed) return;
+    atRevealed = true;
+    document.getElementById('breakupRevealBtn').style.display = 'none';
+
+    const order = ['motive', 'access', 'opportunity'];
+    order.forEach((rowKey, i) => {
+      setTimeout(() => atRevealRow(rowKey), i * 600);
+    });
+
+    setTimeout(() => {
+      const punch = document.getElementById('breakupPunchline');
+      punch.style.display = 'block';
+      requestAnimationFrame(() => punch.classList.add('in'));
+    }, order.length * 600 + 200);
+  }
+
+  function atRevealRow(rowKey) {
+    const truth = BREAKUP_TRUTH[rowKey];
+    const rowEl = document.querySelector(`.at-tag-row[data-row="${rowKey}"]`);
+    const guess = atTagAnswers[rowKey];
+
+    rowEl.classList.remove('present', 'absent');
+    rowEl.classList.add(truth.state);
+
+    const diag = rowEl.querySelector('.row-diagnosis');
+    let html = truth.diagnosis;
+    if (guess && guess !== truth.state) {
+      const correctionText = truth.state === 'present'
+        ? `You marked this absent — here’s why it’s present.`
+        : `You marked this present — here’s why it’s absent.`;
+      html = `<span class="row-correction">${correctionText}</span>${truth.diagnosis}`;
+    }
+    diag.innerHTML = html;
+    rowEl.classList.add('revealed');
+
+    rowEl.querySelectorAll('.at-tag-btn').forEach(b => b.disabled = true);
+  }
+
+  /* ── Screen 7: Restart ── */
+  function atRestart() {
+    // Reset Screen 3 pick
+    document.querySelectorAll('.at-pick-card').forEach(c => c.classList.remove('selected'));
+    atPickedScenario = null;
+    const invBtn = document.getElementById('atInvestigateBtn');
+    invBtn.disabled = true;
+    invBtn.style.opacity = '0.4';
+    invBtn.classList.remove('show');
+
+    // Reset Screen 4
+    Object.keys(atTagAnswers).forEach(k => atTagAnswers[k] = null);
+    atRevealed = false;
+    document.querySelectorAll('.at-tag-row').forEach(r => {
+      r.classList.remove('present', 'absent', 'revealed');
+      r.querySelector('.row-diagnosis').innerHTML = '';
+      r.querySelectorAll('.at-tag-btn').forEach(b => { b.disabled = false; b.classList.remove('active'); });
+    });
+    const revealBtn = document.getElementById('breakupRevealBtn');
+    revealBtn.classList.remove('show');
+    revealBtn.style.display = '';
+    const punch = document.getElementById('breakupPunchline');
+    punch.classList.remove('in');
+    punch.style.display = 'none';
+
+    goTo(1);
+  }
+
+  /* ── Init ── */
+  initSlides(5);
+</script>
+</body>
+</html>

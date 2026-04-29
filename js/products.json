@@ -7,6 +7,12 @@
       "file": "products/printer.html"
     },
     {
+      "id": "airtag",
+      "name": "AirTag",
+      "icon": "📍",
+      "file": "products/airtag.html"
+    },
+    {
       "id": "genai",
       "name": "Generative AI",
       "icon": "🤖",
