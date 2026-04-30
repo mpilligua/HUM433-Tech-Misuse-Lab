@@ -24,9 +24,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-seri
 .slide.exit { opacity: 0; transform: translateX(-60px); }
 
 .slide-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; }
-h1 { font-size: clamp(36px,5.5vw,64px); font-weight: 800; line-height: 1.05; }
-h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
-h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
+h1 { font-size: clamp(28px,4vw,48px); font-weight: 800; line-height: 1.05; }
+h2 { font-size: clamp(20px,2.5vw,32px); font-weight: 700; line-height: 1.1; }
+h3 { font-size: clamp(15px,1.8vw,22px); font-weight: 700; line-height: 1.2; }
 .accent-word { color: var(--accent); }
 .danger-word { color: var(--accent2); }
 
@@ -41,28 +41,28 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 /* ── SLIDE 1: Learning Objectives ── */
 .tool-name {
   font-family: 'Space Mono', monospace;
-  font-size: 22px; letter-spacing: 5px; color: var(--accent3);
+  font-size: 13px; letter-spacing: 4px; color: var(--accent3);
   text-transform: uppercase; margin-bottom: 14px; font-weight: 700;
 }
 .slide-label-large { font-family: 'Space Mono', monospace; font-size: 18px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 28px; font-weight: 700; }
 .obj-list { display: flex; flex-direction: column; gap: 14px; max-width: 720px; margin-top: 10px; width: 100%; }
 .obj-item { display: flex; gap: 18px; align-items: flex-start; padding: 16px 22px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; text-align: left; }
 .obj-num { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; color: var(--accent); min-width: 28px; padding-top: 3px; }
-.obj-text { font-size: 20px; color: #ccc; line-height: 1.55; }
+.obj-text { font-size: 17px; color: #ccc; line-height: 1.55; }
 .obj-text strong { color: var(--text); }
 
 /* ── SLIDE 2: Why This Matters ── */
 .why-box { max-width: 700px; text-align: center; }
-.why-body { font-size: 19px; line-height: 1.75; color: #ccc; margin-top: 28px; max-width: 700px; }
+.why-body { font-size: 17px; line-height: 1.65; color: #ccc; margin-top: 28px; max-width: 700px; }
 .why-body strong { color: var(--text); }
-.why-highlight { margin-top: 32px; padding: 26px 32px; border: 1px solid rgba(232,255,71,0.3); background: #131600; border-radius: 8px; font-size: 20px; line-height: 1.75; color: #ddd; max-width: 700px; }
+.why-highlight { margin-top: 28px; padding: 22px 28px; border: 1px solid rgba(232,255,71,0.3); background: #131600; border-radius: 8px; font-size: 17px; line-height: 1.65; color: #ddd; max-width: 700px; }
 .why-highlight strong { color: var(--accent); }
 
 /* ── SLIDE 3: Choose Device ── */
 .mission-box { margin-top: 24px; padding: 22px 28px; border-left: 3px solid var(--accent3); background: #0d1219; border-radius: 0 8px 8px 0; max-width: 680px; width: 100%; text-align: left; }
 .mission-label { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent3); letter-spacing: 3px; margin-bottom: 12px; }
 .mission-points { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.mission-points li { font-size: 18px; color: #ccc; display: flex; gap: 10px; align-items: flex-start; }
+.mission-points li { font-size: 16px; color: #ccc; display: flex; gap: 10px; align-items: flex-start; }
 .mission-points li::before { content: '→'; color: var(--accent3); font-family: 'Space Mono', monospace; flex-shrink: 0; }
 .object-grid { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 40px; justify-content: center; }
 .object-card { border: 1px solid var(--border); background: var(--surface); border-radius: 14px; padding: 42px 36px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; overflow: hidden; width: 260px; min-height: 220px; display: grid; grid-template-rows: 76px auto; align-content: center; align-items: center; justify-items: center; row-gap: 18px; }
@@ -87,10 +87,10 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 
 /* ── SLIDE 5: Quiz 1 ── */
 .quiz-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; }
-.quiz-heading { font-size: clamp(22px,3.5vw,40px); font-weight: 800; line-height: 1.15; text-align: center; margin-bottom: 14px; }
-.quiz-q { font-size: 18px; color: #bbb; margin-bottom: 26px; line-height: 1.55; text-align: center; max-width: 580px; }
+.quiz-heading { font-size: clamp(18px,2.5vw,28px); font-weight: 800; line-height: 1.15; text-align: center; margin-bottom: 14px; }
+.quiz-q { font-size: 16px; color: #bbb; margin-bottom: 26px; line-height: 1.6; text-align: center; max-width: 580px; }
 .options-grid { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-.option-btn { padding: 18px 24px; background: var(--surface); border: 2px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 600; text-align: left; cursor: pointer; border-radius: 8px; transition: all 0.25s; display: flex; align-items: center; gap: 16px; }
+.option-btn { padding: 16px 22px; background: var(--surface); border: 2px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 600; text-align: left; cursor: pointer; border-radius: 8px; transition: all 0.25s; display: flex; align-items: center; gap: 16px; }
 .option-btn:hover:not(:disabled) { border-color: var(--accent3); background: #0d1a1f; }
 .option-btn.correct { border-color: var(--accent); background: #1a1e00; color: var(--accent); }
 .option-btn.wrong { border-color: var(--accent2); background: #1a0000; color: var(--accent2); }
@@ -102,7 +102,7 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 
 /* ── SLIDE 6: Story 1 ── */
 .story-wrap { max-width: 800px; width: 100%; text-align: left; }
-.story-intro { font-size: 18px; color: #aaa; margin-top: 12px; margin-bottom: 22px; line-height: 1.6; }
+.story-intro { font-size: 16px; color: #aaa; margin-top: 12px; margin-bottom: 22px; line-height: 1.6; }
 .attack-card { display: flex; flex-direction: column; gap: 10px; }
 .attack-block { padding: 20px 26px; border-radius: 8px; border-left: 4px solid transparent; }
 .attack-block.setup { background: #0d1219; border-color: var(--accent3); }
@@ -117,8 +117,8 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 .attack-block p strong.bad { color: #ff8888; }
 
 /* ── SLIDE 7: Teaser ── */
-.teaser-big { font-size: clamp(38px,5.5vw,68px); font-weight: 800; line-height: 1.05; margin: 20px 0 24px; text-align: center; }
-.teaser-sub { font-size: 18px; color: var(--muted); max-width: 520px; line-height: 1.75; text-align: center; }
+.teaser-big { font-size: clamp(26px,3.5vw,44px); font-weight: 800; line-height: 1.05; margin: 20px 0 24px; text-align: center; }
+.teaser-sub { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.65; text-align: center; }
 .hint-box { margin-top: 32px; padding: 18px 26px; border: 1px dashed rgba(232,255,71,0.4); border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 14px; color: var(--muted); max-width: 540px; text-align: center; }
 .hint-box span { color: var(--accent); }
 
@@ -149,9 +149,9 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 
 /* ── SLIDE 12: Finish ── */
 .finish-wrap { max-width: 700px; text-align: center; }
-.finish-body { font-size: 18px; color: #ccc; line-height: 1.75; margin-top: 24px; }
+.finish-body { font-size: 16px; color: #ccc; line-height: 1.65; margin-top: 24px; }
 .finish-body strong { color: var(--text); }
-.finish-card { margin-top: 28px; padding: 22px 28px; border: 1px solid rgba(232,255,71,0.3); background: #131600; border-radius: 10px; font-size: 17px; color: #ccc; line-height: 1.7; }
+.finish-card { margin-top: 24px; padding: 20px 26px; border: 1px solid rgba(232,255,71,0.3); background: #131600; border-radius: 10px; font-size: 16px; color: #ccc; line-height: 1.65; }
 .finish-card strong { color: var(--accent); }
 
 .slide::-webkit-scrollbar { width: 4px; }
@@ -160,8 +160,8 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 /* ── Quiz side-panel image preview ── */
 .quiz-layout { display: flex; flex-direction: row; width: 100%; max-width: 1160px; gap: 48px; align-items: flex-start; text-align: left; }
 .quiz-left { flex: 0 0 460px; display: flex; flex-direction: column; }
-.quiz-heading { font-size: clamp(20px,2.8vw,34px); font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
-.quiz-q { font-size: 20px; color: #bbb; margin-bottom: 22px; line-height: 1.55; max-width: 100%; }
+.quiz-heading { font-size: clamp(18px,2.2vw,28px); font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+.quiz-q { font-size: 16px; color: #bbb; margin-bottom: 22px; line-height: 1.6; max-width: 100%; }
 .quiz-right {
   flex: 1;
   display: flex;
