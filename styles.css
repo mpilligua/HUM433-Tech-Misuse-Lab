@@ -75,6 +75,10 @@ h3 { font-size: clamp(18px,2.5vw,28px); font-weight: 700; line-height: 1.2; }
 .object-card .soon { position: absolute; top: 12px; right: 12px; font-size: 16px; background: var(--border); padding: 3px 8px; border-radius: 3px; font-family: 'Space Mono', monospace; }
 .select-btn { margin-top: 28px; background: var(--accent); color: #000; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; padding: 15px 36px; border: none; cursor: pointer; transition: all 0.2s; border-radius: 5px; }
 .select-btn:hover { background: #d4e83e; transform: translateY(-1px); }
+.select-btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.select-btn.ghost:hover { background: transparent; border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.select-btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 28px; }
+.select-btn-row .select-btn { margin-top: 0; }
 
 /* ── SLIDE 4: Components ── */
 .purpose-box { border-left: 3px solid var(--accent); padding: 15px 20px; background: #161600; margin: 18px 0 20px; font-size: 16px; line-height: 1.7; color: #ccc; max-width: 820px; border-radius: 0 6px 6px 0; width: 100%; }

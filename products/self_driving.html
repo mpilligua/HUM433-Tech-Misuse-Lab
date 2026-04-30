@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tech Misuses Lab — AirTag</title>
+<title>Tech Misuses Lab — Self-driving vehicle</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
@@ -104,17 +104,18 @@
 
 <div class="slides-wrapper">
 
-  <!-- ═══ Screen 1: What's an AirTag ═══ -->
+  <!-- ═══ Slide 1: What's a self-driving vehicle ═══ -->
   <div class="slide" data-slide="1">
     <div class="airtag-stack center" style="gap:24px;">
       <div class="at-product">
-        <div class="img"><img src="../images/AirTag.png" alt="Apple AirTag"/></div>
+        <div class="img">
+          <img src="../images/car.jpg" alt="Self-driving vehicle" onerror="this.style.display='none'; this.parentElement.textContent='🚗';"/>
+        </div>
         <div>
-          <div class="name">Apple AirTag</div>
-          <div class="desc">A small Bluetooth tracker that helps people find lost belongings like keys or bags.</div>
+          <div class="name">Self-driving vehicle</div>
+          <div class="desc">A car that drives itself, sensing its surroundings with cameras, lidar, and radar.</div>
         </div>
       </div>
-      <p class="airtag-prose" style="max-width:680px;">It's coin-sized, sticks to or slips inside almost anything, and reports its location through a network of nearby Apple devices. <strong>That last part is what makes it interesting for this lesson.</strong></p>
     </div>
   </div>
 
@@ -153,13 +154,13 @@
 
       <div class="at-pick-grid">
         <div class="at-pick-card" data-pick="breakup" onclick="atPick(this)">
-          A couple recently ended their relationship and are still exchanging belongings.
+          After a long shift, a tired driver activates driver-assist on the highway and starts to fall asleep.
         </div>
         <div class="at-pick-card" data-pick="custody" onclick="atPick(this)">
-          A parent in a custody dispute wants to know where their child goes after school.
+          A dad uses driver-assist so he can help his daughter find her inhaler while the car is still moving.
         </div>
         <div class="at-pick-card" data-pick="journalist" onclick="atPick(this)">
-          A journalist meets a confidential source in a public location.
+          A tired driver wants the car to take over, but the system refuses to activate in a construction zone.
         </div>
       </div>
 
@@ -172,7 +173,7 @@
     <div class="airtag-stack center" style="gap:18px;">
       <div class="at-scene-label">Scenario <span id="breakupOrder">1</span> of 3</div>
       <div class="at-comic-wrap">
-        <img src="../images/comic1.png" alt="Comic illustrating the breakup scenario"/>
+        <img src="../images/comic4.png" alt="Comic illustrating scenario 1"/>
       </div>
     </div>
   </div>
@@ -187,7 +188,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Does he have a motive?</div>
+              <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -199,7 +200,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Access</div>
-              <div class="row-label-question">Does he have access?</div>
+              <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -211,7 +212,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">Does he have the opportunity?</div>
+              <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -226,7 +227,7 @@
       </div>
 
       <div class="at-punchline" id="breakupPunchline" style="display:none;">
-        <strong>All three present.</strong> Motive plus access plus opportunity. This is the misuse vector.
+        <strong>All three legs are present.</strong> This is what a misuse vector looks like.
         <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
       </div>
     </div>
@@ -237,7 +238,7 @@
     <div class="airtag-stack center" style="gap:18px;">
       <div class="at-scene-label">Scenario <span id="custodyOrder">2</span> of 3</div>
       <div class="at-comic-wrap">
-        <img src="../images/comic2.png" alt="Comic illustrating the custody scenario"/>
+        <img src="../images/comic5.png" alt="Comic illustrating scenario 2"/>
       </div>
     </div>
   </div>
@@ -252,7 +253,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Does he have a motive?</div>
+              <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -264,7 +265,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Access</div>
-              <div class="row-label-question">Does he have access?</div>
+              <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -276,7 +277,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">Does he have the opportunity?</div>
+              <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -291,7 +292,7 @@
       </div>
 
       <div class="at-punchline" id="custodyPunchline" style="display:none;">
-        <strong>All three legs are present here too</strong> — but the motive looks more sympathetic than the breakup, which is exactly why this scenario matters. Misuse doesn't always come from bad intentions. Sometimes it comes from good intentions plus a product that makes overreach easy. The lens flags the structure, not the feeling.
+        <strong>All three legs are present.</strong> The motive is caring, but the structure still creates a misuse vector.
         <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
       </div>
     </div>
@@ -302,8 +303,8 @@
     <div class="airtag-stack center" style="gap:18px;">
       <div class="at-scene-label">Scenario <span id="journalistOrder">3</span> of 3</div>
       <div class="at-comic-wrap at-comic-placeholder">
-        <img src="../images/comic3.png" alt="Comic illustrating the journalist scenario" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
-        <div class="at-comic-fallback">comic pending — images/comic3.png</div>
+        <img src="../images/comic6.png" alt="Comic illustrating scenario 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+        <div class="at-comic-fallback">comic pending — images/comic6.png</div>
       </div>
     </div>
   </div>
@@ -318,7 +319,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Does the watcher have a motive?</div>
+              <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -330,7 +331,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Access</div>
-              <div class="row-label-question">Does the watcher have access?</div>
+              <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -342,7 +343,7 @@
             <div class="row-dot"></div>
             <div class="row-label">
               <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">Does the watcher have the opportunity?</div>
+              <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
             </div>
             <div class="row-diagnosis"></div>
             <div class="row-buttons">
@@ -357,35 +358,37 @@
       </div>
 
       <div class="at-punchline" id="journalistPunchline" style="display:none;">
-        <strong>Only motive is present here.</strong> Without access, the product can't be deployed — and without deployment, opportunity never materializes. This is why scenario-based analysis matters: motive on its own, even strong motive, doesn't create a misuse vector. The legs have to line up. Take one away and the structure falls.
-        <span class="pulse-dots"><span class="on"></span><span></span><span></span></span>
+        <strong>Only two of three legs are present.</strong> Without opportunity, the structure falls.
+        <span class="pulse-dots"><span class="on"></span><span class="on"></span><span></span></span>
       </div>
     </div>
   </div>
 
   <!-- ═══ Slide 10: Wrap ═══ -->
   <div class="slide" data-slide="10">
-    <div class="airtag-stack center" style="gap:24px;">
-      <h2>That was scenario-based misuse analysis.</h2>
-      <p class="airtag-prose" style="max-width:680px;">You watched a situation and checked it against the same lens. When you're designing a new product — or evaluating one — don't start with the features. Start with the people around it, and ask: <strong>motive, access, opportunity</strong>. If all three line up somewhere, you've found a misuse vector before it finds you.</p>
+    <div class="airtag-stack center" style="gap:20px;">
+      <h2>Driver-assist misuse isn't about bad drivers or bad intentions.</h2>
+      <p class="airtag-prose" style="max-width:680px;">In these scenarios, the risk appears when three things line up:</p>
 
       <div class="at-mao-row" id="screen7MaoRow">
         <div class="at-mao-card" data-stagger="0">
           <div class="dot"></div>
           <div class="label">Motive</div>
-          <div class="def">A reason to misuse it.</div>
+          <div class="def">Someone has a reason to disengage.</div>
         </div>
         <div class="at-mao-card" data-stagger="400">
           <div class="dot"></div>
           <div class="label">Access</div>
-          <div class="def">Proximity to the target.</div>
+          <div class="def">They can activate driver-assist.</div>
         </div>
         <div class="at-mao-card" data-stagger="800">
           <div class="dot"></div>
           <div class="label">Opportunity</div>
-          <div class="def">What the product newly enables.</div>
+          <div class="def">The system makes disengagement feel possible.</div>
         </div>
       </div>
+
+      <p class="airtag-prose" style="max-width:680px;"><strong>MAO helps you ask: not "is this feature dangerous?", but "in this scenario, does the feature enable misuse?"</strong></p>
 
       <div class="select-btn-row">
         <button class="select-btn ghost" onclick="atTryAnother()">Try another scenario</button>
@@ -434,51 +437,58 @@
 
   /* ── Scenario data ──
      Each scenario maps to a slide number, owns a truth table, the DOM ids it uses, and a punchline. */
+  /* Internal keys (breakup/custody/journalist) are inherited from the AirTag track and used purely
+     as routing slots. The actual scenarios here are: exhausted commute, inhaler in the backpack,
+     and driver-assist unavailable. */
   const SCENARIOS = {
-    breakup: {
+    breakup: { // Exhausted commute
       comicSlide: 4,
       tagSlide: 5,
       truth: {
-        motive: { state: 'present', diagnosis: 'A recent breakup creates a clear surveillance motive — knowing where the ex is, who they’re with.' },
-        access: { state: 'present', diagnosis: 'They’re still exchanging belongings. The bag, the box, the jacket — all of it passes through the suspect’s hands before going back.' },
-        opportunity: { state: 'present', diagnosis: 'A coin-sized tracker reporting through Apple’s network turns a returned item into continuous covert location tracking.' }
+        motive: { state: 'present', diagnosis: 'Alex is exhausted after a long shift and wants relief from the burden of driving.' },
+        access: { state: 'present', diagnosis: 'Alex is the driver and can activate driver-assist mode.' },
+        opportunity: { state: 'present', diagnosis: 'Driver-assist keeps the car moving in lane, making it feel possible for Alex to rest his eyes instead of supervising.' }
       },
-      corrections: {},
+      corrections: {
+        motive: 'You marked this absent, but the first panel gives the motive: Alex is tired and wants the car to reduce the effort of driving.',
+        access: 'You marked this absent, but the dashboard shows that Alex turned driver-assist on.',
+        opportunity: 'You marked this absent, but the key moment is Alex resting his eyes while the car continues driving. The system creates the opportunity to disengage.'
+      },
       rowsId: 'breakupTagRows',
       revealBtnId: 'breakupRevealBtn',
       punchId: 'breakupPunchline',
       orderLabelId: 'breakupOrder'
     },
-    custody: {
+    custody: { // Inhaler in the backpack
       comicSlide: 6,
       tagSlide: 7,
       truth: {
-        motive: { state: 'present', diagnosis: 'A reason to want covert visibility exists, even when the reason is framed as protective. The text exchange shows one parent demanding more information than the other has agreed to share — that gap is the motive.' },
-        access: { state: 'present', diagnosis: 'The backpack moves between two households on a regular schedule. Recurring physical handoffs of a child’s belongings are a textbook access condition.' },
-        opportunity: { state: 'present', diagnosis: 'The location history with multiple entries across multiple days is what makes this misuse rather than coordination. A safety check-in would not require ongoing logs of every place the child visits — that capability goes beyond what the situation justifies.' }
+        motive: { state: 'present', diagnosis: 'The dad urgently wants to help his daughter find her inhaler.' },
+        access: { state: 'present', diagnosis: 'The dad is driving the car and can activate driver-assist.' },
+        opportunity: { state: 'present', diagnosis: 'Driver-assist keeps the car moving steadily enough that the dad feels able to look away and reach back.' }
       },
       corrections: {
-        motive: 'You marked this absent, probably because the motive looks like parental concern. But scenario-based analysis doesn’t grade motives by sympathy. It asks whether a reason to bypass the other party’s consent exists. Here it clearly does.',
-        access: 'You marked this absent — but the backpack is the access vector, identical in structure to the breakup’s box. Whenever items routinely move between people, access exists.',
-        opportunity: 'You marked this absent, probably because tracking your own child sounds reasonable. But notice what panel 4 actually shows: a continuous record across multiple days, not a single “she arrived” confirmation. That’s the line between coordination and surveillance — and the AirTag is what enables crossing it.'
+        motive: 'You marked this absent, probably because the dad is trying to help. But MAO is not judging whether the motive is caring or selfish. It asks whether there is a reason to use the product in a risky way.',
+        access: 'You marked this absent, but Panel 3 shows him turning on driver-assist from the driver’s seat.',
+        opportunity: 'You marked this absent, but Panel 5 is the key moment. The car is still moving while the dad stops supervising and reaches into the back seat.'
       },
       rowsId: 'custodyTagRows',
       revealBtnId: 'custodyRevealBtn',
       punchId: 'custodyPunchline',
       orderLabelId: 'custodyOrder'
     },
-    journalist: {
+    journalist: { // Driver-assist unavailable
       comicSlide: 8,
       tagSlide: 9,
       truth: {
-        motive: { state: 'present', diagnosis: 'A third party is clearly observing the meeting with surveillance intent. Whoever they’re working for has a reason to want to identify or follow the source.' },
-        access: { state: 'absent', diagnosis: 'The source’s belongings never leave their body. The watcher never approaches the table. No object exchange ever happens. Without a physical pathway to the source’s possessions, access doesn’t exist.' },
-        opportunity: { state: 'absent', diagnosis: 'Without access, the AirTag can never be planted, so the product doesn’t enable anything new in this situation. Opportunity collapses when access fails — the legs depend on each other.' }
+        motive: { state: 'present', diagnosis: 'The driver is exhausted and wants the car to reduce or remove the burden of driving.' },
+        access: { state: 'present', diagnosis: 'He is in the car and can try to activate the driver-assist feature.' },
+        opportunity: { state: 'absent', diagnosis: 'The system does not activate, so it does not create the opportunity to disengage from driving.' }
       },
       corrections: {
-        motive: 'You marked this absent — but the watcher’s behavior in panel 2 is unambiguous. Their attention to the meeting establishes that someone wants information about the source. That’s motive.',
-        access: 'You marked this present — but look again at panel 3. The watcher stays at their own table, hands on their own laptop. There’s no moment where they could plant anything on the source. Proximity in a public space is not the same as access.',
-        opportunity: 'You marked this present — possibly because the watcher clearly has surveillance interest. But interest without a way to act on it produces nothing. The AirTag changes nothing for someone who can’t get near the target’s belongings.'
+        motive: 'You marked this absent, but the first panel shows the motive clearly: he is tired and wants assist to handle the drive.',
+        access: 'You marked this absent, but Panel 2 shows him pressing the driver-assist control. He has access to the feature.',
+        opportunity: 'You marked this present, but the dashboard blocks the feature. Opportunity means the product enables the risky behavior in this situation. Here, it does not.'
       },
       rowsId: 'journalistTagRows',
       revealBtnId: 'journalistRevealBtn',
