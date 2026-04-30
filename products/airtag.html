@@ -97,7 +97,7 @@
 <body>
 
 <div class="topbar">
-  <a class="topbar-home" href="../index.html">← HOME</a>
+  <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
   <div class="slide-counter" id="slideCounter">01 / 10</div>
 </div>
@@ -422,9 +422,13 @@
     }
   }
 
-  /* Re-trigger stagger when slides 2 or 10 (wrap) become active. */
+  /* Re-trigger stagger when slides 2 or 10 (wrap) become active.
+     Tag slides 5/7/9 are gated until their scenario is revealed. */
   const _origGoTo = goTo;
+  const TAG_SLIDE_KEY = { 5: 'breakup', 7: 'custody', 9: 'journalist' };
   goTo = function(n) {
+    const key = TAG_SLIDE_KEY[n];
+    nextGated = key ? !atTagState[key].revealed : false;
     _origGoTo(n);
     if (n === 2) atStaggerMao('screen2MaoRow', 'screen2Final');
     if (n === 10) atStaggerMao('screen7MaoRow', null);
@@ -524,6 +528,7 @@
       const punch = document.getElementById(sc.punchId);
       punch.style.display = 'block';
       requestAnimationFrame(() => punch.classList.add('in'));
+      unlockNext();
     }, rows.length * 600 + 200);
   }
 

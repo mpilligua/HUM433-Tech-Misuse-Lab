@@ -43,7 +43,7 @@
 <body>
 
 <div class="topbar">
-  <a class="topbar-home" href="../index.html">← HOME</a>
+  <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
   <div class="slide-counter" id="slideCounter">01 / 10</div>
 </div>
@@ -231,6 +231,8 @@
 <script src="../js/core.js"></script>
 <script>
 /* ── Quiz answer logic ── */
+const genaiQuizAnswered = { 1: false, 2: false };
+
 const GENAI_QUIZ_CONFIG = {
   1: {
     correct: 'B',
@@ -271,6 +273,8 @@ function answerGenaiQuiz(el, quizNum, key) {
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = config.feedback[key];
   }
+  genaiQuizAnswered[quizNum] = true;
+  unlockNext();
 }
 
 /* ══════════════════════════════════════════════
@@ -382,6 +386,15 @@ function initOptionHovers() {
     });
   });
 }
+
+/* ── Gate: slides 6 and 8 require answering their quiz before NEXT ── */
+const _coreGoTo = goTo;
+goTo = function(n) {
+  if      (n === 6 && !genaiQuizAnswered[1]) nextGated = true;
+  else if (n === 8 && !genaiQuizAnswered[2]) nextGated = true;
+  else                                       nextGated = false;
+  _coreGoTo(n);
+};
 
 /* ── Init everything at page load — no MutationObserver needed ── */
 initSlides(10);
