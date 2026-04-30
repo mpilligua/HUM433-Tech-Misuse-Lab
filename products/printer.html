@@ -345,7 +345,9 @@ function initImageDragGame() {
     zone.addEventListener('drop', e => {
       e.preventDefault();
       zone.classList.remove('active');
-      placeComponentOnZone(zone, e.dataTransfer.getData('componentName'));
+      if (!zone.dataset.placedComponent) {
+        placeComponentOnZone(zone, e.dataTransfer.getData('componentName'));
+      }
     });
     canvas.appendChild(zone);
   });
@@ -369,7 +371,7 @@ function initImageDragGame() {
 
 function placeComponentOnZone(zone, componentName) {
   const expected = zone.dataset.componentName;
-  const compEl = document.querySelector(`[data-component-name="${componentName}"]`);
+  const compEl = document.querySelector(`#componentList [data-component-name="${componentName}"]`);
 
   if (componentName === expected) {
     zone.dataset.placedComponent = componentName;
@@ -387,9 +389,11 @@ function placeComponentOnZone(zone, componentName) {
       unlockNext();
     }
   } else {
-    if (compEl) compEl.classList.add('error');
     const slide = document.querySelector('[data-slide="3"].active');
     if (slide) { slide.classList.add('flash-error'); setTimeout(() => slide.classList.remove('flash-error'), 600); }
+    if (INCORRECT_COMPONENTS.includes(componentName) && compEl) {
+      compEl.classList.add('error');
+    }
   }
 }
 
@@ -407,13 +411,6 @@ function resetImageGame() {
   initImageDragGame();
 }
 
-const dragObserver = new MutationObserver(() => {
-  const slide3 = document.querySelector('[data-slide="3"]');
-  if (slide3 && slide3.classList.contains('active') && !document.getElementById('componentList').innerHTML) {
-    setTimeout(initImageDragGame, 100);
-  }
-});
-dragObserver.observe(document.body, { attributes: true, subtree: true });
 setTimeout(initImageDragGame, 500);
 
 /* ── Init ── */
