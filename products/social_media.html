@@ -126,14 +126,14 @@
     <div style="width:100%; max-width:700px; margin-top:10px;">
       <textarea class="lab-textarea" placeholder="Try to write down the user groups that might trigger misuse and the misuse scenarios you can think of..."></textarea>
       
-      <button class="select-btn" style="padding:12px 24px; font-size:12px; margin-top:0;" onclick="document.getElementById('smHints').style.display='block'; this.style.display='none';">GET HINTS</button>
-      
+      <button class="select-btn" id="hintBtn" style="padding:12px 24px; font-size:12px; margin-top:0;" onclick="revealNextHint()">GET HINT</button>
+
       <div id="smHints" class="sm-hints-box">
         <h4>⚠️ Potential Misuse Scenarios</h4>
         <ul>
-          <li><strong>Cyberbullies:</strong> Exploiting absolute anonymity for untraceable defamation and personal attacks.</li>
-          <li><strong>Copyright Infringers:</strong> Using it to post unauthorized movie resources or trailers.</li>
-          <li><strong>Spammers / Bad Actors:</strong> Using it to post massive amounts of violating ads, ruining the community ecosystem.</li>
+          <li id="hint1" style="display:none"><strong>Cyberbullies:</strong> Exploiting absolute anonymity for untraceable defamation and personal attacks.</li>
+          <li id="hint2" style="display:none"><strong>Copyright Infringers:</strong> Using it to post unauthorized movie resources or trailers.</li>
+          <li id="hint3" style="display:none"><strong>Spammers / Bad Actors:</strong> Using it to post massive amounts of violating ads, ruining the community ecosystem.</li>
         </ul>
       </div>
     </div>
@@ -414,6 +414,16 @@ function resetSMLab() {
   }, 250);
 
   updateUI();
+}
+
+let hintsRevealed = 0;
+function revealNextHint() {
+  hintsRevealed++;
+  document.getElementById('smHints').style.display = 'block';
+  document.getElementById('hint' + hintsRevealed).style.display = 'list-item';
+  const btn = document.getElementById('hintBtn');
+  if (hintsRevealed >= 3) btn.style.display = 'none';
+  else btn.textContent = 'GET HINT';
 }
 
 function rateLearning(item, rating) {
