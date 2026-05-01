@@ -75,6 +75,10 @@
             <span class="status-label">VECTOR</span>
             <span class="status-value" id="statusVector">PENDING</span>
           </div>
+          <div class="status-col">
+            <span class="status-label">FOUND</span>
+            <span class="status-value" id="statusFound" style="color:var(--accent)">0 / 3</span>
+          </div>
         </div>
       </div>
 
@@ -189,6 +193,10 @@
 let current = 1;
 const total = 6;
 let labCompleted = false;
+let foundMatches = 0;
+const totalMatches = 3;
+let pendingActor = null;
+let pendingFeature = null;
 
 function buildDots() {
   const bar = document.getElementById('progressBar');
@@ -204,9 +212,7 @@ function buildDots() {
 function updateUI() {
   document.getElementById('slideCounter').textContent =
     String(current).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
-  document.getElementById('prevBtn').disabled = current === 1;
   const nextBtn = document.getElementById('nextBtn');
-  nextBtn.textContent = 'NEXT →';
   nextBtn.style.visibility = (current === total || (current === 3 && !labCompleted)) ? 'hidden' : 'visible';
   const prevBtn = document.getElementById('prevBtn');
   prevBtn.style.visibility = current === 1 ? 'hidden' : 'visible';
@@ -230,142 +236,192 @@ function goNext() { if (current < total) goTo(current + 1); }
 function goPrev() { if (current > 1) goTo(current - 1); }
 
 /* ========================================================= */
-/* ADVANCED MISUSE CHEMISTRY LAB LOGIC                       */
+/* MISUSE CHEMISTRY LAB LOGIC                                */
 /* ========================================================= */
 
 function handleActorChange() {
   const actorSelect = document.getElementById('smActor');
   const featureSelect = document.getElementById('smFeature');
-  const statusTarget = document.getElementById('statusTarget');
-
   if (actorSelect.value) {
-    statusTarget.textContent = actorSelect.options[actorSelect.selectedIndex].text;
+    document.getElementById('statusTarget').textContent = actorSelect.options[actorSelect.selectedIndex].text;
     featureSelect.disabled = false;
+    featureSelect.value = "";
+    document.getElementById('statusVector').textContent = "PENDING";
   }
-  
-  evaluateSMLab();
 }
 
 function handleFeatureChange() {
   const featureSelect = document.getElementById('smFeature');
-  const statusVector = document.getElementById('statusVector');
-
   if (featureSelect.value) {
-    statusVector.textContent = featureSelect.options[featureSelect.selectedIndex].text;
+    document.getElementById('statusVector').textContent = featureSelect.options[featureSelect.selectedIndex].text;
+    evaluateSMLab();
   }
-  
-  evaluateSMLab();
 }
 
 function evaluateSMLab() {
   const actor = document.getElementById('smActor').value;
   const feature = document.getElementById('smFeature').value;
   const stage = document.getElementById('labStage');
-  
   if (!actor || !feature) return;
-  
-  // Fade out effect
+
+  const isLethal =
+    (actor === 'data'      && feature === 'api') ||
+    (actor === 'state'     && feature === 'algo') ||
+    (actor === 'extremist' && feature === 'msg');
+
   stage.style.opacity = 0;
 
   setTimeout(() => {
-    if (actor === 'data' && feature === 'api') {
-      stage.innerHTML = `
-        <div class="lethal-card">
-          <div class="lethal-stamp">LETHAL MATCH</div>
-          <div class="lethal-title">OPERATION: DATA HARVEST</div>
+    if (isLethal) {
+      pendingActor = actor;
+      pendingFeature = feature;
+      foundMatches++;
+      document.getElementById('statusFound').textContent = foundMatches + ' / ' + totalMatches;
+      const allFound = foundMatches === totalMatches;
 
-          <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
-          <div class="lethal-text">Exploiting open API permissions using low-cost interactive content (like quizzes) as bait. This bypasses user vigilance to harvest massive amounts of private data from users and their extended social networks without informed consent.</div>
+      const tryBtn = allFound
+        ? `<p style="margin-top:24px; font-size:15px; color:var(--accent); font-family:'Space Mono',monospace; letter-spacing:1px;">ALL COMBINATIONS FOUND — YOU'RE DONE!</p>`
+        : `<button class="select-btn" style="margin-top:24px;" onclick="tryAnother()">TRY ANOTHER →</button>`;
 
-          <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
-          <div class="lethal-text">
-            <a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal" target="_blank">The Cambridge Analytica scandal (2010s).</a><br><br>
-            The firm utilized a seemingly harmless personality quiz app to collect data from up to 87 million Facebook users. This data fueled targeted political advertising to influence election behavior, resulting in a massive privacy breach.
-          </div>
-        </div>
-      `;
-      labCompleted = true; updateUI();
-    } else if (actor === 'state' && feature === 'algo') {
-      stage.innerHTML = `
-        <div class="lethal-card">
-          <div class="lethal-stamp">LETHAL MATCH</div>
-          <div class="lethal-title">OPERATION: ECHO CHAMBER</div>
+      let cardHTML = '';
+      if (actor === 'data' && feature === 'api') {
+        cardHTML = `
+          <div class="lethal-card">
+            <div class="lethal-stamp">LETHAL MATCH</div>
+            <div class="lethal-title">OPERATION: DATA HARVEST</div>
+            <div class="lethal-section-title" style="color:var(--accent3);">MECHANISM OF ACTION:</div>
+            <div class="lethal-text">Exploiting open API permissions using low-cost interactive content (like quizzes) as bait. This bypasses user vigilance to harvest massive amounts of private data from users and their extended social networks without informed consent.</div>
+            <div class="lethal-section-title" style="color:var(--accent2);">CASE ARCHIVE:</div>
+            <div class="lethal-text">
+              <a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal" target="_blank">The Cambridge Analytica scandal (2010s).</a><br><br>
+              The firm utilized a seemingly harmless personality quiz app to collect data from up to 87 million Facebook users. This data fueled targeted political advertising to influence election behavior, resulting in a massive privacy breach.
+            </div>
+            ${tryBtn}
+          </div>`;
+      } else if (actor === 'state' && feature === 'algo') {
+        cardHTML = `
+          <div class="lethal-card">
+            <div class="lethal-stamp">LETHAL MATCH</div>
+            <div class="lethal-title">OPERATION: ECHO CHAMBER</div>
+            <div class="lethal-section-title" style="color:var(--accent3);">MECHANISM OF ACTION:</div>
+            <div class="lethal-text">Acting like digital marketers by A/B testing highly shareable content. They leverage recommendation algorithms to feed tailored information to specific demographics based on religion, race, or location. They first build group identity, then introduce external threats to manipulate behavior and manufacture social polarization.</div>
+            <div class="lethal-section-title" style="color:var(--accent2);">CASE ARCHIVE:</div>
+            <div class="lethal-text">
+              <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia manipulating the US elections (2016).</a><br><br>
+              The Russian Internet Research Agency (IRA) managed information and distributed tailored content across platforms such as Twitter, Facebook, and Instagram to manipulate group psychology and ultimately interfere in the US Presidential Election.
+            </div>
+            ${tryBtn}
+          </div>`;
+      } else {
+        cardHTML = `
+          <div class="lethal-card">
+            <div class="lethal-stamp">LETHAL MATCH</div>
+            <div class="lethal-title">OPERATION: SHADOW RECRUIT</div>
+            <div class="lethal-section-title" style="color:var(--accent3);">MECHANISM OF ACTION:</div>
+            <div class="lethal-text">Infiltrating youth subcultures under the guise of casual entertainment. They adopt digital customs (like gaming culture and memes) to build rapport, then utilize highly private direct messaging features to isolate targets for covert radicalization.</div>
+            <div class="lethal-section-title" style="color:var(--accent2);">CASE ARCHIVE:</div>
+            <div class="lethal-text">
+              <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Extremist groups recruiting.</a><br><br>
+              Extremists have increasingly adopted digital realm practices associated with gaming culture and meme usage to specifically target, isolate, and recruit young female users on social media platforms.
+            </div>
+            ${tryBtn}
+          </div>`;
+      }
 
-          <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
-          <div class="lethal-text">Acting like digital marketers by A/B testing highly shareable content. They leverage recommendation algorithms to feed tailored information to specific demographics based on religion, race, or location. They first build group identity, then introduce external threats to manipulate behavior and manufacture social polarization.</div>
+      stage.innerHTML = cardHTML;
+      if (allFound) { labCompleted = true; updateUI(); }
 
-          <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
-          <div class="lethal-text">
-            <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia manipulating the US elections (2016).</a><br><br>
-            The Russian Internet Research Agency (IRA) managed information and distributed tailored content across platforms such as Twitter, Facebook, and Instagram to manipulate group psychology and ultimately interfere in the US Presidential Election.
-          </div>
-        </div>
-      `;
-      labCompleted = true; updateUI();
-    } else if (actor === 'extremist' && feature === 'msg') {
-      stage.innerHTML = `
-        <div class="lethal-card">
-          <div class="lethal-stamp">LETHAL MATCH</div>
-          <div class="lethal-title">OPERATION: SHADOW RECRUIT</div>
-
-          <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
-          <div class="lethal-text">Infiltrating youth subcultures under the guise of casual entertainment. They adopt digital customs (like gaming culture and memes) to build rapport, then utilize highly private direct messaging features to isolate targets for covert radicalization.</div>
-
-          <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
-          <div class="lethal-text">
-            <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Extremist groups recruiting.</a><br><br>
-            Extremists have increasingly adopted digital realm practices associated with gaming culture and meme usage to specifically target, isolate, and recruit young female users on social media platforms.
-          </div>
-        </div>
-      `;
-      labCompleted = true; updateUI();
     } else {
-      // <div class="non-lethal-icon">📉 _PLOT</div>
       stage.innerHTML = `
         <div class="non-lethal-card">
           <div class="non-lethal-title">Non-Lethal Interaction Detected</div>
-          <div class="non-lethal-desc">This combination carries potential security risks, but try to find the specific <strong>[Lethal Combinations]</strong> that led to major historical security crises.</div>
-        </div>
-      `;
+          <div class="non-lethal-desc">This combination carries potential risks, but try to find the specific <strong>[Lethal Combinations]</strong> that led to major historical security crises.</div>
+        </div>`;
     }
-    // Fade in effect
+
+    stage.style.opacity = 1;
+  }, 250);
+}
+
+function tryAnother() {
+  const actorSelect = document.getElementById('smActor');
+  const featureSelect = document.getElementById('smFeature');
+
+  // Remove the matched options from both dropdowns
+  if (pendingActor) {
+    const opt = actorSelect.querySelector(`option[value="${pendingActor}"]`);
+    if (opt) opt.remove();
+    pendingActor = null;
+  }
+  if (pendingFeature) {
+    const opt = featureSelect.querySelector(`option[value="${pendingFeature}"]`);
+    if (opt) opt.remove();
+    pendingFeature = null;
+  }
+
+  actorSelect.value = "";
+  featureSelect.value = "";
+  featureSelect.disabled = true;
+  document.getElementById('statusTarget').textContent = "PENDING";
+  document.getElementById('statusVector').textContent = "PENDING";
+
+  const stage = document.getElementById('labStage');
+  stage.style.opacity = 0;
+  setTimeout(() => {
+    stage.innerHTML = `
+      <div class="stage-empty">
+        <span style="font-size:36px; margin-bottom:16px; display:block;">🔬</span>
+        <h3 style="margin-bottom:8px;">Awaiting Chemical Components...</h3>
+        <p>Select a Threat Actor and Platform Feature to begin analysis.</p>
+      </div>`;
     stage.style.opacity = 1;
   }, 250);
 }
 
 function resetSMLab() {
   labCompleted = false;
-  updateUI();
-  document.getElementById('smActor').value = "";
+  foundMatches = 0;
+  pendingActor = null;
+  pendingFeature = null;
+
+  // Rebuild both selects so removed options come back
+  document.getElementById('smActor').innerHTML = `
+    <option value="" disabled selected>Select an actor...</option>
+    <option value="data">Data Brokers</option>
+    <option value="state">State-Sponsored Actors</option>
+    <option value="extremist">Extremist Recruiters</option>`;
   const featureSelect = document.getElementById('smFeature');
-  featureSelect.value = "";
+  featureSelect.innerHTML = `
+    <option value="" disabled selected>Select a feature...</option>
+    <option value="api">Third-Party API Integrations</option>
+    <option value="algo">Algorithmic Content Feeds</option>
+    <option value="msg">Private Messaging</option>`;
   featureSelect.disabled = true;
 
   document.getElementById('statusTarget').textContent = "PENDING";
   document.getElementById('statusVector').textContent = "PENDING";
-  
+  document.getElementById('statusFound').textContent = "0 / 3";
+
   const stage = document.getElementById('labStage');
   stage.style.opacity = 0;
-  
   setTimeout(() => {
     stage.innerHTML = `
       <div class="stage-empty">
-        <span style="font-size: 36px; margin-bottom: 16px; display: block;">🔬</span>
-        <h3 style="margin-bottom: 8px;">Awaiting Chemical Components...</h3>
+        <span style="font-size:36px; margin-bottom:16px; display:block;">🔬</span>
+        <h3 style="margin-bottom:8px;">Awaiting Chemical Components...</h3>
         <p>Select a Threat Actor and Platform Feature to begin analysis.</p>
-      </div>
-    `;
+      </div>`;
     stage.style.opacity = 1;
   }, 250);
+
+  updateUI();
 }
 
 function rateLearning(item, rating) {
   const row = document.querySelector(`.star-row[data-item="${item}"]`);
-  const stars = row.querySelectorAll('.star');
-  stars.forEach((s, i) => s.classList.toggle('filled', i < rating));
+  row.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('filled', i < rating));
 }
 
-// Initialize
 buildDots();
 </script>
 </body>
