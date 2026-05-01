@@ -204,7 +204,6 @@ function buildDots() {
   for (let i = 1; i <= total; i++) {
     const d = document.createElement('div');
     d.className = 'dot' + (i === current ? ' active' : i < current ? ' visited' : '');
-    d.onclick = () => goTo(i);
     bar.appendChild(d);
   }
 }
