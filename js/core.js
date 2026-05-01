@@ -1,9 +1,5 @@
 let current = 1;
 let total = 1;
-let nextGated = false;
-
-function lockNext()   { nextGated = true;  updateUI(); }
-function unlockNext() { nextGated = false; updateUI(); }
 
 function buildDots() {
   const bar = document.getElementById('progressBar');
@@ -22,7 +18,7 @@ function updateUI() {
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   if (prevBtn) prevBtn.style.visibility = current === 1 ? 'hidden' : 'visible';
-  if (nextBtn) nextBtn.style.visibility = (current === total || nextGated) ? 'hidden' : 'visible';
+  if (nextBtn) nextBtn.style.visibility = current === total ? 'hidden' : 'visible';
   buildDots();
 }
 

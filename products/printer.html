@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tech Misuses Lab — Office Printer</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
 <style>
@@ -23,7 +22,7 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">TECH MISUSES LAB</div>
+  <a class="topbar-home" href="../index.html">← HOME</a>
   <div class="progress-bar" id="progressBar"></div>
   <div class="slide-counter" id="slideCounter">01 / 10</div>
 </div>
@@ -32,24 +31,27 @@
 
   <!-- SLIDE 1: Intro -->
   <div class="slide" data-slide="1">
-    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:56px; padding:24px 4%; text-align:left;">
-      <div style="flex:0 0 auto; max-width:400px;">
+    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:48px; padding:36px 6%; text-align:left;">
+      <div style="flex:0 0 auto; max-width:340px;">
         <h2>The Office <span class="accent-word">Printer</span></h2>
-        <div class="purpose-box" style="margin-top:20px; font-size:18px; line-height:1.65;">
+        <div class="purpose-box" style="margin-top:20px;">
           A printer's primary purpose is to <strong style="color:#f0f0f0">convert digital data into a permanent physical document</strong> on paper. In an office it is a shared hub for printing, scanning, and copying.
         </div>
       </div>
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:560px;">
-        <video src="../images/34594-402634196.mp4" controls autoplay loop muted playsinline style="max-height:540px; width:100%; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);" onerror="this.style.display='none';"></video>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
+        <video src="../images/34594-402634196.mp4" controls autoplay loop muted playsinline style="max-height:480px; width:100%; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);" onerror="this.style.display='none';"></video>
       </div>
     </div>
   </div>
 
   <!-- SLIDE 2: Strategy -->
-  <div class="slide" data-slide="2" style="padding:36px 8%; align-items:center; justify-content:center; text-align:center; gap:20px;">
-    <h2>Strategy: <span class="accent-word">Component Analysis</span></h2>
-    <p style="font-size:18px; color:#ccc; line-height:1.65; max-width:680px; margin-top:24px;">One strategy to spot misuse early is to <strong style="color:#f0f0f0">break the tool into its parts</strong> and ask what each one could leak or enable.</p>
-    <p style="font-size:16px; color:var(--muted); margin-top:8px;">So as a first task, let's break the printer into its components.</p>
+  <div class="slide" data-slide="2">
+    <div style="width:100%; padding:36px 8%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:left; gap:18px;">
+      <div style="display:flex; align-items:center; justify-content:center; width:100%; height:70%;">
+        <p style="font-size:24px; color:#ccc; line-height:1.7; max-width:900px; text-align:center;">One nice strategy to spot misuse early is to break the tool into its parts and ask what each could leak or enable.</p>
+      </div>
+      <p>So as a first task, let's break the printer into its components.</p>
+    </div>
   </div>
 
   <!-- SLIDE 3: Match the Components (drag & drop) -->
@@ -108,7 +110,7 @@
 
   <!-- SLIDE 6: Teaser -->
   <div class="slide" data-slide="6">
-    <p style="color:var(--muted);font-size:18px;">But the story doesn't end there —</p>
+    <p style="color:var(--muted);font-size:26px;">But the story doesn't end there —</p>
     <div class="teaser-big">What happens<br>when the printer<br><span class="accent-word">leaves</span> the building?</div>
   </div>
 
@@ -132,7 +134,7 @@
   <!-- SLIDE 8: Real World Story -->
   <div class="slide" data-slide="8">
     <h2><span class="danger-word">Real World</span> Story</h2>
-    <img src="../images/PrinterDrive.png" alt="Printer hard drive" style="max-width:700px; width:100%; border-radius:8px; border:1px solid var(--border); margin-top:24px;" onerror="this.style.display='none';"/>
+    <img src="../images/real_story.png" alt="Real story illustration" style="max-width:700px; width:100%; border-radius:8px; border:1px solid var(--border); margin-top:24px;" onerror="this.style.display='none';"/>
   </div>
 
   <!-- SLIDE 9: Rate what you learned -->
@@ -174,7 +176,7 @@
       Every device has hidden assumptions.
       The best engineers are the ones who question them before malicious users do.
     </div>
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">← EXPLORE ANOTHER DEVICE</button>
+    <button class="select-btn" onclick="window.location.href='../index.html'">← EXPLORE ANOTHER DEVICE</button>
   </div>
 
 </div>
@@ -186,20 +188,6 @@
 
 <script src="../js/core.js"></script>
 <script>
-/* ── Gate state ── */
-let printerGameDone  = false;
-let printerQuiz1Done = false;
-let printerQuiz2Done = false;
-
-const _coreGoTo = goTo;
-goTo = function(n) {
-  if      (n === 3 && !printerGameDone)  nextGated = true;
-  else if (n === 4 && !printerQuiz1Done) nextGated = true;
-  else if (n === 7 && !printerQuiz2Done) nextGated = true;
-  else                                   nextGated = false;
-  _coreGoTo(n);
-};
-
 /* ── Quiz 1 — correct: B ── */
 function quiz1Answer(btn, key) {
   document.querySelectorAll('#quiz1Options .option-btn').forEach(b => b.disabled = true);
@@ -216,8 +204,6 @@ function quiz1Answer(btn, key) {
       ? '✗ The Mechanical Engine is purely physical — heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
       : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing — it needs a disk and a network to become dangerous.';
   }
-  printerQuiz1Done = true;
-  unlockNext();
 }
 
 /* ── Quiz 2 — correct: B ── */
@@ -236,8 +222,6 @@ function quiz2Answer(btn, key) {
       ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant — but the hard disk keeps all data regardless.'
       : '✗ The Mechanical Engine is all moving parts — drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
   }
-  printerQuiz2Done = true;
-  unlockNext();
 }
 
 /* ── Quiz option image hover panel ── */
@@ -342,9 +326,7 @@ function initImageDragGame() {
     zone.addEventListener('drop', e => {
       e.preventDefault();
       zone.classList.remove('active');
-      if (!zone.dataset.placedComponent) {
-        placeComponentOnZone(zone, e.dataTransfer.getData('componentName'));
-      }
+      placeComponentOnZone(zone, e.dataTransfer.getData('componentName'));
     });
     canvas.appendChild(zone);
   });
@@ -368,7 +350,7 @@ function initImageDragGame() {
 
 function placeComponentOnZone(zone, componentName) {
   const expected = zone.dataset.componentName;
-  const compEl = document.querySelector(`#componentList [data-component-name="${componentName}"]`);
+  const compEl = document.querySelector(`[data-component-name="${componentName}"]`);
 
   if (componentName === expected) {
     zone.dataset.placedComponent = componentName;
@@ -382,21 +364,15 @@ function placeComponentOnZone(zone, componentName) {
     if (Object.keys(gameState.placedComponents).length === Object.keys(CORRECT_COMPONENTS_IMAGE).length) {
       const msg = document.getElementById('completionMessage');
       if (msg) msg.classList.add('show');
-      printerGameDone = true;
-      unlockNext();
     }
   } else {
+    if (compEl) compEl.classList.add('error');
     const slide = document.querySelector('[data-slide="3"].active');
     if (slide) { slide.classList.add('flash-error'); setTimeout(() => slide.classList.remove('flash-error'), 600); }
-    if (INCORRECT_COMPONENTS.includes(componentName) && compEl) {
-      compEl.classList.add('error');
-    }
   }
 }
 
 function resetImageGame() {
-  printerGameDone = false;
-  lockNext();
   gameState.placedComponents = {};
   document.querySelectorAll('.drop-overlay').forEach(z => {
     z.removeAttribute('data-placed-component');
@@ -408,6 +384,13 @@ function resetImageGame() {
   initImageDragGame();
 }
 
+const dragObserver = new MutationObserver(() => {
+  const slide3 = document.querySelector('[data-slide="3"]');
+  if (slide3 && slide3.classList.contains('active') && !document.getElementById('componentList').innerHTML) {
+    setTimeout(initImageDragGame, 100);
+  }
+});
+dragObserver.observe(document.body, { attributes: true, subtree: true });
 setTimeout(initImageDragGame, 500);
 
 /* ── Init ── */

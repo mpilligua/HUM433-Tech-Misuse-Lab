@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tech Misuses Lab - Health Monitoring Devices</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  .topbar-home {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .topbar-home:hover { color: var(--accent); }
+
+  .hmd-stack {
+    width: 100%;
+    max-width: 920px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  .hmd-prose {
+    font-size: 19px;
+    line-height: 1.7;
+    color: #ccc;
+    max-width: 840px;
+  }
+  .hmd-prose strong { color: var(--text); }
+  .hmd-intro {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    text-align: left;
+  }
+  .hmd-device-img {
+    width: 100%;
+    max-width: 360px;
+    max-height: 430px;
+    object-fit: contain;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: #0a0a0a;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  }
+  .hmd-drag-board {
+    width: 100%;
+    max-width: 1160px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: stretch;
+  }
+  .hmd-feature-pool {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .hmd-feature-card {
+    min-height: 86px;
+    display: flex;
+    align-items: center;
+    padding: 16px 18px;
+    background: var(--accent);
+    color: #000;
+    border-radius: 7px;
+    cursor: grab;
+    user-select: none;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.45;
+    text-align: left;
+    transition: transform 0.18s, opacity 0.18s, background 0.18s;
+  }
+  .hmd-feature-card:active { cursor: grabbing; }
+  .hmd-feature-card.dragging { opacity: 0.6; }
+  .hmd-feature-card.error { background: var(--accent2); color: #fff; animation: hmd-shake 0.32s ease; }
+  @keyframes hmd-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .hmd-drop-zone {
+    min-height: 235px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .hmd-drop-zone.active { border-color: var(--accent3); background: #0d1a1f; }
+  .hmd-drop-zone.important { border-color: rgba(255,71,71,0.45); }
+  .hmd-drop-zone.important .hmd-zone-title { color: var(--accent2); }
+  .hmd-drop-zone.less .hmd-zone-title { color: var(--accent3); }
+  .hmd-zone-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .hmd-zone-hint {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .hmd-drop-zone .hmd-feature-card {
+    min-height: auto;
+    background: #0a0a0a;
+    color: #ddd;
+    border: 1px solid var(--border);
+    cursor: default;
+    font-size: 13px;
+  }
+  .hmd-progress {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .hmd-story {
+    width: 100%;
+    max-width: 980px;
+    text-align: left;
+  }
+  .hmd-story-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px;
+    margin-top: 22px;
+  }
+  .hmd-story-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .hmd-story-card.highlight { border-color: rgba(232,255,71,0.35); background: #131600; }
+  .hmd-card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .hmd-story-card p,
+  .hmd-story-card li {
+    font-size: 15px;
+    line-height: 1.65;
+    color: #ccc;
+  }
+  .hmd-story-card ul { padding-left: 18px; }
+  .hmd-story-card a {
+    color: var(--accent3);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(71,200,255,0.5);
+  }
+  .hmd-story-card a:hover { color: var(--accent); border-color: var(--accent); }
+  .hmd-next-note {
+    display: none;
+    margin-top: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+  .hmd-next-note.show { display: block; }
+  .hmd-sort-slide {
+    padding: 14px 5% !important;
+  }
+  .hmd-sort-slide h2 {
+    font-size: clamp(22px, 2.6vw, 34px);
+    margin-bottom: 6px !important;
+  }
+  .hmd-sort-slide .quiz-q {
+    font-size: 17px;
+    line-height: 1.45;
+    margin-bottom: 16px;
+  }
+  .hmd-sort-slide .hmd-drag-board {
+    max-width: 1060px;
+    gap: 12px;
+    margin: 0 auto;
+  }
+  .hmd-sort-slide .hmd-feature-pool {
+    gap: 10px;
+  }
+  .hmd-sort-slide .hmd-feature-card {
+    min-height: 64px;
+    padding: 11px 15px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .hmd-sort-slide .hmd-drop-zone {
+    min-height: 168px;
+    padding: 13px;
+    gap: 8px;
+  }
+  .hmd-sort-slide .hmd-zone-title {
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+  .hmd-sort-slide .hmd-zone-hint {
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+  .hmd-sort-slide .hmd-progress {
+    margin-top: 5px;
+  }
+  .hmd-sort-slide .feedback-box {
+    margin-top: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  .hmd-sort-slide .reset-btn {
+    margin-top: 10px !important;
+    padding: 10px 26px;
+  }
+  @media (max-width: 860px) {
+    .hmd-intro,
+    .hmd-story-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hmd-feature-pool,
+    .hmd-drag-board {
+      grid-template-columns: 1fr;
+    }
+    .hmd-feature-pool { grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-home" href="../index.html">HOME</a>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="slide-counter" id="slideCounter">01 / 08</div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- SLIDE 1: Intro -->
+  <div class="slide" data-slide="1">
+    <div class="hmd-intro">
+      <div style="flex:1; max-width:460px;">
+        <h2>Health Monitoring <span class="accent-word">Devices</span></h2>
+        <div class="purpose-box" style="margin-top:20px;">
+          Health monitoring devices (HMDs) are usually small devices, such as watches, that track heart rate, steps, or similar physiological data. These statistics can be shown clearly on the device itself or in a connected app.
+        </div>
+      </div>
+      <div style="flex:1; display:flex; justify-content:center;">
+        <img class="hmd-device-img" src="../images/health_monitor_device.png" alt="Health monitoring smartwatch"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Strategy -->
+  <div class="slide" data-slide="2">
+    <div class="hmd-stack">
+      <h2>Strategy: <span class="accent-word">Component Breakdown</span></h2>
+      <p class="hmd-prose">
+        A good strategy for discovering potential misuse risks is to break a device into its core functions or features. Then ask whether each function could be used beyond its original design intention.
+      </p>
+      <p class="hmd-prose" style="color:var(--accent); font-weight:700;">So, let's break down HMDs.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Component Sorting -->
+  <div class="slide hmd-sort-slide" data-slide="3">
+    <div style="width:100%; max-width:1160px;">
+      <h2 style="margin-bottom:10px;">Which Features <span class="accent-word">Matter?</span></h2>
+      <p class="quiz-q" style="max-width:860px; margin-left:auto; margin-right:auto;">
+        Which key functions of an HMD could lead to misuse? Which seem less central? Drag each feature to the left or right.
+      </p>
+
+      <div class="hmd-drag-board">
+        <div class="hmd-feature-pool" id="hmdFeaturePool">
+          <div class="hmd-feature-card" draggable="true" data-id="precision" data-zone="less">Modern devices allow very precise measurement, even avoiding tiny errors.</div>
+          <div class="hmd-feature-card" draggable="true" data-id="design" data-zone="less">They come in different colors, designs, and even different device forms.</div>
+          <div class="hmd-feature-card" draggable="true" data-id="sensitive-data" data-zone="important">They collect and store massive amounts of sensitive personal data.</div>
+          <div class="hmd-feature-card" draggable="true" data-id="easy-access" data-zone="important">Collected data, including statistics, can be easily accessed by users at any time.</div>
+        </div>
+
+        <div class="hmd-drop-zone important" data-zone="important">
+          <div class="hmd-zone-title">Important to consider</div>
+          <div class="hmd-zone-hint">Features that create meaningful misuse risk.</div>
+        </div>
+        <div class="hmd-drop-zone less" data-zone="less">
+          <div class="hmd-zone-title">Less important</div>
+          <div class="hmd-zone-hint">Features that matter less for this misuse analysis.</div>
+        </div>
+      </div>
+      <div class="hmd-progress" id="hmdSortProgress">0 / 4 placed</div>
+      <div class="feedback-box" id="hmdSortFeedback"></div>
+      <button class="reset-btn" style="margin-top:16px;" onclick="hmdResetSort()">RESET</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Challenge 1 -->
+  <div class="slide" data-slide="4">
+    <div class="quiz-wrap">
+      <div class="quiz-heading">External threat: which feature could be maliciously exploited by someone other than the user?</div>
+      <p class="quiz-q">Think back to the two important HMD features you identified.</p>
+      <div class="options-grid" id="hmdQuiz1Options">
+        <button class="option-btn" onclick="hmdQuiz1(this,'sensitive')"><span class="option-letter">A</span> They collect and store massive amounts of sensitive personal data.</button>
+        <button class="option-btn" onclick="hmdQuiz1(this,'access')"><span class="option-letter">B</span> Collected data and statistics are easily accessible to users at any time.</button>
+      </div>
+      <div class="feedback-box" id="hmdQuiz1Feedback"></div>
+      <div class="hmd-next-note" id="hmdQuiz1Next">Use NEXT to continue to the real world story.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Real World Story 1 -->
+  <div class="slide" data-slide="5">
+    <div class="hmd-story">
+      <h2><span class="danger-word">Real World</span> Story</h2>
+      <p class="story-intro">Case: Mandatory use imposed by employers or schools</p>
+
+      <div class="hmd-story-grid">
+        <div class="hmd-story-card">
+          <div class="hmd-card-label">Overview</div>
+          <p>An employee's compensation could be threatened if an employer-provided wearable tracks her movements and productivity.</p>
+          <p style="margin-top:10px;">A supervisor, or even the company as a whole, could use data from a worker's GPS tracker to claim that the employee is not meeting job requirements, potentially leading to termination or demotion. Companies could also use wearable data to silence or pressure potential whistleblowers.</p>
+        </div>
+        <div class="hmd-story-card">
+          <div class="hmd-card-label">Risk</div>
+          <p>Wearable technology can enhance productivity, improve workplace safety, and monitor health or performance. But it also raises serious concerns about privacy, data accuracy, and potential bias.</p>
+          <p style="margin-top:12px;"><a href="https://www.sommerspc.com/blog/2016/12/workplace-wearables-pose-real-risks-employees/" target="_blank" rel="noopener">Read the source article</a></p>
+        </div>
+        <div class="hmd-story-card highlight" style="grid-column:1 / 3;">
+          <div class="hmd-card-label">Key Points</div>
+          <p>The coercive use and abuse of health data tracking turns self-health management into surveillance and data dependence. Users need to critically evaluate health-related decisions based on data so they are not controlled by it. Institutional requirements for mandatory tracking must also be clearly defined and strictly constrained through legal and compliance frameworks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Challenge 2 -->
+  <div class="slide" data-slide="6">
+    <div class="quiz-wrap" style="max-width:820px;">
+      <p class="hmd-prose" style="margin-bottom:18px;">Now let's return to the other key feature: collected data is visible to users at any time.</p>
+      <div class="quiz-heading">What do you think about this feature?</div>
+      <div class="options-grid" id="hmdQuiz2Options">
+        <button class="option-btn" onclick="hmdQuiz2(this,'A')"><span class="option-letter">A</span> This is entirely the user's own business, and they can use the feature however they want.</button>
+        <button class="option-btn" onclick="hmdQuiz2(this,'B')"><span class="option-letter">B</span> This is entirely the user's own business, and they are responsible for using it correctly.</button>
+        <button class="option-btn" onclick="hmdQuiz2(this,'C')"><span class="option-letter">C</span> Even if nobody intends harm, it can still create negative consequences for users.</button>
+      </div>
+      <div class="feedback-box" id="hmdQuiz2Feedback"></div>
+      <div class="hmd-next-note" id="hmdQuiz2Next">Use NEXT to continue to the real world story.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Real World Story 2 -->
+  <div class="slide" data-slide="7">
+    <div class="hmd-story">
+      <h2><span class="danger-word">Real World</span> Story</h2>
+      <p class="story-intro">Case: User overreliance on wearable devices</p>
+
+      <div class="hmd-story-grid">
+        <div class="hmd-story-card">
+          <div class="hmd-card-label">Overview</div>
+          <p>A 2024 study published in <em>Sleep Medicine</em> found that individuals who used sleep-tracking devices reported higher sleep-related anxiety and worse subjective sleep quality, even though objective measurements showed improvements in sleep duration.</p>
+          <p style="margin-top:12px;"><a href="https://www.theonlinegp.com/blog/are-wearables-making-us-healthier-or-just-more-anxious" target="_blank" rel="noopener">Read the source article</a></p>
+        </div>
+        <div class="hmd-story-card">
+          <div class="hmd-card-label">Consequences</div>
+          <p>Many wearables rely on alarming notifications, red warning signals, and urgent alerts for readings that may reflect normal physiological variation. Without enough context, users may be forced to interpret complex health data without medical training.</p>
+          <p style="margin-top:10px;"><strong style="color:var(--accent2);">Negative impact:</strong> increased anxiety and other mental-health strain.</p>
+        </div>
+        <div class="hmd-story-card highlight">
+          <div class="hmd-card-label">For Users</div>
+          <p>Avoid excessive dependence on wearable devices. This is a form of psychological technological misuse. Users should understand the limitations of the technology.</p>
+        </div>
+        <div class="hmd-story-card highlight">
+          <div class="hmd-card-label">For Designers</div>
+          <p>The wearable industry is beginning to address the psychological challenges of health-monitoring devices. Better context, fewer false alarms, and mental well-being should be part of future design.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Summary -->
+  <div class="slide" data-slide="8">
+    <h1>Nice Work!</h1>
+    <div class="purpose-box" style="margin-top:34px; border-left-color:var(--accent3); max-width:760px;">
+      <strong style="color:var(--accent3);">Component Breakdown Mindset</strong><br><br>
+      As a designer, try using the component breakdown strategy to think about how each part of your device could be misused. Then look for ways to reduce or prevent those risks.
+    </div>
+    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">EXPLORE OTHER DEVICES</button>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()">PREV</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT</button>
+</div>
+
+<script src="../js/core.js"></script>
+<script>
+let hmdDragged = null;
+let hmdPlaced = 0;
+
+function hmdFlash(type) {
+  const slide = document.querySelector('[data-slide="3"]');
+  if (!slide) return;
+  const cls = type === 'correct' ? 'flash-success' : 'flash-error';
+  slide.classList.add(cls);
+  setTimeout(() => slide.classList.remove(cls), 600);
+}
+
+function hmdUpdateSortProgress() {
+  const progress = document.getElementById('hmdSortProgress');
+  if (progress) progress.textContent = hmdPlaced + ' / 4 placed';
+}
+
+function hmdShowSortFeedback(message, correct) {
+  const fb = document.getElementById('hmdSortFeedback');
+  fb.className = 'feedback-box show ' + (correct ? 'correct-fb' : 'wrong-fb');
+  fb.textContent = message;
+}
+
+function initHmdSort() {
+  document.querySelectorAll('.hmd-feature-card[draggable="true"]').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      hmdDragged = card;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', card.dataset.id);
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      hmdDragged = null;
+    });
+  });
+
+  document.querySelectorAll('.hmd-drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      zone.classList.add('active');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('active'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('active');
+      if (!hmdDragged) return;
+
+      const card = hmdDragged;
+      const correctZone = card.dataset.zone;
+      const targetZone = zone.dataset.zone;
+
+      if (correctZone === targetZone) {
+        card.setAttribute('draggable', 'false');
+        zone.appendChild(card);
+        hmdPlaced += 1;
+        hmdUpdateSortProgress();
+        hmdFlash('correct');
+        if (hmdPlaced === 4) {
+          hmdShowSortFeedback('Well done. The highest-risk HMD features are sensitive data collection and always-available user access.', true);
+        }
+      } else {
+        card.classList.add('error');
+        card.addEventListener('animationend', () => card.classList.remove('error'), { once: true });
+        hmdFlash('wrong');
+        hmdShowSortFeedback('Try again. Ask whether this feature creates a realistic misuse path, not just whether it is technically impressive.', false);
+      }
+    });
+  });
+}
+
+function hmdResetSort() {
+  const pool = document.getElementById('hmdFeaturePool');
+  const order = ['precision', 'design', 'sensitive-data', 'easy-access'];
+  const cards = Array.from(document.querySelectorAll('.hmd-feature-card'));
+  cards.sort((a, b) => order.indexOf(a.dataset.id) - order.indexOf(b.dataset.id)).forEach(card => {
+    card.setAttribute('draggable', 'true');
+    card.classList.remove('error', 'dragging');
+    pool.appendChild(card);
+  });
+  hmdPlaced = 0;
+  hmdUpdateSortProgress();
+  const fb = document.getElementById('hmdSortFeedback');
+  fb.className = 'feedback-box';
+  fb.textContent = '';
+}
+
+function hmdQuiz1(btn, key) {
+  document.querySelectorAll('#hmdQuiz1Options .option-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('hmdQuiz1Feedback');
+  if (key === 'sensitive') {
+    btn.classList.add('correct');
+    fb.className = 'feedback-box show correct-fb';
+    fb.textContent = "Yes. Someone could steal a user's sensitive personal data, and even the company itself could misuse that data.";
+    document.getElementById('hmdQuiz1Next').classList.add('show');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#hmdQuiz1Options .option-btn')[0].classList.add('correct');
+    fb.className = 'feedback-box show wrong-fb';
+    fb.textContent = 'This mainly relates to the user themselves, not to someone else exploiting the user.';
+  }
+}
+
+function hmdQuiz2(btn, key) {
+  document.querySelectorAll('#hmdQuiz2Options .option-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('hmdQuiz2Feedback');
+  if (key === 'C') {
+    btn.classList.add('correct');
+    fb.className = 'feedback-box show correct-fb';
+    fb.textContent = 'Yes. Unintentional misuse can still cause harm.';
+    document.getElementById('hmdQuiz2Next').classList.add('show');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#hmdQuiz2Options .option-btn')[2].classList.add('correct');
+    fb.className = 'feedback-box show wrong-fb';
+    fb.textContent = key === 'A'
+      ? 'Not quite. In theory, users can decide how to use their device, but they may unintentionally use it in a way that harms themselves.'
+      : 'Users do have responsibility for themselves. But a good engineer should still make sure the device creates as little risk as possible.';
+  }
+}
+
+initSlides(8);
+initHmdSort();
+</script>
+</body>
+</html>

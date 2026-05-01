@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tech Misuses Lab — AirTag</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
 <style>
@@ -82,14 +81,10 @@
   .at-punchline strong { color: var(--accent); }
   .at-punchline .pulse-dots { display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle; }
   .at-punchline .pulse-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); opacity: 0.25; }
-  .at-punchline.in .pulse-dots span.on { animation: at-pulse 1.4s ease infinite; }
-  .at-punchline.in .pulse-dots span.on:nth-child(2) { animation-delay: 0.25s; }
-  .at-punchline.in .pulse-dots span.on:nth-child(3) { animation-delay: 0.5s; }
+  .at-punchline.in .pulse-dots span { animation: at-pulse 1.4s ease infinite; }
+  .at-punchline.in .pulse-dots span:nth-child(2) { animation-delay: 0.25s; }
+  .at-punchline.in .pulse-dots span:nth-child(3) { animation-delay: 0.5s; }
   @keyframes at-pulse { 0%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
-
-  /* Journalist comic placeholder (until image is generated) */
-  .at-comic-placeholder { position: relative; min-height: 280px; }
-  .at-comic-fallback { display: none; align-items: center; justify-content: center; min-height: 280px; color: #666; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
 
   .at-next-scene { margin-top: 4px; }
 </style>
@@ -97,33 +92,32 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">TECH MISUSES LAB</div>
+  <a class="topbar-home" href="../index.html">← HOME</a>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 10</div>
+  <div class="slide-counter" id="slideCounter">01 / 05</div>
 </div>
 
 <div class="slides-wrapper">
 
   <!-- ═══ Screen 1: What's an AirTag ═══ -->
   <div class="slide" data-slide="1">
-    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:56px; padding:24px 4%; text-align:left;">
-      <div style="flex:0 0 auto; max-width:400px;">
-        <h2>Apple <span class="accent-word">AirTag</span></h2>
-        <div class="purpose-box" style="margin-top:20px; font-size:18px; line-height:1.65;">
-          A small Bluetooth tracker that helps people find lost belongings like keys or bags. It's coin-sized, sticks to or slips inside almost anything, and reports its location through a network of nearby Apple devices. <strong style="color:#f0f0f0">That last part is what makes it interesting for this lesson.</strong>
+    <div class="airtag-stack center" style="gap:24px;">
+      <div class="at-product">
+        <div class="img"><img src="../images/AirTag.png" alt="Apple AirTag"/></div>
+        <div>
+          <div class="name">Apple AirTag</div>
+          <div class="desc">A small Bluetooth tracker that helps people find lost belongings like keys or bags.</div>
         </div>
       </div>
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:560px;">
-        <img src="../images/AirTag.png" alt="Apple AirTag" style="width:100%; max-height:520px; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);"/>
-      </div>
+      <p class="airtag-prose" style="max-width:680px;">It's coin-sized, sticks to or slips inside almost anything, and reports its location through a network of nearby Apple devices. <strong>That last part is what makes it interesting for this lesson.</strong></p>
     </div>
   </div>
 
   <!-- ═══ Screen 2: What's scenario-based misuse analysis ═══ -->
   <div class="slide" data-slide="2">
     <div class="airtag-stack center" style="gap:28px;">
-      <h2>Strategy: <span class="accent-word">Scenario Analysis</span></h2>
-      <p class="airtag-prose" style="max-width:680px; font-size:18px;">Most analyses ask what a product does. Scenario-based analysis asks <strong>who's around it</strong>. You imagine real situations — people, tensions, relationships — and check whether the product changes what's possible in those situations. Misuse rarely shows up in the spec sheet. It shows up in the scenario.</p>
+      <h2>Scenario-based misuse analysis</h2>
+      <p class="airtag-prose" style="max-width:680px;">Most product reviews ask what a product does. This one asks who's around it. You imagine real situations — people, tensions, relationships — and check whether the product changes what's possible in those situations. Misuse rarely shows up in the spec sheet. It shows up in the scenario.</p>
 
       <div class="at-mao-row" id="screen2MaoRow">
         <div class="at-mao-card" data-stagger="0">
@@ -156,10 +150,12 @@
         <div class="at-pick-card" data-pick="breakup" onclick="atPick(this)">
           A couple recently ended their relationship and are still exchanging belongings.
         </div>
-        <div class="at-pick-card" data-pick="custody" onclick="atPick(this)">
+        <div class="at-pick-card locked">
+          <span class="soon">SOON</span>
           A parent in a custody dispute wants to know where their child goes after school.
         </div>
-        <div class="at-pick-card" data-pick="journalist" onclick="atPick(this)">
+        <div class="at-pick-card locked">
+          <span class="soon">SOON</span>
           A journalist meets a confidential source in a public location.
         </div>
       </div>
@@ -168,19 +164,14 @@
     </div>
   </div>
 
-  <!-- ═══ Slide 4: Breakup comic ═══ -->
+  <!-- ═══ Screen 4 (originally Screen 4): Breakup video + MAO tagging ═══ -->
   <div class="slide" data-slide="4">
     <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-scene-label">Scenario <span id="breakupOrder">1</span> of 3</div>
+      <div class="at-scene-label">Scenario 1 of 3</div>
       <div class="at-comic-wrap">
-        <img src="../images/comic1.png" alt="Comic illustrating the breakup scenario"/>
+        <img src="../images/Airtag_scenario1.png" alt="Comic illustrating the breakup scenario"/>
       </div>
-    </div>
-  </div>
 
-  <!-- ═══ Slide 5: Breakup tagging + reveal ═══ -->
-  <div class="slide" data-slide="5">
-    <div class="airtag-stack center" style="gap:18px;">
       <div class="at-tag-block" id="breakupTagBlock">
         <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
         <div class="at-tag-rows" id="breakupTagRows">
@@ -228,144 +219,13 @@
 
       <div class="at-punchline" id="breakupPunchline" style="display:none;">
         <strong>All three present.</strong> Motive plus access plus opportunity. This is the misuse vector.
-        <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
+        <span class="pulse-dots"><span></span><span></span><span></span></span>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 6: Custody comic ═══ -->
-  <div class="slide" data-slide="6">
-    <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-scene-label">Scenario <span id="custodyOrder">2</span> of 3</div>
-      <div class="at-comic-wrap">
-        <img src="../images/comic2.png" alt="Comic illustrating the custody scenario"/>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ Slide 7: Custody tagging + reveal ═══ -->
-  <div class="slide" data-slide="7">
-    <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-tag-block" id="custodyTagBlock">
-        <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
-        <div class="at-tag-rows" id="custodyTagRows">
-          <div class="at-tag-row" data-row="motive">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Does he have a motive?</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'motive','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'motive','absent')">Absent</button>
-            </div>
-          </div>
-          <div class="at-tag-row" data-row="access">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Access</div>
-              <div class="row-label-question">Does he have access?</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'access','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'access','absent')">Absent</button>
-            </div>
-          </div>
-          <div class="at-tag-row" data-row="opportunity">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">Does he have the opportunity?</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'opportunity','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'opportunity','absent')">Absent</button>
-            </div>
-          </div>
-        </div>
-        <div style="display:flex; justify-content:center; margin-top:18px;">
-          <button class="at-reveal-btn" id="custodyRevealBtn" onclick="atRevealCustody()">Reveal</button>
-        </div>
-      </div>
-
-      <div class="at-punchline" id="custodyPunchline" style="display:none;">
-        <strong>All three legs are present here too</strong> — but the motive looks more sympathetic than the breakup, which is exactly why this scenario matters. Misuse doesn't always come from bad intentions. Sometimes it comes from good intentions plus a product that makes overreach easy. The lens flags the structure, not the feeling.
-        <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ Slide 8: Journalist comic ═══ -->
-  <div class="slide" data-slide="8">
-    <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-scene-label">Scenario <span id="journalistOrder">3</span> of 3</div>
-      <div class="at-comic-wrap at-comic-placeholder">
-        <img src="../images/comic3.png" alt="Comic illustrating the journalist scenario" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
-        <div class="at-comic-fallback">comic pending — images/comic3.png</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ Slide 9: Journalist tagging + reveal ═══ -->
-  <div class="slide" data-slide="9">
-    <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-tag-block" id="journalistTagBlock">
-        <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
-        <div class="at-tag-rows" id="journalistTagRows">
-          <div class="at-tag-row" data-row="motive">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Does the watcher have a motive?</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'motive','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'motive','absent')">Absent</button>
-            </div>
-          </div>
-          <div class="at-tag-row" data-row="access">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Access</div>
-              <div class="row-label-question">Does the watcher have access?</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'access','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'access','absent')">Absent</button>
-            </div>
-          </div>
-          <div class="at-tag-row" data-row="opportunity">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">Does the watcher have the opportunity?</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'opportunity','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'opportunity','absent')">Absent</button>
-            </div>
-          </div>
-        </div>
-        <div style="display:flex; justify-content:center; margin-top:18px;">
-          <button class="at-reveal-btn" id="journalistRevealBtn" onclick="atRevealJournalist()">Reveal</button>
-        </div>
-      </div>
-
-      <div class="at-punchline" id="journalistPunchline" style="display:none;">
-        <strong>Only motive is present here.</strong> Without access, the product can't be deployed — and without deployment, opportunity never materializes. This is why scenario-based analysis matters: motive on its own, even strong motive, doesn't create a misuse vector. The legs have to line up. Take one away and the structure falls.
-        <span class="pulse-dots"><span class="on"></span><span></span><span></span></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ Slide 10: Wrap ═══ -->
-  <div class="slide" data-slide="10">
+  <!-- ═══ Screen 7 (sequential 5 here): Wrap ═══ -->
+  <div class="slide" data-slide="5">
     <div class="airtag-stack center" style="gap:24px;">
       <h2>That was scenario-based misuse analysis.</h2>
       <p class="airtag-prose" style="max-width:680px;">You watched a situation and checked it against the same lens. When you're designing a new product — or evaluating one — don't start with the features. Start with the people around it, and ask: <strong>motive, access, opportunity</strong>. If all three line up somewhere, you've found a misuse vector before it finds you.</p>
@@ -388,10 +248,7 @@
         </div>
       </div>
 
-      <div class="select-btn-row">
-        <button class="select-btn ghost" onclick="atTryAnother()">Try another scenario</button>
-        <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go back to home page</button>
-      </div>
+      <button class="select-btn" onclick="window.location.href='../index.html'">Go back to home page</button>
     </div>
   </div>
 
@@ -423,147 +280,19 @@
     }
   }
 
-  /* Re-trigger stagger when slides 2 or 10 (wrap) become active.
-     Tag slides 5/7/9 are gated until their scenario is revealed. */
+  /* Re-trigger stagger when screens 2 or 5 (wrap) become active.
+     Hook into goTo so we don't need a global observer (which would loop on every class change). */
   const _origGoTo = goTo;
-  const TAG_SLIDE_KEY = { 5: 'breakup', 7: 'custody', 9: 'journalist' };
   goTo = function(n) {
-    const key = TAG_SLIDE_KEY[n];
-    nextGated = key ? !atTagState[key].revealed : false;
     _origGoTo(n);
     if (n === 2) atStaggerMao('screen2MaoRow', 'screen2Final');
-    if (n === 10) atStaggerMao('screen7MaoRow', null);
+    if (n === 5) atStaggerMao('screen7MaoRow', null);
   };
+  // First-load case: if slide 2 or 5 is somehow the initial slide
   if (document.querySelector('[data-slide="2"]').classList.contains('active')) atStaggerMao('screen2MaoRow', 'screen2Final');
-  if (document.querySelector('[data-slide="10"]').classList.contains('active')) atStaggerMao('screen7MaoRow', null);
+  if (document.querySelector('[data-slide="5"]').classList.contains('active')) atStaggerMao('screen7MaoRow', null);
 
-  /* ── Scenario data ──
-     Each scenario maps to a slide number, owns a truth table, the DOM ids it uses, and a punchline. */
-  const SCENARIOS = {
-    breakup: {
-      comicSlide: 4,
-      tagSlide: 5,
-      truth: {
-        motive: { state: 'present', diagnosis: 'A recent breakup creates a clear surveillance motive — knowing where the ex is, who they’re with.' },
-        access: { state: 'present', diagnosis: 'They’re still exchanging belongings. The bag, the box, the jacket — all of it passes through the suspect’s hands before going back.' },
-        opportunity: { state: 'present', diagnosis: 'A coin-sized tracker reporting through Apple’s network turns a returned item into continuous covert location tracking.' }
-      },
-      corrections: {},
-      rowsId: 'breakupTagRows',
-      revealBtnId: 'breakupRevealBtn',
-      punchId: 'breakupPunchline',
-      orderLabelId: 'breakupOrder'
-    },
-    custody: {
-      comicSlide: 6,
-      tagSlide: 7,
-      truth: {
-        motive: { state: 'present', diagnosis: 'A reason to want covert visibility exists, even when the reason is framed as protective. The text exchange shows one parent demanding more information than the other has agreed to share — that gap is the motive.' },
-        access: { state: 'present', diagnosis: 'The backpack moves between two households on a regular schedule. Recurring physical handoffs of a child’s belongings are a textbook access condition.' },
-        opportunity: { state: 'present', diagnosis: 'The location history with multiple entries across multiple days is what makes this misuse rather than coordination. A safety check-in would not require ongoing logs of every place the child visits — that capability goes beyond what the situation justifies.' }
-      },
-      corrections: {
-        motive: 'You marked this absent, probably because the motive looks like parental concern. But scenario-based analysis doesn’t grade motives by sympathy. It asks whether a reason to bypass the other party’s consent exists. Here it clearly does.',
-        access: 'You marked this absent — but the backpack is the access vector, identical in structure to the breakup’s box. Whenever items routinely move between people, access exists.',
-        opportunity: 'You marked this absent, probably because tracking your own child sounds reasonable. But notice what panel 4 actually shows: a continuous record across multiple days, not a single “she arrived” confirmation. That’s the line between coordination and surveillance — and the AirTag is what enables crossing it.'
-      },
-      rowsId: 'custodyTagRows',
-      revealBtnId: 'custodyRevealBtn',
-      punchId: 'custodyPunchline',
-      orderLabelId: 'custodyOrder'
-    },
-    journalist: {
-      comicSlide: 8,
-      tagSlide: 9,
-      truth: {
-        motive: { state: 'present', diagnosis: 'A third party is clearly observing the meeting with surveillance intent. Whoever they’re working for has a reason to want to identify or follow the source.' },
-        access: { state: 'absent', diagnosis: 'The source’s belongings never leave their body. The watcher never approaches the table. No object exchange ever happens. Without a physical pathway to the source’s possessions, access doesn’t exist.' },
-        opportunity: { state: 'absent', diagnosis: 'Without access, the AirTag can never be planted, so the product doesn’t enable anything new in this situation. Opportunity collapses when access fails — the legs depend on each other.' }
-      },
-      corrections: {
-        motive: 'You marked this absent — but the watcher’s behavior in panel 2 is unambiguous. Their attention to the meeting establishes that someone wants information about the source. That’s motive.',
-        access: 'You marked this present — but look again at panel 3. The watcher stays at their own table, hands on their own laptop. There’s no moment where they could plant anything on the source. Proximity in a public space is not the same as access.',
-        opportunity: 'You marked this present — possibly because the watcher clearly has surveillance interest. But interest without a way to act on it produces nothing. The AirTag changes nothing for someone who can’t get near the target’s belongings.'
-      },
-      rowsId: 'journalistTagRows',
-      revealBtnId: 'journalistRevealBtn',
-      punchId: 'journalistPunchline',
-      orderLabelId: 'journalistOrder'
-    }
-  };
-
-  const SCENARIO_KEYS = ['breakup', 'custody', 'journalist'];
-  const WRAP_SLIDE = 10;
-
-  /* ── Per-scenario tag/reveal state ── */
-  const atTagState = {
-    breakup:    { answers: { motive: null, access: null, opportunity: null }, revealed: false },
-    custody:    { answers: { motive: null, access: null, opportunity: null }, revealed: false },
-    journalist: { answers: { motive: null, access: null, opportunity: null }, revealed: false }
-  };
-
-  function _tagAnswer(key, btn, row, value) {
-    const st = atTagState[key];
-    if (st.revealed) return;
-    st.answers[row] = value;
-    const sc = SCENARIOS[key];
-    const rowEl = document.querySelector(`#${sc.rowsId} .at-tag-row[data-row="${row}"]`);
-    rowEl.classList.remove('present', 'absent');
-    rowEl.classList.add(value);
-    rowEl.querySelectorAll('.at-tag-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    const allAnswered = Object.values(st.answers).every(v => v !== null);
-    document.getElementById(sc.revealBtnId).classList.toggle('show', allAnswered);
-  }
-
-  function _reveal(key) {
-    const st = atTagState[key];
-    if (st.revealed) return;
-    st.revealed = true;
-    const sc = SCENARIOS[key];
-    document.getElementById(sc.revealBtnId).style.display = 'none';
-    const rows = ['motive', 'access', 'opportunity'];
-    rows.forEach((rowKey, i) => setTimeout(() => _revealRow(key, rowKey), i * 600));
-    setTimeout(() => {
-      const punch = document.getElementById(sc.punchId);
-      punch.style.display = 'block';
-      requestAnimationFrame(() => punch.classList.add('in'));
-      unlockNext();
-    }, rows.length * 600 + 200);
-  }
-
-  function _revealRow(key, rowKey) {
-    const sc = SCENARIOS[key];
-    const truth = sc.truth[rowKey];
-    const rowEl = document.querySelector(`#${sc.rowsId} .at-tag-row[data-row="${rowKey}"]`);
-    const guess = atTagState[key].answers[rowKey];
-
-    rowEl.classList.remove('present', 'absent');
-    rowEl.classList.add(truth.state);
-
-    const diag = rowEl.querySelector('.row-diagnosis');
-    let html = truth.diagnosis;
-    if (guess && guess !== truth.state) {
-      const correction = sc.corrections[rowKey] || (truth.state === 'present'
-        ? 'You marked this absent — here’s why it’s present.'
-        : 'You marked this present — here’s why it’s absent.');
-      html = `<span class="row-correction">${correction}</span>${truth.diagnosis}`;
-    }
-    diag.innerHTML = html;
-    rowEl.classList.add('revealed');
-    rowEl.querySelectorAll('.at-tag-btn').forEach(b => b.disabled = true);
-  }
-
-  /* Inline-onclick entry points. Exposed via window so they're reachable from HTML. */
-  window.atTagAnswer           = function(btn, row, value) { _tagAnswer('breakup', btn, row, value); };
-  window.atTagAnswerCustody    = function(btn, row, value) { _tagAnswer('custody', btn, row, value); };
-  window.atTagAnswerJournalist = function(btn, row, value) { _tagAnswer('journalist', btn, row, value); };
-  window.atReveal              = function() { _reveal('breakup'); };
-  window.atRevealCustody       = function() { _reveal('custody'); };
-  window.atRevealJournalist    = function() { _reveal('journalist'); };
-
-  /* ── Screen 3: pick a scenario ── */
+  /* ── Screen 3: pick a scenario (only "breakup" is live) ── */
   let atPickedScenario = null;
 
   function atPick(card) {
@@ -571,7 +300,6 @@
     document.querySelectorAll('.at-pick-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
     atPickedScenario = card.dataset.pick;
-    atUpdateScenarioLabels();
     const btn = document.getElementById('atInvestigateBtn');
     btn.disabled = false;
     btn.style.opacity = '1';
@@ -583,69 +311,100 @@
     goNext();
   }
 
-  /* Picked scenario gets label "1", the others fill 2/3 in their natural order. */
-  function atUpdateScenarioLabels() {
-    const order = atPickedScenario
-      ? [atPickedScenario, ...SCENARIO_KEYS.filter(k => k !== atPickedScenario)]
-      : SCENARIO_KEYS.slice();
-    order.forEach((k, i) => {
-      const el = document.getElementById(SCENARIOS[k].orderLabelId);
-      if (el) el.textContent = String(i + 1);
-    });
-  }
-
-  /* ── Routing: 3 → picked.comicSlide → picked.tagSlide → wrap. Other scenarios skipped. ── */
-  function atPicked() {
-    return SCENARIOS[atPickedScenario || 'breakup'];
-  }
-
-  goNext = function() {
-    const sc = atPicked();
-    if (current === 3) { goTo(sc.comicSlide); return; }
-    if (current === sc.comicSlide) { goTo(sc.tagSlide); return; }
-    if (current === sc.tagSlide) { goTo(WRAP_SLIDE); return; }
-    goTo(current + 1);
-  };
-  goPrev = function() {
-    const sc = atPicked();
-    if (current === WRAP_SLIDE) { goTo(sc.tagSlide); return; }
-    if (current === sc.tagSlide) { goTo(sc.comicSlide); return; }
-    if (current === sc.comicSlide) { goTo(3); return; }
-    goTo(current - 1);
+  /* ── Screen 4: MAO tagging + reveal ── */
+  const BREAKUP_TRUTH = {
+    motive: { state: 'present', diagnosis: 'A recent breakup creates a clear surveillance motive — knowing where the ex is, who they’re with.' },
+    access: { state: 'present', diagnosis: 'They’re still exchanging belongings. The bag, the box, the jacket — all of it passes through the suspect’s hands before going back.' },
+    opportunity: { state: 'present', diagnosis: 'A coin-sized tracker reporting through Apple’s network turns a returned item into continuous covert location tracking.' }
   };
 
-  /* Reset all scenario state and return to the picker. */
-  function atTryAnother() {
-    SCENARIO_KEYS.forEach(key => {
-      const sc = SCENARIOS[key];
-      const st = atTagState[key];
-      st.answers = { motive: null, access: null, opportunity: null };
-      st.revealed = false;
+  const atTagAnswers = { motive: null, access: null, opportunity: null };
+  let atRevealed = false;
 
-      document.querySelectorAll(`#${sc.rowsId} .at-tag-row`).forEach(row => {
-        row.classList.remove('present', 'absent', 'revealed');
-        const diag = row.querySelector('.row-diagnosis');
-        if (diag) diag.innerHTML = '';
-        row.querySelectorAll('.at-tag-btn').forEach(b => { b.disabled = false; b.classList.remove('active'); });
-      });
-      const revealBtn = document.getElementById(sc.revealBtnId);
-      if (revealBtn) { revealBtn.classList.remove('show'); revealBtn.style.display = ''; }
-      const punch = document.getElementById(sc.punchId);
-      if (punch) { punch.classList.remove('in'); punch.style.display = 'none'; }
+  function atTagAnswer(btn, row, value) {
+    if (atRevealed) return;
+    atTagAnswers[row] = value;
+
+    const rowEl = document.querySelector(`.at-tag-row[data-row="${row}"]`);
+    rowEl.classList.remove('present', 'absent');
+    rowEl.classList.add(value);
+
+    rowEl.querySelectorAll('.at-tag-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const allAnswered = Object.values(atTagAnswers).every(v => v !== null);
+    document.getElementById('breakupRevealBtn').classList.toggle('show', allAnswered);
+  }
+
+  function atReveal() {
+    if (atRevealed) return;
+    atRevealed = true;
+    document.getElementById('breakupRevealBtn').style.display = 'none';
+
+    const order = ['motive', 'access', 'opportunity'];
+    order.forEach((rowKey, i) => {
+      setTimeout(() => atRevealRow(rowKey), i * 600);
     });
 
+    setTimeout(() => {
+      const punch = document.getElementById('breakupPunchline');
+      punch.style.display = 'block';
+      requestAnimationFrame(() => punch.classList.add('in'));
+    }, order.length * 600 + 200);
+  }
+
+  function atRevealRow(rowKey) {
+    const truth = BREAKUP_TRUTH[rowKey];
+    const rowEl = document.querySelector(`.at-tag-row[data-row="${rowKey}"]`);
+    const guess = atTagAnswers[rowKey];
+
+    rowEl.classList.remove('present', 'absent');
+    rowEl.classList.add(truth.state);
+
+    const diag = rowEl.querySelector('.row-diagnosis');
+    let html = truth.diagnosis;
+    if (guess && guess !== truth.state) {
+      const correctionText = truth.state === 'present'
+        ? `You marked this absent — here’s why it’s present.`
+        : `You marked this present — here’s why it’s absent.`;
+      html = `<span class="row-correction">${correctionText}</span>${truth.diagnosis}`;
+    }
+    diag.innerHTML = html;
+    rowEl.classList.add('revealed');
+
+    rowEl.querySelectorAll('.at-tag-btn').forEach(b => b.disabled = true);
+  }
+
+  /* ── Screen 7: Restart ── */
+  function atRestart() {
+    // Reset Screen 3 pick
     document.querySelectorAll('.at-pick-card').forEach(c => c.classList.remove('selected'));
     atPickedScenario = null;
-    atUpdateScenarioLabels();
-    const inv = document.getElementById('atInvestigateBtn');
-    if (inv) { inv.disabled = true; inv.style.opacity = '0.4'; inv.classList.remove('show'); }
+    const invBtn = document.getElementById('atInvestigateBtn');
+    invBtn.disabled = true;
+    invBtn.style.opacity = '0.4';
+    invBtn.classList.remove('show');
 
-    goTo(3);
+    // Reset Screen 4
+    Object.keys(atTagAnswers).forEach(k => atTagAnswers[k] = null);
+    atRevealed = false;
+    document.querySelectorAll('.at-tag-row').forEach(r => {
+      r.classList.remove('present', 'absent', 'revealed');
+      r.querySelector('.row-diagnosis').innerHTML = '';
+      r.querySelectorAll('.at-tag-btn').forEach(b => { b.disabled = false; b.classList.remove('active'); });
+    });
+    const revealBtn = document.getElementById('breakupRevealBtn');
+    revealBtn.classList.remove('show');
+    revealBtn.style.display = '';
+    const punch = document.getElementById('breakupPunchline');
+    punch.classList.remove('in');
+    punch.style.display = 'none';
+
+    goTo(1);
   }
-  window.atTryAnother = atTryAnother;
 
   /* ── Init ── */
-  initSlides(10);
+  initSlides(5);
 </script>
 </body>
 </html>

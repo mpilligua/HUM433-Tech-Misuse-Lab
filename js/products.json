@@ -29,6 +29,12 @@
       "name": "Social Media",
       "icon": "📱",
       "file": "products/social_media.html"
+    },
+    {
+      "id": "health_monitor_device",
+      "name": "Health Monitoring Devices",
+      "icon": "⌚",
+      "file": "products/health_monitor_device.html"
     }
   ]
 }
