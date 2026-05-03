@@ -36,11 +36,22 @@
   .hmd-prose strong { color: var(--text); }
   .hmd-intro {
     width: 100%;
+    max-width: 1100px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 48px;
     text-align: left;
+    margin: 0 auto;
+  }
+  .hmd-intro-copy {
+    flex: 0 1 520px;
+    max-width: 520px;
+  }
+  .hmd-intro-media {
+    flex: 0 0 410px;
+    display: flex;
+    justify-content: center;
   }
   .hmd-device-img {
     width: 100%;
@@ -240,6 +251,12 @@
       flex-direction: column;
       gap: 24px;
     }
+    .hmd-intro-copy,
+    .hmd-intro-media {
+      flex: 0 1 auto;
+      width: 100%;
+      max-width: 520px;
+    }
     .hmd-feature-pool,
     .hmd-drag-board {
       grid-template-columns: 1fr;
@@ -261,13 +278,13 @@
   <!-- SLIDE 1: Intro -->
   <div class="slide" data-slide="1">
     <div class="hmd-intro">
-      <div style="flex:1; max-width:460px;">
+      <div class="hmd-intro-copy">
         <h2>Health Monitoring <span class="accent-word">Devices</span></h2>
         <div class="purpose-box" style="margin-top:20px;">
           Health monitoring devices (HMDs) are usually small devices, such as watches, that track heart rate, steps, or similar physiological data. These statistics can be shown clearly on the device itself or in a connected app.
         </div>
       </div>
-      <div style="flex:1; display:flex; justify-content:center;">
+      <div class="hmd-intro-media">
         <img class="hmd-device-img" src="../images/health_monitor_device.png" alt="Health monitoring smartwatch"/>
       </div>
     </div>
