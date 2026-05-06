@@ -22,7 +22,7 @@
 <body>
 
 <div class="topbar">
-  <a class="topbar-home" href="../index.html">← HOME</a>
+  <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
   <div class="slide-counter" id="slideCounter">01 / 10</div>
 </div>
@@ -45,13 +45,10 @@
   </div>
 
   <!-- SLIDE 2: Strategy -->
-  <div class="slide" data-slide="2">
-    <div style="width:100%; padding:36px 8%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:left; gap:18px;">
-      <div style="display:flex; align-items:center; justify-content:center; width:100%; height:70%;">
-        <p style="font-size:24px; color:#ccc; line-height:1.7; max-width:900px; text-align:center;">One nice strategy to spot misuse early is to break the tool into its parts and ask what each could leak or enable.</p>
-      </div>
-      <p>So as a first task, let's break the printer into its components.</p>
-    </div>
+  <div class="slide" data-slide="2" style="padding:36px 8%; align-items:center; justify-content:center; text-align:center; gap:20px;">
+    <h2>Strategy: <span class="accent-word">Component Analysis</span></h2>
+    <p style="font-size:18px; color:#ccc; line-height:1.65; max-width:680px; margin-top:24px;">One strategy to spot misuse early is to <strong style="color:#f0f0f0">break the tool into its parts</strong> and ask what each one could leak or enable.</p>
+    <p style="font-size:16px; color:var(--muted); margin-top:8px;">So as a first task, let's break the printer into its components.</p>
   </div>
 
   <!-- SLIDE 3: Match the Components (drag & drop) -->
@@ -134,7 +131,7 @@
   <!-- SLIDE 8: Real World Story -->
   <div class="slide" data-slide="8">
     <h2><span class="danger-word">Real World</span> Story</h2>
-    <img src="../images/real_story.png" alt="Real story illustration" style="max-width:700px; width:100%; border-radius:8px; border:1px solid var(--border); margin-top:24px;" onerror="this.style.display='none';"/>
+    <img src="../images/PrinterDrive.png" alt="Printer hard drive" style="max-width:700px; width:100%; border-radius:8px; border:1px solid var(--border); margin-top:24px;" onerror="this.style.display='none';"/>
   </div>
 
   <!-- SLIDE 9: Rate what you learned -->
@@ -176,7 +173,7 @@
       Every device has hidden assumptions.
       The best engineers are the ones who question them before malicious users do.
     </div>
-    <button class="select-btn" onclick="window.location.href='../index.html'">← EXPLORE ANOTHER DEVICE</button>
+    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">← EXPLORE ANOTHER DEVICE</button>
   </div>
 
 </div>
@@ -188,6 +185,20 @@
 
 <script src="../js/core.js"></script>
 <script>
+/* ── Gate state ── */
+let printerGameDone  = false;
+let printerQuiz1Done = false;
+let printerQuiz2Done = false;
+
+const _coreGoTo = goTo;
+goTo = function(n) {
+  if      (n === 3 && !printerGameDone)  nextGated = true;
+  else if (n === 4 && !printerQuiz1Done) nextGated = true;
+  else if (n === 7 && !printerQuiz2Done) nextGated = true;
+  else                                   nextGated = false;
+  _coreGoTo(n);
+};
+
 /* ── Quiz 1 — correct: B ── */
 function quiz1Answer(btn, key) {
   document.querySelectorAll('#quiz1Options .option-btn').forEach(b => b.disabled = true);
@@ -204,6 +215,8 @@ function quiz1Answer(btn, key) {
       ? '✗ The Mechanical Engine is purely physical — heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
       : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing — it needs a disk and a network to become dangerous.';
   }
+  printerQuiz1Done = true;
+  unlockNext();
 }
 
 /* ── Quiz 2 — correct: B ── */
@@ -222,6 +235,8 @@ function quiz2Answer(btn, key) {
       ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant — but the hard disk keeps all data regardless.'
       : '✗ The Mechanical Engine is all moving parts — drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
   }
+  printerQuiz2Done = true;
+  unlockNext();
 }
 
 /* ── Quiz option image hover panel ── */
@@ -326,7 +341,9 @@ function initImageDragGame() {
     zone.addEventListener('drop', e => {
       e.preventDefault();
       zone.classList.remove('active');
-      placeComponentOnZone(zone, e.dataTransfer.getData('componentName'));
+      if (!zone.dataset.placedComponent) {
+        placeComponentOnZone(zone, e.dataTransfer.getData('componentName'));
+      }
     });
     canvas.appendChild(zone);
   });
@@ -350,7 +367,7 @@ function initImageDragGame() {
 
 function placeComponentOnZone(zone, componentName) {
   const expected = zone.dataset.componentName;
-  const compEl = document.querySelector(`[data-component-name="${componentName}"]`);
+  const compEl = document.querySelector(`#componentList [data-component-name="${componentName}"]`);
 
   if (componentName === expected) {
     zone.dataset.placedComponent = componentName;
@@ -364,15 +381,21 @@ function placeComponentOnZone(zone, componentName) {
     if (Object.keys(gameState.placedComponents).length === Object.keys(CORRECT_COMPONENTS_IMAGE).length) {
       const msg = document.getElementById('completionMessage');
       if (msg) msg.classList.add('show');
+      printerGameDone = true;
+      unlockNext();
     }
   } else {
-    if (compEl) compEl.classList.add('error');
     const slide = document.querySelector('[data-slide="3"].active');
     if (slide) { slide.classList.add('flash-error'); setTimeout(() => slide.classList.remove('flash-error'), 600); }
+    if (INCORRECT_COMPONENTS.includes(componentName) && compEl) {
+      compEl.classList.add('error');
+    }
   }
 }
 
 function resetImageGame() {
+  printerGameDone = false;
+  lockNext();
   gameState.placedComponents = {};
   document.querySelectorAll('.drop-overlay').forEach(z => {
     z.removeAttribute('data-placed-component');
