@@ -548,6 +548,7 @@ function goTo(n) {
   current = n;
   updateUI();
   setTimeout(() => document.querySelectorAll('.slide.exit').forEach(s => s.classList.remove('exit')), 500);
+  if (n === total) { try { localStorage.setItem('completed:social_media', '1'); } catch (e) {} }
 }
 
 function goNext() { if (current < total) goTo(current + 1); }

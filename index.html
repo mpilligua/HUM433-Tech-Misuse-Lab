@@ -43,10 +43,17 @@
 
   <!-- SLIDE 3: Choose Device -->
   <div class="slide" data-slide="3">
-    <h2>Which device do you<br>want to <span class="accent-word">explore?</span></h2>
+    <h2 id="chooseHeading">Which device do you<br>want to <span class="accent-word">explore?</span></h2>
     <div class="object-grid" id="productGrid">
       <!-- Cards are injected by loadProducts() -->
     </div>
+    <!-- Path UI (hidden unless ?path=1 / localStorage flag) -->
+    <div class="path-wrap" id="pathWrap" hidden></div>
+    <!-- Levels UI (hidden unless ?path=levels) -->
+    <div class="levels-wrap" id="levelsWrap" hidden></div>
+    <!-- Duolingo-style UI (hidden unless ?path=duolingo) -->
+    <div class="duo-wrap" id="duoWrap" hidden></div>
+    <button class="path-reset" id="pathReset" onclick="resetPathProgress()" hidden>Reset progress</button>
   </div>
 
 </div>
@@ -58,6 +65,32 @@
 
 <script src="js/core.js"></script>
 <script>
+  /* ── Home mode flag ──
+     Default: grid. Activate alternate homes via URL param (persisted in localStorage):
+       index.html?path=1       → serpentine path
+       index.html?path=levels  → level cards (click a level to pick one of two options)
+       index.html?path=0       → grid (clears flag) */
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('path')) {
+      const v = params.get('path');
+      try {
+        if (v === '0' || v === '') localStorage.removeItem('home_path');
+        else localStorage.setItem('home_path', v);
+      } catch (e) {}
+    }
+  })();
+  function homeMode() {
+    try {
+      const v = localStorage.getItem('home_path');
+      if (v === '1') return 'serpentine';
+      if (v === 'levels') return 'levels';
+      if (v === 'duolingo') return 'duolingo';
+    } catch (e) {}
+    return 'grid';
+  }
+
+  /* ── Default home: grid of all products ── */
   async function loadProducts() {
     const grid = document.getElementById('productGrid');
     try {
@@ -97,7 +130,374 @@
     }
   }
 
-  loadProducts();
+  /* ── Serpentine path home (feature-flagged) ──
+     Six products in a single snaking line. Levels are pairs: nodes 0+1 = level 1,
+     2+3 = level 2, 4+5 = level 3. Completing either node in a level unlocks the
+     next pair. Completion is read from localStorage 'completed:<id>'. */
+  const PATH_NODES = [
+    { id: 'airtag',       name: 'AirTag',               icon: '', file: 'products/airtag.html' },
+    { id: 'self_driving', name: 'Self-driving vehicle', icon: '🚗', file: 'products/self_driving.html' },
+    { id: 'genai',        name: 'Generative AI',        icon: '🤖', file: 'products/genai.html' },
+    { id: 'social_media', name: 'Social Media',         icon: '📱', file: 'products/social_media.html' },
+    { id: 'printer',      name: 'Office Printer',       icon: '🖨️', file: 'products/printer.html' },
+    { id: 'tbd',          name: 'Coming soon',          icon: '⏳', file: null, locked: true }
+  ];
+  const NODES_PER_LEVEL = 2;
+
+  function isCompleted(id) {
+    try { return localStorage.getItem('completed:' + id) === '1'; } catch (e) { return false; }
+  }
+
+  function renderPath() {
+    const wrap = document.getElementById('pathWrap');
+    wrap.innerHTML = '';
+
+    // Level gating: a level is unlocked if every prior level had any node completed.
+    const numLevels = Math.ceil(PATH_NODES.length / NODES_PER_LEVEL);
+    const levelUnlocked = [true];
+    for (let lvl = 1; lvl < numLevels; lvl++) {
+      const prevSlice = PATH_NODES.slice((lvl - 1) * NODES_PER_LEVEL, lvl * NODES_PER_LEVEL);
+      const prevDone = prevSlice.some(n => !n.locked && isCompleted(n.id));
+      levelUnlocked[lvl] = levelUnlocked[lvl - 1] && prevDone;
+    }
+    function nodeUnlocked(idx) { return levelUnlocked[Math.floor(idx / NODES_PER_LEVEL)]; }
+
+    // Geometry. Container is ~480px wide; nodes alternate ±64px around the centerline.
+    const W = 480;
+    const STRIDE = 100;     // vertical distance between nodes
+    const PAD_TOP = 70;
+    const OFFSET = 64;      // horizontal swing from centerline
+    const NODE_R = 48;      // node radius (matches CSS .path-node-btn 96px)
+
+    const positions = PATH_NODES.map((_, i) => ({
+      x: W / 2 + (i % 2 === 0 ? -OFFSET : OFFSET),
+      y: PAD_TOP + i * STRIDE
+    }));
+    const H = PAD_TOP + (PATH_NODES.length - 1) * STRIDE + 110; // include space for label below last
+
+    // Build SVG cubic-bezier path through all nodes.
+    // Control-point Y is offset from each anchor by `CURVE * dy`, so the curve scales
+    // sensibly when STRIDE changes. CURVE = 0.5 reproduces the old midpoint behavior;
+    // smaller values pull the curve tighter to a straight line, larger ones bulge it.
+    const CURVE = 0.8;
+    function buildD(points) {
+      if (!points.length) return '';
+      let d = `M ${points[0].x} ${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        const p0 = points[i - 1], p1 = points[i];
+        const dy = p1.y - p0.y;
+        d += ` C ${p0.x} ${p0.y + dy * CURVE}, ${p1.x} ${p1.y - dy * CURVE}, ${p1.x} ${p1.y}`;
+      }
+      return d;
+    }
+    const fullD = buildD(positions);
+
+    // Completed-curve: end it at the last completed node (use frontier for visual continuity).
+    let lastDoneIdx = -1;
+    for (let i = 0; i < PATH_NODES.length; i++) {
+      if (!PATH_NODES[i].locked && isCompleted(PATH_NODES[i].id)) lastDoneIdx = i;
+    }
+    const doneD = lastDoneIdx >= 0 ? buildD(positions.slice(0, lastDoneIdx + 1)) : '';
+
+    // Render SVG underlay.
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('class', 'path-svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+
+    const trackPath = document.createElementNS(svgNS, 'path');
+    trackPath.setAttribute('d', fullD);
+    trackPath.setAttribute('class', 'path-track');
+    svg.appendChild(trackPath);
+
+    if (doneD) {
+      const donePath = document.createElementNS(svgNS, 'path');
+      donePath.setAttribute('d', doneD);
+      donePath.setAttribute('class', 'path-track-done');
+      svg.appendChild(donePath);
+    }
+
+    wrap.appendChild(svg);
+
+    // Render nodes positioned over the curve.
+    wrap.style.height = H + 'px';
+    PATH_NODES.forEach((opt, idx) => {
+      const open = nodeUnlocked(idx) && !opt.locked;
+      const completed = !opt.locked && isCompleted(opt.id);
+      const node = document.createElement('div');
+      node.className = 'path-node'
+        + (open ? '' : ' locked')
+        + (opt.locked ? ' tbd' : '')
+        + (completed ? ' done' : '');
+      const symbol = !open ? '🔒' : (completed ? '✓' : opt.icon);
+      node.style.left = `calc(50% + ${positions[idx].x - W / 2}px)`;
+      node.style.top  = `${positions[idx].y - NODE_R}px`;
+      node.innerHTML = `
+        <button class="path-node-btn" ${open ? '' : 'disabled aria-disabled="true"'}>
+          <span class="path-node-symbol">${symbol}</span>
+        </button>
+        <div class="path-node-name">${opt.name}</div>
+      `;
+      if (open) node.querySelector('.path-node-btn').onclick = () => { window.location.href = opt.file; };
+      wrap.appendChild(node);
+    });
+  }
+
+  function resetPathProgress() {
+    if (!confirm('Reset your progress? This will clear every completed lesson.')) return;
+    try {
+      PATH_NODES.forEach(n => { if (!n.locked) localStorage.removeItem('completed:' + n.id); });
+    } catch (e) {}
+    const m = homeMode();
+    if (m === 'levels') renderLevels();
+    else if (m === 'duolingo') renderDuolingo();
+    else renderPath();
+  }
+  window.resetPathProgress = resetPathProgress;
+
+  /* ── Levels home (?path=levels) ──
+     Three Level N cards, stacked vertically. Clicking an unlocked level expands it
+     into the two options for that level. Picking an option navigates to that product. */
+  function levelsData() {
+    const groups = [];
+    for (let i = 0; i < PATH_NODES.length; i += NODES_PER_LEVEL) {
+      groups.push(PATH_NODES.slice(i, i + NODES_PER_LEVEL));
+    }
+    return groups;
+  }
+
+  function renderLevels() {
+    const wrap = document.getElementById('levelsWrap');
+    wrap.innerHTML = '';
+    const groups = levelsData();
+
+    // Same gating as the serpentine: a level is unlocked if every prior level had any node completed.
+    const unlocked = [true];
+    for (let i = 1; i < groups.length; i++) {
+      unlocked[i] = unlocked[i - 1] && groups[i - 1].some(n => !n.locked && isCompleted(n.id));
+    }
+
+    groups.forEach((group, idx) => {
+      const open = unlocked[idx];
+      const done = group.some(n => !n.locked && isCompleted(n.id));
+      const row = document.createElement('div');
+      row.className = 'level-row' + (open ? '' : ' locked') + (done ? ' done' : '');
+
+      const card = document.createElement('button');
+      card.className = 'level-card';
+      card.disabled = !open;
+      card.innerHTML = `
+        <div class="level-card-meta">
+          <div class="level-card-num">Level ${idx + 1}</div>
+          <div class="level-card-hint">${open ? 'Pick one of two scenarios' : 'Locked — finish the previous level'}</div>
+        </div>
+        <div class="level-card-state">${!open ? '🔒' : (done ? '✓' : '→')}</div>
+      `;
+
+      const opts = document.createElement('div');
+      opts.className = 'level-options';
+      group.forEach(opt => {
+        const completed = !opt.locked && isCompleted(opt.id);
+        const reachable = open && !opt.locked;
+        const btn = document.createElement('button');
+        btn.className = 'level-option' + (opt.locked ? ' tbd' : '') + (completed ? ' done' : '');
+        btn.disabled = !reachable;
+        btn.innerHTML = `
+          <span class="level-option-icon">${opt.locked ? '⏳' : (completed ? '✓' : opt.icon)}</span>
+          <span class="level-option-name">${opt.name}</span>
+        `;
+        if (reachable) btn.onclick = (e) => { e.stopPropagation(); window.location.href = opt.file; };
+        opts.appendChild(btn);
+      });
+
+      if (open) {
+        card.onclick = () => {
+          // Collapse any other expanded level, then toggle this one.
+          document.querySelectorAll('.level-row.expanded').forEach(r => { if (r !== row) r.classList.remove('expanded'); });
+          row.classList.toggle('expanded');
+        };
+      }
+
+      row.appendChild(card);
+      row.appendChild(opts);
+      wrap.appendChild(row);
+    });
+  }
+
+  // Click outside any level row collapses the expanded one.
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.level-row')) {
+      document.querySelectorAll('.level-row.expanded').forEach(r => r.classList.remove('expanded'));
+    }
+    if (!e.target.closest('.duo-stop')) {
+      document.querySelectorAll('.duo-stop.open').forEach(s => s.classList.remove('open'));
+    }
+  });
+
+  /* ── Duolingo home (?path=duolingo) ──
+     Three serpentine "stops" — one per level. Clicking an unlocked stop opens an
+     inline popover with the two product options. */
+  function renderDuolingo() {
+    const wrap = document.getElementById('duoWrap');
+    wrap.innerHTML = '';
+    const groups = levelsData(); // reuses the levels mode pairing
+
+    const unlocked = [true];
+    for (let i = 1; i < groups.length; i++) {
+      unlocked[i] = unlocked[i - 1] && groups[i - 1].some(n => !n.locked && isCompleted(n.id));
+    }
+
+    // Geometry: 3 stops, alternating x-offset, generous spacing.
+    const W = 360;
+    const STRIDE = 180;
+    const PAD_TOP = 90;
+    const OFFSET = 70;
+    const NODE_R = 56; // matches CSS .duo-pill 112px
+
+    const positions = groups.map((_, i) => ({
+      x: W / 2 + (i % 2 === 0 ? -OFFSET : OFFSET),
+      y: PAD_TOP + i * STRIDE
+    }));
+    const H = PAD_TOP + (groups.length - 1) * STRIDE + 140;
+
+    const CURVE = 0.7;
+    function buildD(pts) {
+      if (!pts.length) return '';
+      let d = `M ${pts[0].x} ${pts[0].y}`;
+      for (let i = 1; i < pts.length; i++) {
+        const p0 = pts[i - 1], p1 = pts[i];
+        const dy = p1.y - p0.y;
+        d += ` C ${p0.x} ${p0.y + dy * CURVE}, ${p1.x} ${p1.y - dy * CURVE}, ${p1.x} ${p1.y}`;
+      }
+      return d;
+    }
+    const fullD = buildD(positions);
+
+    let lastDoneIdx = -1;
+    groups.forEach((g, i) => { if (g.some(n => !n.locked && isCompleted(n.id))) lastDoneIdx = i; });
+    const doneD = lastDoneIdx >= 0 ? buildD(positions.slice(0, lastDoneIdx + 1)) : '';
+
+    // Section banner.
+    const banner = document.createElement('div');
+    banner.className = 'duo-banner';
+    banner.innerHTML = `
+      <div class="duo-banner-meta">Section 1 · Tech Misuses Lab</div>
+      <div class="duo-banner-title">Three levels, one strategy</div>
+    `;
+    wrap.appendChild(banner);
+
+    // Scrollable stage holding the SVG + stops.
+    const stage = document.createElement('div');
+    stage.className = 'duo-stage';
+    stage.style.height = H + 'px';
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('class', 'duo-svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+
+    const trackPath = document.createElementNS(svgNS, 'path');
+    trackPath.setAttribute('d', fullD);
+    trackPath.setAttribute('class', 'duo-track');
+    svg.appendChild(trackPath);
+
+    if (doneD) {
+      const donePath = document.createElementNS(svgNS, 'path');
+      donePath.setAttribute('d', doneD);
+      donePath.setAttribute('class', 'duo-track-done');
+      svg.appendChild(donePath);
+    }
+
+    stage.appendChild(svg);
+
+    // Find the "current" stop = first unlocked, not-done stop.
+    let currentIdx = -1;
+    for (let i = 0; i < groups.length; i++) {
+      const done = groups[i].some(n => !n.locked && isCompleted(n.id));
+      if (unlocked[i] && !done) { currentIdx = i; break; }
+    }
+
+    groups.forEach((group, idx) => {
+      const open = unlocked[idx];
+      const done = group.some(n => !n.locked && isCompleted(n.id));
+      const isCurrent = idx === currentIdx;
+
+      const stop = document.createElement('div');
+      stop.className = 'duo-stop'
+        + (open ? '' : ' locked')
+        + (done ? ' done' : '')
+        + (isCurrent ? ' current' : '');
+      stop.style.left = `calc(50% + ${positions[idx].x - W / 2}px)`;
+      stop.style.top  = `${positions[idx].y - NODE_R}px`;
+
+      const symbol = !open ? '🔒' : (done ? '✓' : (idx + 1));
+      stop.innerHTML = `
+        <button class="duo-pill" ${open ? '' : 'disabled aria-disabled="true"'}>
+          <span class="duo-pill-symbol">${symbol}</span>
+        </button>
+        <div class="duo-stop-label">Level ${idx + 1}</div>
+        <div class="duo-popover">
+          <div class="duo-popover-arrow"></div>
+          <div class="duo-popover-title">Level ${idx + 1} — pick a scenario</div>
+          <div class="duo-popover-options"></div>
+        </div>
+      `;
+
+      const optsHost = stop.querySelector('.duo-popover-options');
+      group.forEach(opt => {
+        const completed = !opt.locked && isCompleted(opt.id);
+        const reachable = open && !opt.locked;
+        const btn = document.createElement('button');
+        btn.className = 'duo-popover-option' + (opt.locked ? ' tbd' : '') + (completed ? ' done' : '');
+        btn.disabled = !reachable;
+        btn.innerHTML = `
+          <span class="duo-popover-icon">${opt.locked ? '⏳' : (completed ? '✓' : opt.icon)}</span>
+          <span class="duo-popover-name">${opt.name}</span>
+        `;
+        if (reachable) btn.onclick = (e) => { e.stopPropagation(); window.location.href = opt.file; };
+        optsHost.appendChild(btn);
+      });
+
+      if (open) {
+        stop.querySelector('.duo-pill').onclick = (e) => {
+          e.stopPropagation();
+          document.querySelectorAll('.duo-stop.open').forEach(s => { if (s !== stop) s.classList.remove('open'); });
+          stop.classList.toggle('open');
+        };
+      }
+
+      stage.appendChild(stop);
+    });
+
+    wrap.appendChild(stage);
+  }
+
+  /* ── Boot ── */
+  const mode = homeMode();
+  if (mode === 'serpentine') {
+    document.getElementById('productGrid').hidden = true;
+    document.getElementById('pathWrap').hidden = false;
+    document.getElementById('chooseHeading').innerHTML = 'Your <span class="accent-word">path</span>';
+    renderPath();
+    document.getElementById('pathReset').hidden = false;
+  } else if (mode === 'levels') {
+    document.getElementById('productGrid').hidden = true;
+    document.getElementById('levelsWrap').hidden = false;
+    document.getElementById('chooseHeading').innerHTML = 'Pick a <span class="accent-word">level</span>';
+    renderLevels();
+    document.getElementById('pathReset').hidden = false;
+  } else if (mode === 'duolingo') {
+    document.getElementById('productGrid').hidden = true;
+    document.getElementById('chooseHeading').hidden = true; // banner inside the wrap acts as heading
+    document.getElementById('duoWrap').hidden = false;
+    renderDuolingo();
+    document.getElementById('pathReset').hidden = false;
+  } else {
+    loadProducts();
+  }
+
   initSlides(3);
   if (window.location.hash === '#slide-3') {
     goTo(3);

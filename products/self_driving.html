@@ -434,7 +434,10 @@
     nextGated = key ? !atTagState[key].revealed : false;
     _origGoTo(n);
     if (n === 2) atStaggerMao('screen2MaoRow', 'screen2Final');
-    if (n === 10) atStaggerMao('screen7MaoRow', null);
+    if (n === 10) {
+      atStaggerMao('screen7MaoRow', null);
+      try { localStorage.setItem('completed:self_driving', '1'); } catch (e) {}
+    }
   };
   if (document.querySelector('[data-slide="2"]').classList.contains('active')) atStaggerMao('screen2MaoRow', 'screen2Final');
   if (document.querySelector('[data-slide="10"]').classList.contains('active')) atStaggerMao('screen7MaoRow', null);
