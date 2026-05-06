@@ -358,9 +358,8 @@ function initImageDragGame() {
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('componentName', comp);
       el.classList.add('dragging');
-      setHighlight(comp);
     });
-    el.addEventListener('dragend', () => { el.classList.remove('dragging'); clearHighlight(); });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); });
     componentList.appendChild(el);
   });
 }
