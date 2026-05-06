@@ -18,6 +18,11 @@
   }
   .topbar-home:hover { color: var(--accent); }
 
+  /* Risk slider */
+  .risk-slider { -webkit-appearance: none; appearance: none; width: 140px; height: 4px; background: var(--border); border-radius: 2px; outline: none; cursor: pointer; }
+  .risk-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+  .risk-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; border: none; }
+
   /* Persona card states */
   .persona-card.error {
     background: var(--accent2) !important;
@@ -75,28 +80,46 @@
     </div>
   </div>
 
-  <!-- SLIDE 3: Who uses GenAI? (persona drag & drop) -->
+  <!-- SLIDE 3: Brainstorm user types -->
   <div class="slide" data-slide="3">
-    <div style="width:100%; max-width:900px; text-align:center;">
-      <h2 style="margin-bottom:20px;">Who uses <span class="accent-word">Generative AI?</span></h2>
-      <p class="body-text" style="margin-bottom:28px;">Drag each persona into the right category.</p>
-      <div class="persona-cards" id="persona-pool">
-        <div class="persona-card" draggable="true" data-id="student">Student</div>
-        <div class="persona-card" draggable="true" data-id="journalist">Journalist</div>
-        <div class="persona-card" draggable="true" data-id="politician">Politician</div>
-        <div class="persona-card" draggable="true" data-id="agency">Marketing Agency</div>
-        <div class="persona-card" draggable="true" data-id="scammer">Scammer</div>
-        <div class="persona-card" draggable="true" data-id="researcher">Researcher</div>
-        <div class="persona-card" draggable="true" data-id="troll">Troll</div>
-        <div class="persona-card" draggable="true" data-id="hr">HR Manager</div>
+    <div style="width:100%; max-width:600px; text-align:center;">
+      <h2 style="margin-bottom:8px;">Who could use <span class="accent-word">Generative AI?</span></h2>
+      <p class="body-text" style="margin-bottom:24px;">Name 5 types of people who might use this tool — think broadly.</p>
+
+      <div style="display:flex; flex-direction:column; gap:10px; width:100%; text-align:left; margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">01</span>
+          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">02</span>
+          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">03</span>
+          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">04</span>
+          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">05</span>
+          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
+        </div>
       </div>
-      <div class="drop-zones">
-        <div class="drop-zone everyday" id="zone-everyday">
-          <div class="zone-label">Everyday Users</div>
-        </div>
-        <div class="drop-zone risky" id="zone-risky">
-          <div class="zone-label">⚠ Potentially Problematic</div>
-        </div>
+
+      <button class="select-btn ghost" id="genaiHintBtn" style="padding:10px 24px;font-size:12px;margin-top:0;" onclick="revealGenaiHint()">HINT</button>
+
+      <div id="genaiHints" class="sm-hints-box" style="margin-top:16px;border-color:rgba(71,200,255,0.3);background:#0d1219;text-align:left;">
+        <h4 style="color:var(--accent3);">Think about...</h4>
+        <ul>
+          <li id="ghint1" style="display:none">Someone who needs to influence a large audience for political gain.</li>
+          <li id="ghint2" style="display:none">Someone motivated by money who might deceive or exploit others at scale.</li>
+          <li id="ghint3" style="display:none">Someone who deliberately spreads harmful or inflammatory content online.</li>
+          <li id="ghint4" style="display:none">Someone in education who might be tempted to take shortcuts on their work.</li>
+          <li id="ghint5" style="display:none">A professional who handles sensitive research and could access or misuse private data.</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -109,7 +132,7 @@
     </div>
   </div>
 
-  <!-- SLIDE 5: Rank the risk -->
+  <!-- SLIDE 5: Rate the risk -->
   <div class="slide" data-slide="5">
     <h2 style="font-size:30px; margin-bottom:8px;">Rank these users by <span class="danger-word">risk they pose</span></h2>
     <p class="body-text" style="margin-bottom:24px;">Drag to reorder — most dangerous at the top.</p>
@@ -273,92 +296,152 @@ function answerGenaiQuiz(el, quizNum, key) {
 }
 
 /* ══════════════════════════════════════════════
-   PERSONA DRAG & DROP
+   SLIDE 3: HINT SYSTEM
    ══════════════════════════════════════════════ */
 
-const PERSONA_CORRECT_ZONE = {
-  student:    'zone-everyday',
-  journalist: 'zone-everyday',
-  researcher: 'zone-everyday',
-  hr:         'zone-everyday',
-  politician: 'zone-risky',
-  troll:      'zone-risky',
-  scammer:    'zone-risky',
-  agency:     'zone-risky'
-};
-
-let draggedPersona = null;
-
-function flashSlide(slideNum, type) {
-  const slide = document.querySelector(`[data-slide="${slideNum}"]`);
-  if (!slide) return;
-  const cls = type === 'correct' ? 'flash-success' : 'flash-error';
-  slide.classList.add(cls);
-  setTimeout(() => slide.classList.remove(cls), 600);
-}
-
-function initPersonaDragDrop() {
-  document.querySelectorAll('#persona-pool .persona-card').forEach(card => {
-    card.addEventListener('dragstart', e => {
-      draggedPersona = card;
-      card.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    card.addEventListener('dragend', () => {
-      if (draggedPersona) draggedPersona.classList.remove('dragging');
-      draggedPersona = null;
-    });
-  });
-
-  document.querySelectorAll('.drop-zone').forEach(zone => {
-    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('active'); });
-    zone.addEventListener('dragleave', () => zone.classList.remove('active'));
-    zone.addEventListener('drop', e => {
-      e.preventDefault();
-      zone.classList.remove('active');
-      if (!draggedPersona) return;
-
-      const card = draggedPersona;
-      draggedPersona = null;
-      card.classList.remove('dragging');
-
-      const correctZone = PERSONA_CORRECT_ZONE[card.dataset.id];
-
-      if (correctZone === zone.id) {
-        // Correct — move into zone, lock it
-        card.setAttribute('draggable', 'false');
-        zone.appendChild(card);
-        flashSlide(3, 'correct');
-      } else {
-        // Wrong — shake & flash red, leave card in pool
-        card.classList.add('error');
-        card.addEventListener('animationend', () => card.classList.remove('error'), { once: true });
-        flashSlide(3, 'wrong');
-      }
-    });
-  });
+let genaiHintsRevealed = 0;
+function revealGenaiHint() {
+  genaiHintsRevealed++;
+  document.getElementById('genaiHints').style.display = 'block';
+  document.getElementById('ghint' + genaiHintsRevealed).style.display = 'list-item';
+  if (genaiHintsRevealed >= 5) document.getElementById('genaiHintBtn').style.display = 'none';
 }
 
 /* ══════════════════════════════════════════════
-   RANK DRAG & DROP
+   SLIDE 5: RISK RATING
    ══════════════════════════════════════════════ */
 
-let draggedRank = null;
+let slide3Done = false;
+let slide5Done = false;
 
-function initRankDrag() {
-  const list = document.getElementById('rankList');
-  if (!list) return;
-  list.querySelectorAll('.rank-item').forEach(item => {
-    item.setAttribute('draggable', 'true');
-    item.addEventListener('dragstart', () => { draggedRank = item; item.style.opacity = '0.5'; });
-    item.addEventListener('dragend',   () => { draggedRank = null; item.style.opacity = ''; });
-    item.addEventListener('dragover', e => {
-      e.preventDefault();
-      if (!draggedRank || draggedRank === item) return;
-      const rect = item.getBoundingClientRect();
-      list.insertBefore(draggedRank, e.clientY > rect.top + rect.height / 2 ? item.nextSibling : item);
-    });
+function checkSlide3Complete() {
+  const inputs = document.querySelectorAll('.user-type-input');
+  const allFilled = [...inputs].every(i => i.value.trim().length > 0);
+  slide3Done = allFilled;
+  if (current === 3) { allFilled ? unlockNext() : lockNext(); }
+}
+
+const OUR_FIVE = ['Politician', 'Troll', 'Scammer', 'Student', 'Researcher'];
+const BAD_ACTORS = new Set([0, 1, 2]); // indices within OUR_FIVE
+let riskRatings = {};
+let ourFiveStartIdx = 0;
+
+function populateRiskRatings() {
+  const inputs = document.querySelectorAll('.user-type-input');
+  const userEntries = [...inputs].map(i => i.value.trim()).filter(Boolean);
+  ourFiveStartIdx = userEntries.length;
+  riskRatings = {};
+  document.getElementById('riskCheckMsg').textContent = '';
+  const list = document.getElementById('riskRatingList');
+  list.innerHTML = '';
+
+  const addRow = (name, idx, isOurs) => {
+    const row = document.createElement('div');
+    row.className = 'learning-item';
+    row.style.animationDelay = (idx * 0.05) + 's';
+
+    const num = document.createElement('div');
+    num.className = 'learning-num';
+    num.textContent = String(idx + 1).padStart(2, '0');
+
+    const label = document.createElement('div');
+    label.className = 'learning-text';
+    label.textContent = name;
+
+    const sliderWrap = document.createElement('div');
+    sliderWrap.style = 'display:flex;align-items:center;gap:8px;flex-shrink:0;';
+
+    const emojiLow = document.createElement('span');
+    emojiLow.textContent = '😊';
+    emojiLow.style.fontSize = '18px';
+
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 1;
+    slider.max = 5;
+    slider.value = 3;
+    slider.className = 'risk-slider';
+    slider.oninput = function() { rateRisk(idx, parseInt(this.value)); };
+
+    const emojiHigh = document.createElement('span');
+    emojiHigh.textContent = '💀';
+    emojiHigh.style.fontSize = '18px';
+
+    const valueDisplay = document.createElement('span');
+    valueDisplay.dataset.riskItem = idx;
+    valueDisplay.textContent = '3';
+    valueDisplay.style = 'font-family:"Space Mono",monospace;font-size:13px;color:var(--accent);min-width:16px;text-align:center;';
+
+    sliderWrap.appendChild(emojiLow);
+    sliderWrap.appendChild(slider);
+    sliderWrap.appendChild(emojiHigh);
+    sliderWrap.appendChild(valueDisplay);
+
+    row.appendChild(num);
+    row.appendChild(label);
+    row.appendChild(sliderWrap);
+    list.appendChild(row);
+  };
+
+  userEntries.forEach((name, i) => addRow(name, i, false));
+
+  if (userEntries.length > 0) {
+    const sep = document.createElement('div');
+    sep.style = 'font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:2px;text-align:center;padding:6px 0;';
+    sep.textContent = '— also consider —';
+    list.appendChild(sep);
+  }
+
+  OUR_FIVE.forEach((name, i) => {
+    const idx = userEntries.length + i;
+    riskRatings[idx] = 3; // default midpoint
+    addRow(name, idx, true);
   });
+}
+
+function rateRisk(item, rating) {
+  riskRatings[item] = rating;
+  const display = document.querySelector(`[data-risk-item="${item}"]`);
+  if (display) display.textContent = rating;
+}
+
+function checkRiskRatings() {
+
+  const FEEDBACK = {
+    0: 'We think <strong>Politician</strong> should be rated higher — they can use GenAI to generate deepfakes and mass disinformation to manipulate elections at scale.',
+    1: 'We think <strong>Troll</strong> should be rated higher — they can use GenAI to flood platforms with coordinated harassment and inflammatory content.',
+    2: 'We think <strong>Scammer</strong> should be rated higher — they can use GenAI to craft thousands of personalized phishing messages, defrauding victims at scale.',
+    3: 'We think <strong>Student</strong> should be rated lower — they mostly use GenAI to assist with learning and can\'t cause much large-scale harm.',
+    4: 'We think <strong>Researcher</strong> should be rated lower — they use GenAI for legitimate work and typically don\'t cause significant harm.'
+  };
+
+  let wrongs = [];
+
+  OUR_FIVE.forEach((name, i) => {
+    const idx = ourFiveStartIdx + i;
+    const rating = riskRatings[idx];
+    const isBadActor = BAD_ACTORS.has(i);
+    const correct = isBadActor ? rating >= 3 : rating <= 3;
+    if (!correct) wrongs.push(i);
+
+    const row = document.querySelector(`[data-risk-item="${idx}"]`)?.closest('.learning-item');
+    if (row) {
+      row.style.borderColor = correct ? 'rgba(232,255,71,0.5)' : 'rgba(255,71,71,0.5)';
+      row.style.background  = correct ? '#131600' : '#1a0000';
+    }
+  });
+
+  const msg = document.getElementById('riskCheckMsg');
+  if (wrongs.length === 0) {
+    msg.innerHTML = '<span style="color:var(--accent)">✓ You identified which users pose the most risk.</span>';
+  } else {
+    msg.innerHTML = wrongs.map(i =>
+      `<div style="color:var(--accent2);margin-bottom:10px;">✗ ${FEEDBACK[i]}</div>`
+    ).join('');
+  }
+
+  slide5Done = true;
+  if (current === 5) unlockNext();
 }
 
 /* ── Option image hover panels (mirrors printer behaviour) ── */
@@ -382,10 +465,7 @@ function initOptionHovers() {
   });
 }
 
-/* ── Init everything at page load — no MutationObserver needed ── */
 initSlides(10);
-initPersonaDragDrop();
-initRankDrag();
 initOptionHovers();
 </script>
 </body>
