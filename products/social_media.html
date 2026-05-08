@@ -60,6 +60,9 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
 .select-btn { background: var(--accent); color: #000; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; padding: 15px 36px; border: none; cursor: pointer; transition: all 0.2s; border-radius: 5px; margin-top: 20px;}
 .select-btn:hover { background: #d4e83e; transform: translateY(-1px); }
 
+.select-btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.select-btn.ghost:hover { background: rgba(232,255,71,0.08); }
+
 /* SLIDE 4 specific */
 .lab-textarea { padding: 16px; border-radius: 8px; background: #0a0a0a; border: 2px solid var(--border); color: white; width: 100%; height: 160px; font-size: 16px; resize: vertical; font-family: 'Syne'; outline: none; transition: border-color 0.3s; margin-bottom: 16px;}
 .lab-textarea:focus { border-color: var(--accent); }
@@ -443,19 +446,20 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
   <!-- ═══ SLIDE 4: Designer Challenge ═══ -->
   <div class="slide" data-slide="4" style="padding:36px 5%; align-items:center; justify-content:center;">
     <h2 style="margin-bottom:16px;">The Designer's <span class="danger-word">Challenge</span></h2>
-    <p class="quiz-q" style="max-width:750px; text-align:center;">Let's apply our strategy: Imagine you, as a designer, took on a new project, designing an <strong>"Anonymous Posting & Help-seeking Wall"</strong> for a campus community.</p>
+    <p class="quiz-q" style="max-width:750px; text-align:center;">Let's apply our strategy: Imagine you, as a designer, took on a new project, designing an <strong>"Anonymous Posting &amp; Help-seeking Wall"</strong> for a campus community.</p>
+    <p class="quiz-q" style="max-width:750px; text-align:center; font-size:16px; margin-top:-8px; color:var(--muted);">Name the user groups that might trigger misuse.</p>
 
-    <div style="width:100%; max-width:700px; margin-top:10px;">
-      <textarea class="lab-textarea" placeholder="Try to write down the user groups that might trigger misuse and the misuse scenarios you can think of..."></textarea>
+    <div style="width:100%; max-width:700px; margin-top:4px;">
+      <div id="smChallengeList" style="display:flex; flex-direction:column; gap:10px; width:100%; text-align:left; margin-bottom:16px;"></div>
 
-      <button class="select-btn" style="padding:12px 24px; font-size:12px; margin-top:0;" onclick="document.getElementById('smHints').style.display='block'; this.style.display='none';">GET HINTS</button>
+      <button class="select-btn ghost" id="smHintBtn" style="padding:10px 24px;font-size:12px;margin-top:0;" onclick="revealSmHint()">HINT</button>
 
-      <div id="smHints" class="sm-hints-box">
-        <h4>⚠️ Potential Misuse Scenarios</h4>
-        <ul>
-          <li><strong>Cyberbullies:</strong> Exploiting absolute anonymity for untraceable defamation and personal attacks.</li>
-          <li><strong>Copyright Infringers:</strong> Using it to post unauthorized movie resources or trailers.</li>
-          <li><strong>Spammers / Bad Actors:</strong> Using it to post massive amounts of violating ads, ruining the community ecosystem.</li>
+      <div id="smHintBox" style="display:none; background:#1a0d0d; border:1px solid var(--accent2); padding:16px 20px; border-radius:8px; text-align:left; margin-top:12px;">
+        <h4 style="color:var(--accent2);margin-bottom:10px;font-size:15px;">⚠️ Potential Misuse Scenarios</h4>
+        <ul style="padding-left:20px;color:#ccc;font-size:15px;line-height:1.6;">
+          <li id="smh1" style="display:none;margin-bottom:8px;"><strong>Cyberbullies:</strong> Exploiting absolute anonymity for untraceable defamation and personal attacks.</li>
+          <li id="smh2" style="display:none;margin-bottom:8px;"><strong>Copyright Infringers:</strong> Using it to post unauthorized movie resources or trailers.</li>
+          <li id="smh3" style="display:none;margin-bottom:8px;"><strong>Spammers / Bad Actors:</strong> Using it to post massive amounts of violating ads, ruining the community ecosystem.</li>
         </ul>
       </div>
     </div>
@@ -526,13 +530,16 @@ function buildDots() {
   }
 }
 
+const TOTAL_MATCHES = 3;
+const foundMatches = new Set();
+
 function updateUI() {
   document.getElementById('slideCounter').textContent =
     String(current).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
   document.getElementById('prevBtn').disabled = current === 1;
   const nextBtn = document.getElementById('nextBtn');
   nextBtn.textContent = 'NEXT →';
-  nextBtn.style.visibility = current === total ? 'hidden' : 'visible';
+  nextBtn.style.visibility = (current === total || (current === 3 && foundMatches.size < TOTAL_MATCHES) || (current === 4 && !smChallengeDone)) ? 'hidden' : 'visible';
   const prevBtn = document.getElementById('prevBtn');
   prevBtn.style.visibility = current === 1 ? 'hidden' : 'visible';
   buildDots();
@@ -599,15 +606,14 @@ function evaluateSMLab() {
         <div class="lethal-card">
           <div class="lethal-stamp">LETHAL MATCH</div>
           <div class="lethal-title">OPERATION: DATA HARVEST</div>
-
           <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
           <div class="lethal-text">Exploiting open API permissions using low-cost interactive content (like quizzes) as bait. This bypasses user vigilance to harvest massive amounts of private data from users and their extended social networks without informed consent.</div>
-
           <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
           <div class="lethal-text">
             <a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal" target="_blank">The Cambridge Analytica scandal (2010s).</a><br><br>
             The firm utilized a seemingly harmless personality quiz app to collect data from up to 87 million Facebook users. This data fueled targeted political advertising to influence election behavior, resulting in a massive privacy breach.
           </div>
+          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('data','api')">GOT IT — NEXT COMBINATION →</button>
         </div>
       `;
     } else if (actor === 'state' && feature === 'algo') {
@@ -615,15 +621,14 @@ function evaluateSMLab() {
         <div class="lethal-card">
           <div class="lethal-stamp">LETHAL MATCH</div>
           <div class="lethal-title">OPERATION: ECHO CHAMBER</div>
-
           <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
           <div class="lethal-text">Acting like digital marketers by A/B testing highly shareable content. They leverage recommendation algorithms to feed tailored information to specific demographics based on religion, race, or location. They first build group identity, then introduce external threats to manipulate behavior and manufacture social polarization.</div>
-
           <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
           <div class="lethal-text">
             <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia manipulating the US elections (2016).</a><br><br>
             The Russian Internet Research Agency (IRA) managed information and distributed tailored content across platforms such as Twitter, Facebook, and Instagram to manipulate group psychology and ultimately interfere in the US Presidential Election.
           </div>
+          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('state','algo')">GOT IT — NEXT COMBINATION →</button>
         </div>
       `;
     } else if (actor === 'extremist' && feature === 'msg') {
@@ -631,15 +636,14 @@ function evaluateSMLab() {
         <div class="lethal-card">
           <div class="lethal-stamp">LETHAL MATCH</div>
           <div class="lethal-title">OPERATION: SHADOW RECRUIT</div>
-
           <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
           <div class="lethal-text">Infiltrating youth subcultures under the guise of casual entertainment. They adopt digital customs (like gaming culture and memes) to build rapport, then utilize highly private direct messaging features to isolate targets for covert radicalization.</div>
-
           <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
           <div class="lethal-text">
             <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Extremist groups recruiting.</a><br><br>
             Extremists have increasingly adopted digital realm practices associated with gaming culture and meme usage to specifically target, isolate, and recruit young female users on social media platforms.
           </div>
+          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('extremist','msg')">GOT IT — NEXT COMBINATION →</button>
         </div>
       `;
     } else {
@@ -652,6 +656,42 @@ function evaluateSMLab() {
       `;
     }
     // Fade in effect
+    stage.style.opacity = 1;
+  }, 250);
+}
+
+function confirmMatch(actor, feature) {
+  foundMatches.add(actor + ':' + feature);
+
+  const actorSelect = document.getElementById('smActor');
+  const opt = actorSelect.querySelector(`option[value="${actor}"]`);
+  if (opt) opt.remove();
+
+  const featureSelect = document.getElementById('smFeature');
+  const fopt = featureSelect.querySelector(`option[value="${feature}"]`);
+  if (fopt) fopt.remove();
+
+  if (foundMatches.size >= TOTAL_MATCHES) {
+    showLabComplete();
+  } else {
+    resetSMLab();
+  }
+  updateUI();
+}
+
+function showLabComplete() {
+  document.getElementById('smActor').disabled = true;
+  document.getElementById('smFeature').disabled = true;
+  const stage = document.getElementById('labStage');
+  stage.style.opacity = 0;
+  setTimeout(() => {
+    stage.innerHTML = `
+      <div class="lethal-card" style="text-align:center; border-color:var(--accent);">
+        <div class="lethal-stamp" style="background:var(--accent);color:#000;">ALL COMBINATIONS FOUND</div>
+        <div class="lethal-title" style="color:var(--accent);">Lab Complete</div>
+        <div class="lethal-text">You identified all three lethal threat actor and feature combinations. Use NEXT to continue.</div>
+      </div>
+    `;
     stage.style.opacity = 1;
   }, 250);
 }
@@ -686,8 +726,63 @@ function rateLearning(item, rating) {
   stars.forEach((s, i) => s.classList.toggle('filled', i < rating));
 }
 
+/* ── Slide 4: Designer Challenge input boxes ── */
+let smChallengeDone = false;
+let smBoxDoneCount = 0;
+const SM_HINTS_TOTAL = 3;
+let smHintsRevealed = 0;
+
+function addSmBox() {
+  const list = document.getElementById('smChallengeList');
+  const num = list.children.length + 1;
+  const row = document.createElement('div');
+  row.style = 'display:flex;align-items:center;gap:10px;';
+  row.innerHTML = `
+    <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">${String(num).padStart(2,'0')}</span>
+    <input type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+    <button onclick="smBoxDone(this)" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;border:1px solid #22c55e;background:transparent;color:#22c55e;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;" onmouseover="if(!this.disabled)this.style.background='rgba(34,197,94,0.1)'" onmouseout="if(!this.disabled)this.style.background='transparent'">DONE</button>
+  `;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+function smBoxDone(btn) {
+  const row = btn.parentElement;
+  const input = row.querySelector('input');
+  const val = input.value.trim();
+  if (!val) { input.style.borderColor = 'var(--accent2)'; return; }
+
+  input.disabled = true;
+  input.style.borderColor = 'var(--accent)';
+  input.style.opacity = '0.75';
+  btn.disabled = true;
+  btn.textContent = '✓';
+  btn.style.borderColor = 'var(--accent)';
+  btn.style.color = 'var(--accent)';
+
+  smBoxDoneCount++;
+
+  if (smBoxDoneCount === 2) {
+    smChallengeDone = true;
+    updateUI();
+  }
+
+  if (smBoxDoneCount >= 2) {
+    addSmBox();
+  }
+}
+
+function revealSmHint() {
+  smHintsRevealed++;
+  document.getElementById('smHintBox').style.display = 'block';
+  document.getElementById('smh' + smHintsRevealed).style.display = 'list-item';
+  if (smHintsRevealed >= SM_HINTS_TOTAL) document.getElementById('smHintBtn').style.display = 'none';
+}
+
 // Initialize
 buildDots();
+addSmBox();
+addSmBox();
 </script>
 </body>
 </html>
