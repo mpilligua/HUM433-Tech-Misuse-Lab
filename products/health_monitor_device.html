@@ -328,7 +328,6 @@
       </div>
       <div class="hmd-progress" id="hmdSortProgress">0 / 4 placed</div>
       <div class="feedback-box" id="hmdSortFeedback"></div>
-      <button class="reset-btn" style="margin-top:16px;" onclick="hmdResetSort()">RESET</button>
     </div>
   </div>
 
@@ -348,26 +347,10 @@
 
   <!-- SLIDE 5: Real World Story 1 -->
   <div class="slide" data-slide="5">
-    <div class="hmd-story">
+    <div class="hmd-story" style="align-items:center;">
       <h2><span class="danger-word">Real World</span> Story</h2>
-      <p class="story-intro">Case: Mandatory use imposed by employers or schools</p>
-
-      <div class="hmd-story-grid">
-        <div class="hmd-story-card">
-          <div class="hmd-card-label">Overview</div>
-          <p>An employee's compensation could be threatened if an employer-provided wearable tracks her movements and productivity.</p>
-          <p style="margin-top:10px;">A supervisor, or even the company as a whole, could use data from a worker's GPS tracker to claim that the employee is not meeting job requirements, potentially leading to termination or demotion. Companies could also use wearable data to silence or pressure potential whistleblowers.</p>
-        </div>
-        <div class="hmd-story-card">
-          <div class="hmd-card-label">Risk</div>
-          <p>Wearable technology can enhance productivity, improve workplace safety, and monitor health or performance. But it also raises serious concerns about privacy, data accuracy, and potential bias.</p>
-          <p style="margin-top:12px;"><a href="https://www.sommerspc.com/blog/2016/12/workplace-wearables-pose-real-risks-employees/" target="_blank" rel="noopener">Read the source article</a></p>
-        </div>
-        <div class="hmd-story-card highlight" style="grid-column:1 / 3;">
-          <div class="hmd-card-label">Key Points</div>
-          <p>The coercive use and abuse of health data tracking turns self-health management into surveillance and data dependence. Users need to critically evaluate health-related decisions based on data so they are not controlled by it. Institutional requirements for mandatory tracking must also be clearly defined and strictly constrained through legal and compliance frameworks.</p>
-        </div>
-      </div>
+      <img src="../images/HMD_companyinfgorphic.png" alt="Company health tracker infographic" style="max-width:100%;max-height:62vh;object-fit:contain;border-radius:10px;"/>
+      <p style="margin-top:16px;"><a href="https://www.sommerspc.com/blog/2016/12/workplace-wearables-pose-real-risks-employees/" target="_blank" rel="noopener" style="display:inline-block;padding:10px 22px;border:2px solid #22c55e;color:#22c55e;border-radius:6px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:1px;text-decoration:none;transition:background 0.2s,color 0.2s;" onmouseover="this.style.background='#22c55e';this.style.color='#000'" onmouseout="this.style.background='transparent';this.style.color='#22c55e'">READ THE SOURCE ARTICLE ↗</a></p>
     </div>
   </div>
 
@@ -388,30 +371,10 @@
 
   <!-- SLIDE 7: Real World Story 2 -->
   <div class="slide" data-slide="7">
-    <div class="hmd-story">
+    <div class="hmd-story" style="align-items:center;">
       <h2><span class="danger-word">Real World</span> Story</h2>
-      <p class="story-intro">Case: User overreliance on wearable devices</p>
-
-      <div class="hmd-story-grid">
-        <div class="hmd-story-card">
-          <div class="hmd-card-label">Overview</div>
-          <p>A 2024 study published in <em>Sleep Medicine</em> found that individuals who used sleep-tracking devices reported higher sleep-related anxiety and worse subjective sleep quality, even though objective measurements showed improvements in sleep duration.</p>
-          <p style="margin-top:12px;"><a href="https://www.theonlinegp.com/blog/are-wearables-making-us-healthier-or-just-more-anxious" target="_blank" rel="noopener">Read the source article</a></p>
-        </div>
-        <div class="hmd-story-card">
-          <div class="hmd-card-label">Consequences</div>
-          <p>Many wearables rely on alarming notifications, red warning signals, and urgent alerts for readings that may reflect normal physiological variation. Without enough context, users may be forced to interpret complex health data without medical training.</p>
-          <p style="margin-top:10px;"><strong style="color:var(--accent2);">Negative impact:</strong> increased anxiety and other mental-health strain.</p>
-        </div>
-        <div class="hmd-story-card highlight">
-          <div class="hmd-card-label">For Users</div>
-          <p>Avoid excessive dependence on wearable devices. This is a form of psychological technological misuse. Users should understand the limitations of the technology.</p>
-        </div>
-        <div class="hmd-story-card highlight">
-          <div class="hmd-card-label">For Designers</div>
-          <p>The wearable industry is beginning to address the psychological challenges of health-monitoring devices. Better context, fewer false alarms, and mental well-being should be part of future design.</p>
-        </div>
-      </div>
+      <img src="../images/HMD_overreliance.png" alt="Overreliance on wearable devices infographic" style="max-width:100%;max-height:62vh;object-fit:contain;border-radius:10px;"/>
+      <p style="margin-top:16px;"><a href="https://www.theonlinegp.com/blog/are-wearables-making-us-healthier-or-just-more-anxious" target="_blank" rel="noopener" style="display:inline-block;padding:10px 22px;border:2px solid #22c55e;color:#22c55e;border-radius:6px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:1px;text-decoration:none;transition:background 0.2s,color 0.2s;" onmouseover="this.style.background='#22c55e';this.style.color='#000'" onmouseout="this.style.background='transparent';this.style.color='#22c55e'">READ THE SOURCE ARTICLE ↗</a></p>
     </div>
   </div>
 
@@ -500,6 +463,7 @@ function initHmdSort() {
         hmdFlash('correct');
         if (hmdPlaced === 4) {
           hmdShowSortFeedback('Well done. The highest-risk HMD features are sensitive data collection and always-available user access.', true);
+          unlockNext();
         }
       } else {
         card.classList.add('error');
@@ -522,14 +486,20 @@ function hmdResetSort() {
   });
   hmdPlaced = 0;
   hmdUpdateSortProgress();
+  lockNext();
   const fb = document.getElementById('hmdSortFeedback');
   fb.className = 'feedback-box';
   fb.textContent = '';
 }
 
+let hmdQuiz1Answered = false;
+let hmdQuiz2Answered = false;
+
 function hmdQuiz1(btn, key) {
   document.querySelectorAll('#hmdQuiz1Options .option-btn').forEach(b => b.disabled = true);
   const fb = document.getElementById('hmdQuiz1Feedback');
+  hmdQuiz1Answered = true;
+  unlockNext();
   if (key === 'sensitive') {
     btn.classList.add('correct');
     fb.className = 'feedback-box show correct-fb';
@@ -546,6 +516,8 @@ function hmdQuiz1(btn, key) {
 function hmdQuiz2(btn, key) {
   document.querySelectorAll('#hmdQuiz2Options .option-btn').forEach(b => b.disabled = true);
   const fb = document.getElementById('hmdQuiz2Feedback');
+  hmdQuiz2Answered = true;
+  unlockNext();
   if (key === 'C') {
     btn.classList.add('correct');
     fb.className = 'feedback-box show correct-fb';
@@ -560,6 +532,15 @@ function hmdQuiz2(btn, key) {
       : 'Users do have responsibility for themselves. But a good engineer should still make sure the device creates as little risk as possible.';
   }
 }
+
+const _hmdGoTo = goTo;
+goTo = function(n) {
+  if (n === 3) nextGated = true;
+  else if (n === 4 && !hmdQuiz1Answered) nextGated = true;
+  else if (n === 6 && !hmdQuiz2Answered) nextGated = true;
+  else nextGated = false;
+  _hmdGoTo(n);
+};
 
 initSlides(8);
 initHmdSort();
