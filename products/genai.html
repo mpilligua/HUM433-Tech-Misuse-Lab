@@ -131,16 +131,11 @@
 
   <!-- SLIDE 5: Rate the risk -->
   <div class="slide" data-slide="5">
-    <h2 style="font-size:30px; margin-bottom:8px;">Rank these users by <span class="danger-word">risk they pose</span></h2>
-    <p class="body-text" style="margin-bottom:24px;">Drag to reorder, most dangerous at the top.</p>
-    <div class="rank-list" id="rankList" style="margin:0 auto;">
-      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Politician</span></div>
-      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Scammer</span></div>
-      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Troll</span></div>
-      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Overworked Student</span></div>
-      <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Marketing Agency</span></div>
-    </div>
-    <p class="rank-hint" style="margin-top:16px; text-align:center;">No right answer yet, commit to your ranking.</p>
+    <h2 style="font-size:30px; margin-bottom:8px;">Rate their <span class="danger-word">risk level</span></h2>
+    <p class="body-text" style="margin-bottom:16px;">Slide from 😊 to 💀 for each user type. When you're done, hit Check.</p>
+    <div class="learning-list" id="riskRatingList" style="margin:0 auto; width:100%; max-width:640px;"></div>
+    <button class="select-btn" style="margin-top:16px;" onclick="checkRiskRatings()">CHECK</button>
+    <div id="riskCheckMsg" style="margin-top:16px; max-width:640px; width:100%; text-align:left;"></div>
   </div>
 
   <!-- SLIDE 6: Quiz — Politician -->
@@ -234,6 +229,8 @@
 <script src="../js/core.js"></script>
 <script>
 /* ── Quiz answer logic ── */
+const genaiQuizAnswered = { 1: false, 2: false };
+
 const GENAI_QUIZ_CONFIG = {
   1: {
     correct: 'B',
@@ -274,6 +271,8 @@ function answerGenaiQuiz(el, quizNum, key) {
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = config.feedback[key];
   }
+  genaiQuizAnswered[quizNum] = true;
+  unlockNext();
 }
 
 /* ══════════════════════════════════════════════
@@ -446,17 +445,22 @@ function initOptionHovers() {
   });
 }
 
+/* ── Gate: slide 3 requires all inputs filled, slide 5 requires CHECK,
+         slides 6 and 8 require answering their quiz before NEXT ── */
+const _coreGoTo = goTo;
+goTo = function(n) {
+  if      (n === 3 && !slide3Done)               nextGated = true;
+  else if (n === 5 && !slide5Done)               nextGated = true;
+  else if (n === 6 && !genaiQuizAnswered[1])     nextGated = true;
+  else if (n === 8 && !genaiQuizAnswered[2])     nextGated = true;
+  else                                           nextGated = false;
+  _coreGoTo(n);
+  if (n === 5) populateRiskRatings();
+  if (n === 10) { try { localStorage.setItem('completed:genai', '1'); } catch (e) {} }
+};
+
 initSlides(10);
 initOptionHovers();
-
-/* Mark this product as completed once the user reaches the wrap slide. */
-(function() {
-  const _origGoTo = goTo;
-  goTo = function(n) {
-    _origGoTo(n);
-    if (n === 10) { try { localStorage.setItem('completed:genai', '1'); } catch (e) {} }
-  };
-})();
 </script>
 </body>
 </html>
