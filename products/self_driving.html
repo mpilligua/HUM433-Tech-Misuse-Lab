@@ -568,8 +568,8 @@
     let html = truth.diagnosis;
     if (guess && guess !== truth.state) {
       const correction = sc.corrections[rowKey] || (truth.state === 'present'
-        ? ‘You marked this absent, here is why it is present.’
-        : ‘You marked this present, here is why it is absent.’);
+        ? 'You marked this absent, here is why it is present.'
+        : 'You marked this present, here is why it is absent.');
       html = `<span class="row-correction">${correction}</span>${truth.diagnosis}`;
     }
     diag.innerHTML = html;
