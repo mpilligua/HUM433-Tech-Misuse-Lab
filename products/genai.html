@@ -81,30 +81,9 @@
   <div class="slide" data-slide="3">
     <div style="width:100%; max-width:600px; text-align:center;">
       <h2 style="margin-bottom:8px;">Who could use <span class="accent-word">Generative AI?</span></h2>
-      <p class="body-text" style="margin-bottom:24px;">Name 5 types of people who might use this tool. Think broadly.</p>
+      <p class="body-text" style="margin-bottom:24px;">Name the types of people who might use this tool. Think broadly.</p>
 
-      <div style="display:flex; flex-direction:column; gap:10px; width:100%; text-align:left; margin-bottom:20px;">
-        <div style="display:flex; align-items:center; gap:14px;">
-          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">01</span>
-          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
-        </div>
-        <div style="display:flex; align-items:center; gap:14px;">
-          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">02</span>
-          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
-        </div>
-        <div style="display:flex; align-items:center; gap:14px;">
-          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">03</span>
-          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
-        </div>
-        <div style="display:flex; align-items:center; gap:14px;">
-          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">04</span>
-          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
-        </div>
-        <div style="display:flex; align-items:center; gap:14px;">
-          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">05</span>
-          <input class="user-type-input" type="text" placeholder="" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" oninput="checkSlide3Complete()"/>
-        </div>
-      </div>
+      <div id="actorList" style="display:flex; flex-direction:column; gap:10px; width:100%; text-align:left; margin-bottom:20px;"></div>
 
       <button class="select-btn ghost" id="genaiHintBtn" style="padding:10px 24px;font-size:12px;margin-top:0;" onclick="revealGenaiHint()">HINT</button>
 
@@ -294,21 +273,67 @@ function revealGenaiHint() {
 let slide3Done = false;
 let slide5Done = false;
 
-function checkSlide3Complete() {
-  const inputs = document.querySelectorAll('.user-type-input');
-  const allFilled = [...inputs].every(i => i.value.trim().length > 0);
-  slide3Done = allFilled;
-  if (current === 3) { allFilled ? unlockNext() : lockNext(); }
+/* ── Slide 3: dynamic actor boxes ── */
+let actorEntries = [];
+let actorDoneCount = 0;
+
+function addActorBox() {
+  const list = document.getElementById('actorList');
+  const num = list.children.length + 1;
+  const row = document.createElement('div');
+  row.style = 'display:flex;align-items:center;gap:10px;';
+  row.innerHTML = `
+    <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">${String(num).padStart(2,'0')}</span>
+    <input class="user-type-input" type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+    <button onclick="actorDone(this)" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;border:1px solid #22c55e;background:transparent;color:#22c55e;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;" onmouseover="if(!this.disabled)this.style.background='rgba(34,197,94,0.1)'" onmouseout="if(!this.disabled)this.style.background='transparent'">DONE</button>
+  `;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+function actorDone(btn) {
+  const row = btn.parentElement;
+  const input = row.querySelector('input');
+  const val = input.value.trim();
+  if (!val) { input.style.borderColor = 'var(--accent2)'; return; }
+
+  input.disabled = true;
+  input.style.borderColor = 'var(--accent)';
+  input.style.opacity = '0.75';
+  btn.disabled = true;
+  btn.textContent = '✓';
+  btn.style.borderColor = 'var(--accent)';
+  btn.style.color = 'var(--accent)';
+
+  actorEntries.push(val);
+  actorDoneCount++;
+
+  if (actorDoneCount === 2) {
+    slide3Done = true;
+    unlockNext();
+  }
+
+  if (actorDoneCount >= 2) {
+    addActorBox();
+  }
+}
+
+function initActorList() {
+  actorEntries = [];
+  actorDoneCount = 0;
+  slide3Done = false;
+  document.getElementById('actorList').innerHTML = '';
+  addActorBox();
+  addActorBox();
 }
 
 const OUR_FIVE = ['Politician', 'Troll', 'Scammer', 'Student', 'Researcher'];
-const BAD_ACTORS = new Set([0, 1, 2]); // indices within OUR_FIVE
+const BAD_ACTORS = new Set([0, 1, 2]);
 let riskRatings = {};
 let ourFiveStartIdx = 0;
 
 function populateRiskRatings() {
-  const inputs = document.querySelectorAll('.user-type-input');
-  const userEntries = [...inputs].map(i => i.value.trim()).filter(Boolean);
+  const userEntries = actorEntries;
   ourFiveStartIdx = userEntries.length;
   riskRatings = {};
   document.getElementById('riskCheckMsg').textContent = '';
@@ -447,6 +472,7 @@ function initOptionHovers() {
 
 /* ── Gate: slide 3 requires all inputs filled, slide 5 requires CHECK,
          slides 6 and 8 require answering their quiz before NEXT ── */
+let slide3Initialised = false;
 const _coreGoTo = goTo;
 goTo = function(n) {
   if      (n === 3 && !slide3Done)               nextGated = true;
@@ -455,12 +481,15 @@ goTo = function(n) {
   else if (n === 8 && !genaiQuizAnswered[2])     nextGated = true;
   else                                           nextGated = false;
   _coreGoTo(n);
+  if (n === 3 && !slide3Initialised) { slide3Initialised = true; initActorList(); }
   if (n === 5) populateRiskRatings();
   if (n === 10) { try { localStorage.setItem('completed:genai', '1'); } catch (e) {} }
 };
 
 initSlides(10);
 initOptionHovers();
+initActorList();
+slide3Initialised = true;
 </script>
 </body>
 </html>
