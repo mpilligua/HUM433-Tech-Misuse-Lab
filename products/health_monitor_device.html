@@ -485,6 +485,13 @@ function initHmdSort() {
       const correctZone = card.dataset.zone;
       const targetZone = zone.dataset.zone;
 
+      const WRONG_HINTS = {
+        'precision':      'Precise measurement improves accuracy, but precision on its own does not create a misuse path. Think about what happens to the data after it is collected.',
+        'design':         'How a device looks affects how appealing it is, not what it can expose. Aesthetics do not create a misuse risk.',
+        'sensitive-data': 'This is actually the highest-risk feature. Sensitive personal data can be stolen, sold, or used against the user. It belongs in "Important to consider".',
+        'easy-access':    'Always-on access to personal statistics creates a path for misuse, both by the user and by anyone else who gains access. It belongs in "Important to consider".'
+      };
+
       if (correctZone === targetZone) {
         card.setAttribute('draggable', 'false');
         zone.appendChild(card);
@@ -498,7 +505,7 @@ function initHmdSort() {
         card.classList.add('error');
         card.addEventListener('animationend', () => card.classList.remove('error'), { once: true });
         hmdFlash('wrong');
-        hmdShowSortFeedback('Try again. Ask whether this feature creates a realistic misuse path, not just whether it is technically impressive.', false);
+        hmdShowSortFeedback(WRONG_HINTS[card.dataset.id], false);
       }
     });
   });
