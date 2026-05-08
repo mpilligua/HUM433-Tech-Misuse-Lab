@@ -391,7 +391,7 @@
       <p class="airtag-prose" style="max-width:680px;"><strong>MAO helps you ask: not "is this feature dangerous?", but "in this scenario, does the feature enable misuse?"</strong></p>
 
       <div class="select-btn-row">
-        <button class="select-btn ghost" onclick="atTryAnother()">Try another scenario</button>
+        <button class="select-btn ghost" id="atTryAnotherBtn" onclick="atTryAnother()">Try another scenario</button>
         <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go back to home page</button>
       </div>
     </div>
@@ -426,16 +426,26 @@
   }
 
   /* Re-trigger stagger when slides 2 or 10 (wrap) become active.
-     Tag slides 5/7/9 are gated until their scenario is revealed. */
+     Tag slides 5/7/9 are gated until their scenario is revealed.
+     Slide 3 (picker) always hides NEXT — user must use "Investigate". */
+  const visitedScenarios = new Set();
+
   const _origGoTo = goTo;
   const TAG_SLIDE_KEY = { 5: 'breakup', 7: 'custody', 9: 'journalist' };
   goTo = function(n) {
-    const key = TAG_SLIDE_KEY[n];
-    nextGated = key ? !atTagState[key].revealed : false;
+    if (n === 3) {
+      nextGated = true;
+    } else {
+      const key = TAG_SLIDE_KEY[n];
+      nextGated = key ? !atTagState[key].revealed : false;
+    }
     _origGoTo(n);
     if (n === 2) atStaggerMao('screen2MaoRow', 'screen2Final');
     if (n === 10) {
       atStaggerMao('screen7MaoRow', null);
+      if (atPickedScenario) visitedScenarios.add(atPickedScenario);
+      const tryBtn = document.getElementById('atTryAnotherBtn');
+      if (tryBtn) tryBtn.style.display = visitedScenarios.size >= 3 ? 'none' : '';
       try { localStorage.setItem('completed:self_driving', '1'); } catch (e) {}
     }
   };
@@ -646,7 +656,11 @@
       if (punch) { punch.classList.remove('in'); punch.style.display = 'none'; }
     });
 
-    document.querySelectorAll('.at-pick-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.at-pick-card').forEach(c => {
+      c.classList.remove('selected');
+      if (visitedScenarios.has(c.dataset.pick)) c.classList.add('locked');
+      else c.classList.remove('locked');
+    });
     atPickedScenario = null;
     atUpdateScenarioLabels();
     const inv = document.getElementById('atInvestigateBtn');

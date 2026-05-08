@@ -286,14 +286,7 @@
   goTo = function(n) {
     _origGoTo(n);
     if (n === 2) atStaggerMao('screen2MaoRow', 'screen2Final');
-<<<<<<< Updated upstream
     if (n === 5) atStaggerMao('screen7MaoRow', null);
-=======
-    if (n === 10) {
-      atStaggerMao('screen7MaoRow', null);
-      try { localStorage.setItem('completed:airtag', '1'); } catch (e) {}
-    }
->>>>>>> Stashed changes
   };
   // First-load case: if slide 2 or 5 is somehow the initial slide
   if (document.querySelector('[data-slide="2"]').classList.contains('active')) atStaggerMao('screen2MaoRow', 'screen2Final');
