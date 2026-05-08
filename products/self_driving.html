@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tech Misuses Lab — Self-driving vehicle</title>
+<title>Tech Misuses Lab - Self-driving vehicle</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
@@ -110,7 +110,7 @@
       <div style="flex:0 0 auto; max-width:400px;">
         <h2>Self-driving <span class="accent-word">Vehicle</span></h2>
         <div class="purpose-box" style="margin-top:20px; font-size:18px; line-height:1.65;">
-          A car that <strong style="color:#f0f0f0">drives itself</strong>, sensing its surroundings with cameras, lidar, and radar. It processes that data in real time to navigate roads, avoid obstacles, and make decisions — without a human at the wheel.
+          A car that <strong style="color:#f0f0f0">drives itself</strong>, sensing its surroundings with cameras, lidar, and radar. It processes that data in real time to navigate roads, avoid obstacles, and make decisions, without a human at the wheel.
         </div>
       </div>
       <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:560px;">
@@ -123,7 +123,7 @@
   <div class="slide" data-slide="2">
     <div class="airtag-stack center" style="gap:28px;">
       <h2>Strategy: <span class="accent-word">Scenario Analysis</span></h2>
-      <p class="airtag-prose" style="max-width:680px; font-size:18px;">Most analyses ask what a product does. Scenario-based analysis asks <strong>who's around it</strong>. You imagine real situations — people, tensions, relationships — and check whether the product changes what's possible in those situations. Misuse rarely shows up in the spec sheet. It shows up in the scenario.</p>
+      <p class="airtag-prose" style="max-width:680px; font-size:18px;">Most analyses ask what a product does. Scenario-based analysis asks <strong>who's around it</strong>. You imagine real situations — people, tensions, relationships, and check whether the product changes what's possible in those situations. Misuse rarely shows up in the spec sheet. It shows up in the scenario.</p>
 
       <div class="at-mao-row" id="screen2MaoRow">
         <div class="at-mao-card" data-stagger="0">
@@ -568,8 +568,8 @@
     let html = truth.diagnosis;
     if (guess && guess !== truth.state) {
       const correction = sc.corrections[rowKey] || (truth.state === 'present'
-        ? 'You marked this absent — here’s why it’s present.'
-        : 'You marked this present — here’s why it’s absent.');
+        ? ‘You marked this absent, here is why it is present.’
+        : ‘You marked this present, here is why it is absent.’);
       html = `<span class="row-correction">${correction}</span>${truth.diagnosis}`;
     }
     diag.innerHTML = html;

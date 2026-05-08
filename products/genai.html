@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tech Misuses Lab — Generative AI</title>
+<title>Tech Misuses Lab - Generative AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
 <style>
@@ -74,14 +74,14 @@
   <!-- SLIDE 2: Strategy -->
   <div class="slide" data-slide="2" style="padding:36px 8%; align-items:center; justify-content:center; text-align:center; gap:20px;">
     <h2>Strategy: <span class="accent-word">Threat Actor Analysis</span></h2>
-    <p style="font-size:18px; color:#ccc; line-height:1.65; max-width:680px; margin-top:24px;">One strategy to spot misuse early is to <strong style="color:var(--accent)">think about who</strong> will actually use this tool — and who might exploit it.</p>
+    <p style="font-size:18px; color:#ccc; line-height:1.65; max-width:680px; margin-top:24px;">One strategy to spot misuse early is to <strong style="color:var(--accent)">think about who</strong> will actually use this tool, and who might exploit it.</p>
   </div>
 
   <!-- SLIDE 3: Brainstorm user types -->
   <div class="slide" data-slide="3">
     <div style="width:100%; max-width:600px; text-align:center;">
       <h2 style="margin-bottom:8px;">Who could use <span class="accent-word">Generative AI?</span></h2>
-      <p class="body-text" style="margin-bottom:24px;">Name 5 types of people who might use this tool — think broadly.</p>
+      <p class="body-text" style="margin-bottom:24px;">Name 5 types of people who might use this tool. Think broadly.</p>
 
       <div style="display:flex; flex-direction:column; gap:10px; width:100%; text-align:left; margin-bottom:20px;">
         <div style="display:flex; align-items:center; gap:14px;">
@@ -125,14 +125,14 @@
   <div class="slide" data-slide="4">
     <div style="text-align:center; max-width:600px;">
       <div class="line1" style="color:var(--muted);font-size:26px;">It's not humanly possible to anticipate every user.</div>
-      <div class="line2" style="font-size:38px; font-weight:900; line-height:1.1; margin-top:20px;">So designers focus on the <span style="color:var(--accent)">biggest holes</span> first — ranked by misuse impact.</div>
+      <div class="line2" style="font-size:38px; font-weight:900; line-height:1.1; margin-top:20px;">So designers focus on the <span style="color:var(--accent)">biggest holes</span> first, ranked by misuse impact.</div>
     </div>
   </div>
 
   <!-- SLIDE 5: Rate the risk -->
   <div class="slide" data-slide="5">
     <h2 style="font-size:30px; margin-bottom:8px;">Rank these users by <span class="danger-word">risk they pose</span></h2>
-    <p class="body-text" style="margin-bottom:24px;">Drag to reorder — most dangerous at the top.</p>
+    <p class="body-text" style="margin-bottom:24px;">Drag to reorder, most dangerous at the top.</p>
     <div class="rank-list" id="rankList" style="margin:0 auto;">
       <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Politician</span></div>
       <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Scammer</span></div>
@@ -140,7 +140,7 @@
       <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Overworked Student</span></div>
       <div class="rank-item"><span class="rank-handle">⠿</span><span class="rank-label">Marketing Agency</span></div>
     </div>
-    <p class="rank-hint" style="margin-top:16px; text-align:center;">No right answer yet — commit to your ranking.</p>
+    <p class="rank-hint" style="margin-top:16px; text-align:center;">No right answer yet, commit to your ranking.</p>
   </div>
 
   <!-- SLIDE 6: Quiz — Politician -->
@@ -238,7 +238,7 @@ const GENAI_QUIZ_CONFIG = {
   1: {
     correct: 'B',
     feedback: {
-      correct: '✓ Correct. Deepfakes create visual "evidence" — fake videos of opponents saying or doing things they never did. People trust what they see more than what they read, so fabricated images spread faster and are nearly impossible to debunk before election day.',
+      correct: '✓ Correct. Deepfakes create visual "evidence", fake videos of opponents saying or doing things they never did. People trust what they see more than what they read, so fabricated images spread faster and are nearly impossible to debunk before election day.',
       A: '✗ Solving math has nothing to do with winning elections or manipulating voters. The correct answer is B: realistic fake images and video that voters believe are real.',
       C: '✗ Dark mode only changes how the screen looks. It has zero bearing on harm potential. The most dangerous capability for a politician is B: producing fake images and video that voters believe are real.'
     }
@@ -246,7 +246,7 @@ const GENAI_QUIZ_CONFIG = {
   2: {
     correct: 'A',
     feedback: {
-      correct: '✓ Correct. Before GenAI, phishing emails were generic and easy to spot. Now a scammer can craft millions of emails, each personalized with the victim\'s name, employer, and context — making them indistinguishable from legitimate messages. Click rates skyrocket.',
+      correct: '✓ Correct. Before GenAI, phishing emails were generic and easy to spot. Now a scammer can craft millions of emails, each personalized with the victim\'s name, employer, and context, making them indistinguishable from legitimate messages. Click rates skyrocket.',
       B: '✗ Writing a résumé is a legitimate, zero-harm use. It helps the scammer get a job, not steal money. The answer is A: personalized phishing at scale is what turns GenAI into a weapon for fraud.',
       C: '✗ Summarizing news is a benign task anyone might use. The real threat is A — AI that can write thousands of perfectly tailored phishing emails per hour, each designed to fool a specific person.'
     }
@@ -369,7 +369,7 @@ function populateRiskRatings() {
   if (userEntries.length > 0) {
     const sep = document.createElement('div');
     sep.style = 'font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:2px;text-align:center;padding:6px 0;';
-    sep.textContent = '— also consider —';
+    sep.textContent = 'also consider';
     list.appendChild(sep);
   }
 
@@ -389,11 +389,11 @@ function rateRisk(item, rating) {
 function checkRiskRatings() {
 
   const FEEDBACK = {
-    0: 'We think <strong>Politician</strong> should be rated higher — they can use GenAI to generate deepfakes and mass disinformation to manipulate elections at scale.',
-    1: 'We think <strong>Troll</strong> should be rated higher — they can use GenAI to flood platforms with coordinated harassment and inflammatory content.',
-    2: 'We think <strong>Scammer</strong> should be rated higher — they can use GenAI to craft thousands of personalized phishing messages, defrauding victims at scale.',
-    3: 'We think <strong>Student</strong> should be rated lower — they mostly use GenAI to assist with learning and can\'t cause much large-scale harm.',
-    4: 'We think <strong>Researcher</strong> should be rated lower — they use GenAI for legitimate work and typically don\'t cause significant harm.'
+    0: 'We think <strong>Politician</strong> should be rated higher, they can use GenAI to generate deepfakes and mass disinformation to manipulate elections at scale.',
+    1: 'We think <strong>Troll</strong> should be rated higher, they can use GenAI to flood platforms with coordinated harassment and inflammatory content.',
+    2: 'We think <strong>Scammer</strong> should be rated higher, they can use GenAI to craft thousands of personalized phishing messages, defrauding victims at scale.',
+    3: 'We think <strong>Student</strong> should be rated lower, they mostly use GenAI to assist with learning and can\'t cause much large-scale harm.',
+    4: 'We think <strong>Researcher</strong> should be rated lower, they use GenAI for legitimate work and typically don\'t cause significant harm.'
   };
 
   let wrongs = [];

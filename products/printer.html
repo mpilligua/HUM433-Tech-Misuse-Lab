@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tech Misuses Lab — Office Printer</title>
+<title>Tech Misuses Lab - Office Printer</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
 <style>
@@ -107,7 +107,7 @@
 
   <!-- SLIDE 6: Teaser -->
   <div class="slide" data-slide="6">
-    <p style="color:var(--muted);font-size:26px;">But the story doesn't end there —</p>
+    <p style="color:var(--muted);font-size:26px;">But the story doesn't end there.</p>
     <div class="teaser-big">What happens<br>when the printer<br><span class="accent-word">leaves</span> the building?</div>
   </div>
 
@@ -212,8 +212,8 @@ function quiz1Answer(btn, key) {
     document.querySelectorAll('#quiz1Options .option-btn')[1].classList.add('correct');
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = key === 'A'
-      ? '✗ The Mechanical Engine is purely physical — heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
-      : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing — it needs a disk and a network to become dangerous.';
+      ? '✗ The Mechanical Engine is purely physical, heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
+      : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing, it needs a disk and a network to become dangerous.';
   }
   printerQuiz1Done = true;
   unlockNext();
@@ -226,14 +226,14 @@ function quiz2Answer(btn, key) {
   if (key === 'B') {
     btn.classList.add('correct');
     fb.className = 'feedback-box show correct-fb';
-    fb.textContent = '✓ Correct! The Hard Disk retains every document even after the printer is powered off and discarded. No network needed — just a $5 adapter and free software is enough to recover everything.';
+    fb.textContent = '✓ Correct! The Hard Disk retains every document even after the printer is powered off and discarded. No network needed, just a $5 adapter and free software is enough to recover everything.';
   } else {
     btn.classList.add('wrong');
     document.querySelectorAll('#quiz2Options .option-btn')[1].classList.add('correct');
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = key === 'A'
-      ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant — but the hard disk keeps all data regardless.'
-      : '✗ The Mechanical Engine is all moving parts — drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
+      ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant, but the hard disk keeps all data regardless.'
+      : '✗ The Mechanical Engine is all moving parts: drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
   }
   printerQuiz2Done = true;
   unlockNext();

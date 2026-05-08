@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tech Misuses Lab — AirTag</title>
+<title>Tech Misuses Lab - AirTag</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
 <style>
@@ -313,9 +313,9 @@
 
   /* ── Screen 4: MAO tagging + reveal ── */
   const BREAKUP_TRUTH = {
-    motive: { state: 'present', diagnosis: 'A recent breakup creates a clear surveillance motive — knowing where the ex is, who they’re with.' },
-    access: { state: 'present', diagnosis: 'They’re still exchanging belongings. The bag, the box, the jacket — all of it passes through the suspect’s hands before going back.' },
-    opportunity: { state: 'present', diagnosis: 'A coin-sized tracker reporting through Apple’s network turns a returned item into continuous covert location tracking.' }
+    motive: { state: 'present', diagnosis: "A recent breakup creates a clear surveillance motive, knowing where the ex is, who they’re with." },
+    access: { state: 'present', diagnosis: "They’re still exchanging belongings. The bag, the box, the jacket, all of it passes through the suspect’s hands before going back." },
+    opportunity: { state: 'present', diagnosis: 'A coin-sized tracker reporting through Apple\'s network turns a returned item into continuous covert location tracking.' }
   };
 
   const atTagAnswers = { motive: null, access: null, opportunity: null };
@@ -365,8 +365,8 @@
     let html = truth.diagnosis;
     if (guess && guess !== truth.state) {
       const correctionText = truth.state === 'present'
-        ? `You marked this absent — here’s why it’s present.`
-        : `You marked this present — here’s why it’s absent.`;
+        ? `You marked this absent, here is why it is present.`
+        : `You marked this present, here is why it is absent.`;
       html = `<span class="row-correction">${correctionText}</span>${truth.diagnosis}`;
     }
     diag.innerHTML = html;
