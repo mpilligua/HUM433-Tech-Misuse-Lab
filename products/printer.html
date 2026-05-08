@@ -307,32 +307,22 @@ function clearHighlight() {
 function initImageDragGame() {
   const canvas = document.getElementById('printerCanvas');
   const componentList = document.getElementById('componentList');
-  const baseImg = document.getElementById('printerBaseImage');
   if (!canvas || !componentList) return;
-
-  if (baseImg.naturalWidth === 0) { baseImg.onload = initImageDragGame; return; }
 
   clearHighlight();
   gameState.placedComponents = {};
   componentList.innerHTML = '';
   canvas.querySelectorAll('.drop-overlay').forEach(el => el.remove());
 
-  const rect = baseImg.getBoundingClientRect();
-
   Object.entries(CORRECT_COMPONENTS_IMAGE).forEach(([name, coords], zoneIdx) => {
-    const y0 = (coords.y[0] / 1000) * rect.height;
-    const y1 = (coords.y[1] / 1000) * rect.height;
-    const x0 = (coords.x[0] / 1000) * rect.width;
-    const x1 = (coords.x[1] / 1000) * rect.width;
-
     const zone = document.createElement('div');
     zone.className = 'drop-overlay';
     zone.dataset.componentName = name;
     zone.dataset.zoneIndex = zoneIdx;
-    zone.style.top  = y0 + 'px';
-    zone.style.left = x0 + 'px';
-    zone.style.width  = (x1 - x0) + 'px';
-    zone.style.height = (y1 - y0) + 'px';
+    zone.style.top    = (coords.y[0] / 10) + '%';
+    zone.style.left   = (coords.x[0] / 10) + '%';
+    zone.style.width  = ((coords.x[1] - coords.x[0]) / 10) + '%';
+    zone.style.height = ((coords.y[1] - coords.y[0]) / 10) + '%';
     zone.innerHTML = `<div class="component-label-overlay">${name}</div>`;
 
     zone.addEventListener('mouseenter', () => setHighlight(name));
