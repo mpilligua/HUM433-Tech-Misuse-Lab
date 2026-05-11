@@ -262,14 +262,21 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 .reset-lab-btn {
   width: 100%;
   margin-top: 0;
-  background: #111;
-  color: var(--text);
-  border: 1px solid var(--border);
+  background: var(--accent);
+  color: #000;
+  border: 1px solid var(--accent);
+  transition: background 0.2s, opacity 0.2s, transform 0.1s;
 }
-.reset-lab-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(232,255,71,0.05);
+.reset-lab-btn:hover:not(:disabled) {
+  background: #d4e83e;
+  transform: translateY(-1px);
+}
+.reset-lab-btn:disabled {
+  background: #111;
+  color: var(--muted);
+  border-color: var(--border);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .lab-slide {
@@ -381,9 +388,9 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 
   <!-- ═══ SLIDE 2: Strategy ═══ -->
   <div class="slide" data-slide="2" style="padding:36px 8%; align-items:center; justify-content:center; text-align:left; gap:18px;">
-    <h2>Strategy: <span class="accent-word">Threat Modeling</span></h2>
+    <h2>Strategy: <span class="accent-word">Actor Analysis</span></h2>
     <p class="quiz-q" style="margin-top:20px; font-size:22px; max-width:800px; text-align:center;">
-      By imagining social media users as different <strong style="color:var(--accent)">Threat Actors</strong>, we can explore how the platform's rich <strong style="color:var(--accent)">Features</strong> might provide invisible convenience for misuse. This helps you quickly understand and identify potential misuse risks on social media.
+      Imagine social media users as different kinds of <strong style="color:var(--accent)">bad users</strong>. Then look at the platform's <strong style="color:var(--accent)">tools</strong> and see how each one might be misused. This helps you spot risks on social media quickly.
     </p>
   </div>
 
@@ -394,15 +401,15 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 
       <!-- Top Header Area -->
       <div class="dash-header">
-        <h2 class="dash-title">Misuse Chemistry Lab</h2>
+        <h2 class="dash-title">Misuse Combinations Lab</h2>
         <div class="dash-status">
           <div class="status-col">
-            <span class="status-label">TARGET</span>
-            <span class="status-value" id="statusTarget">PENDING</span>
+            <span class="status-label">BAD USER</span>
+            <span class="status-value" id="statusTarget">NOT CHOSEN</span>
           </div>
           <div class="status-col">
-            <span class="status-label">VECTOR</span>
-            <span class="status-value" id="statusVector">PENDING</span>
+            <span class="status-label">TOOL</span>
+            <span class="status-value" id="statusVector">NOT CHOSEN</span>
           </div>
         </div>
       </div>
@@ -411,34 +418,34 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
       <div class="dash-stage" id="labStage">
         <div class="stage-empty">
           <span style="font-size: 36px; margin-bottom: 16px; display: block;">🔬</span>
-          <h3 style="margin-bottom: 8px;">Awaiting Chemical Components...</h3>
-          <p>Select a Threat Actor and Platform Feature to begin analysis.</p>
+          <h3 style="margin-bottom: 8px;">Waiting for your choices…</h3>
+          <p>Choose a bad user and a platform tool to see what happens.</p>
         </div>
       </div>
 
       <!-- Bottom Controls -->
       <div class="dash-controls">
         <div class="control-group">
-          <span class="control-label">1. Threat Actor</span>
+          <span class="control-label">1. Bad user</span>
           <select id="smActor" class="control-select" onchange="handleActorChange()">
-            <option value="" disabled selected>Select an actor...</option>
-            <option value="data">Data Brokers</option>
-            <option value="state">State-Sponsored Actors</option>
-            <option value="extremist">Extremist Recruiters</option>
+            <option value="" disabled selected>Choose a bad user…</option>
+            <option value="data">Data Sellers</option>
+            <option value="state">Government Agents</option>
+            <option value="extremist">Extremists</option>
           </select>
         </div>
         <div class="control-group">
-          <span class="control-label">2. Platform Feature</span>
+          <span class="control-label">2. Platform tool</span>
           <select id="smFeature" class="control-select" onchange="handleFeatureChange()" disabled>
-            <option value="" disabled selected>Select a feature...</option>
-            <option value="api">Third-Party API Integrations</option>
-            <option value="algo">Algorithmic Content Feeds</option>
-            <option value="msg">Private Messaging</option>
+            <option value="" disabled selected>Choose a tool…</option>
+            <option value="api">Apps that connect to the platform</option>
+            <option value="algo">The recommendation feed</option>
+            <option value="msg">Private messages</option>
           </select>
         </div>
       </div>
 
-      <button class="select-btn reset-lab-btn" onclick="resetSMLab()">Reset Lab</button>
+      <button class="select-btn reset-lab-btn" id="addNewCardBtn" onclick="addNewCard()" disabled>ADD NEW CARD</button>
 
     </div>
   </div>
@@ -471,8 +478,8 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
      <h1><span class="accent-word">Nice Work</span></h1>
 
     <div class="purpose-box" style="margin-top:40px; border-left: 3px solid var(--accent3);">
-      <strong style="color:var(--accent3); font-size: 18px;">Threat Modeling Mindset</strong><br><br>
-      As a platform designer, try to adopt a "threat modeling" mindset from the perspective of <span class="accent-word">different</span> user groups, <span class="accent-word">"Actors"</span>. Anticipate potential social media misuses and find ways to mitigate them.
+      <strong style="color:var(--accent3); font-size: 18px;">Think like a designer</strong><br><br>
+      When you design a platform, try to look at it from the point of view of <span class="accent-word">different</span> kinds of users — including <span class="accent-word">bad users</span>. Imagine the ways the platform could be misused, and find ways to stop it.
       <br><br>
     </div>
 
@@ -570,6 +577,7 @@ function evaluateSMLab() {
   const feature = document.getElementById('smFeature').value;
   const stage = document.getElementById('labStage');
 
+  _syncAddCardBtn();
   if (!actor || !feature) return;
 
   // Fade out effect
@@ -579,54 +587,50 @@ function evaluateSMLab() {
     if (actor === 'data' && feature === 'api') {
       stage.innerHTML = `
         <div class="lethal-card">
-          <div class="lethal-stamp">LETHAL MATCH</div>
-          <div class="lethal-title">OPERATION: DATA HARVEST</div>
-          <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
-          <div class="lethal-text">Exploiting open API permissions using low-cost interactive content (like quizzes) as bait. This bypasses user vigilance to harvest massive amounts of private data from users and their extended social networks without informed consent.</div>
-          <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
+          <div class="lethal-stamp">DANGEROUS COMBINATION</div>
+          <div class="lethal-title">STEALING USER DATA</div>
+          <div class="lethal-section-title" style="color: var(--accent3);">HOW IT WORKS:</div>
+          <div class="lethal-text">They use open app permissions and cheap, fun content like quizzes to trick people. People don't notice, so the attackers can collect huge amounts of private data — from the users and from their friends — without anyone giving real consent.</div>
+          <div class="lethal-section-title" style="color: var(--accent2);">REAL CASE:</div>
           <div class="lethal-text">
             <a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal" target="_blank">The Cambridge Analytica scandal (2010s).</a><br><br>
-            The firm utilized a seemingly harmless personality quiz app to collect data from up to 87 million Facebook users. This data fueled targeted political advertising to influence election behavior, resulting in a massive privacy breach.
+            The company used a simple personality quiz app to collect data from up to 87 million Facebook users. They then used this data to send targeted political ads and try to change how people voted. It became a huge privacy scandal.
           </div>
-          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('data','api')">GOT IT - NEXT COMBINATION →</button>
         </div>
       `;
     } else if (actor === 'state' && feature === 'algo') {
       stage.innerHTML = `
         <div class="lethal-card">
-          <div class="lethal-stamp">LETHAL MATCH</div>
-          <div class="lethal-title">OPERATION: ECHO CHAMBER</div>
-          <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
-          <div class="lethal-text">Acting like digital marketers by A/B testing highly shareable content. They leverage recommendation algorithms to feed tailored information to specific demographics based on religion, race, or location. They first build group identity, then introduce external threats to manipulate behavior and manufacture social polarization.</div>
-          <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
+          <div class="lethal-stamp">DANGEROUS COMBINATION</div>
+          <div class="lethal-title">CREATING AN ECHO CHAMBER</div>
+          <div class="lethal-section-title" style="color: var(--accent3);">HOW IT WORKS:</div>
+          <div class="lethal-text">They act like marketers, testing different posts to see which ones spread fastest. Then they use the platform's recommendation system to show specific content to specific groups (by religion, race, or location). First they build a strong group identity, then they introduce a fake threat to make people angry and divided.</div>
+          <div class="lethal-section-title" style="color: var(--accent2);">REAL CASE:</div>
           <div class="lethal-text">
-            <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia manipulating the US elections (2016).</a><br><br>
-            The Russian Internet Research Agency (IRA) managed information and distributed tailored content across platforms such as Twitter, Facebook, and Instagram to manipulate group psychology and ultimately interfere in the US Presidential Election.
+            <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia and the US elections (2016).</a><br><br>
+            A Russian group called the Internet Research Agency posted tailored content on Twitter, Facebook, and Instagram to influence how Americans thought and felt — and ultimately to interfere with the US presidential election.
           </div>
-          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('state','algo')">GOT IT - NEXT COMBINATION →</button>
         </div>
       `;
     } else if (actor === 'extremist' && feature === 'msg') {
       stage.innerHTML = `
         <div class="lethal-card">
-          <div class="lethal-stamp">LETHAL MATCH</div>
-          <div class="lethal-title">OPERATION: SHADOW RECRUIT</div>
-          <div class="lethal-section-title" style="color: var(--accent3);">MECHANISM OF ACTION:</div>
-          <div class="lethal-text">Infiltrating youth subcultures under the guise of casual entertainment. They adopt digital customs (like gaming culture and memes) to build rapport, then utilize highly private direct messaging features to isolate targets for covert radicalization.</div>
-          <div class="lethal-section-title" style="color: var(--accent2);">CASE ARCHIVE:</div>
+          <div class="lethal-stamp">DANGEROUS COMBINATION</div>
+          <div class="lethal-title">SECRET RECRUITING</div>
+          <div class="lethal-section-title" style="color: var(--accent3);">HOW IT WORKS:</div>
+          <div class="lethal-text">They enter young people's online spaces by pretending to share their hobbies. They use the same language, jokes, and memes to feel like part of the group. Then they move the conversation into private messages, where they can isolate one person and slowly push extreme ideas without anyone else noticing.</div>
+          <div class="lethal-section-title" style="color: var(--accent2);">REAL CASE:</div>
           <div class="lethal-text">
-            <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Extremist groups recruiting.</a><br><br>
-            Extremists have increasingly adopted digital realm practices associated with gaming culture and meme usage to specifically target, isolate, and recruit young female users on social media platforms.
+            <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Extremist groups recruiting online.</a><br><br>
+            Extremist groups have started using gaming culture and memes online to specifically target, isolate, and recruit young women on social media.
           </div>
-          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('extremist','msg')">GOT IT - NEXT COMBINATION →</button>
         </div>
       `;
     } else {
-      // <div class="non-lethal-icon">📉 _PLOT</div>
       stage.innerHTML = `
         <div class="non-lethal-card">
-          <div class="non-lethal-title">Non-Lethal Interaction Detected</div>
-          <div class="non-lethal-desc">This combination carries potential security risks, but try to find the specific <strong>[Lethal Combinations]</strong> that led to major historical security crises.</div>
+          <div class="non-lethal-title">Not a major risk</div>
+          <div class="non-lethal-desc">This combination has some risk, but it's not one of the big ones. Try to find the three <strong>dangerous combinations</strong> that caused real, well-known security problems.</div>
         </div>
       `;
     }
@@ -651,6 +655,7 @@ function confirmMatch(actor, feature) {
   } else {
     resetSMLab();
   }
+  _syncAddCardBtn();
   updateUI();
 }
 
@@ -663,8 +668,8 @@ function showLabComplete() {
     stage.innerHTML = `
       <div class="lethal-card" style="text-align:center; border-color:var(--accent);">
         <div class="lethal-stamp" style="background:var(--accent);color:#000;">ALL COMBINATIONS FOUND</div>
-        <div class="lethal-title" style="color:var(--accent);">Lab Complete</div>
-        <div class="lethal-text">You identified all three lethal threat actor and feature combinations. Use NEXT to continue.</div>
+        <div class="lethal-title" style="color:var(--accent);">Lab finished!</div>
+        <div class="lethal-text">You found all three dangerous bad-user-and-tool combinations. Press NEXT to continue.</div>
       </div>
     `;
     stage.style.opacity = 1;
@@ -677,8 +682,8 @@ function resetSMLab() {
   featureSelect.value = "";
   featureSelect.disabled = true;
 
-  document.getElementById('statusTarget').textContent = "PENDING";
-  document.getElementById('statusVector').textContent = "PENDING";
+  document.getElementById('statusTarget').textContent = "NOT CHOSEN";
+  document.getElementById('statusVector').textContent = "NOT CHOSEN";
 
   const stage = document.getElementById('labStage');
   stage.style.opacity = 0;
@@ -687,12 +692,33 @@ function resetSMLab() {
     stage.innerHTML = `
       <div class="stage-empty">
         <span style="font-size: 36px; margin-bottom: 16px; display: block;">🔬</span>
-        <h3 style="margin-bottom: 8px;">Awaiting Chemical Components...</h3>
-        <p>Select a Threat Actor and Platform Feature to begin analysis.</p>
+        <h3 style="margin-bottom: 8px;">Waiting for your choices…</h3>
+        <p>Choose a bad user and a platform tool to see what happens.</p>
       </div>
     `;
     stage.style.opacity = 1;
   }, 250);
+  _syncAddCardBtn();
+}
+
+/* The three actor+feature pairs that count as a dangerous match. Used by the
+   dashboard's ADD NEW CARD button to know when it's actionable. */
+const LETHAL_PAIRS = new Set(['data:api', 'state:algo', 'extremist:msg']);
+
+function _syncAddCardBtn() {
+  const btn = document.getElementById('addNewCardBtn');
+  if (!btn) return;
+  const actor = document.getElementById('smActor').value;
+  const feature = document.getElementById('smFeature').value;
+  const key = actor + ':' + feature;
+  btn.disabled = !(actor && feature && LETHAL_PAIRS.has(key) && !foundMatches.has(key));
+}
+
+function addNewCard() {
+  const actor = document.getElementById('smActor').value;
+  const feature = document.getElementById('smFeature').value;
+  if (!LETHAL_PAIRS.has(actor + ':' + feature)) return;
+  confirmMatch(actor, feature);
 }
 
 function rateLearning(item, rating) {
