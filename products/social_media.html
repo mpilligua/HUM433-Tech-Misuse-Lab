@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Social Media</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg: #0d0d0d; --surface: #161616; --border: #2a2a2a;
@@ -13,14 +13,14 @@
   --text: #f0f0f0; --muted: #888;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
 /* TOPBAR */
-.topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 40px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-.topbar-brand { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 2px; font-weight: 700; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 50px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.topbar-brand { font-family: 'Space Mono', monospace; font-size: 15px; color: var(--accent); letter-spacing: 2px; font-weight: 700; }
 .topbar-home {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
   letter-spacing: 2px;
   text-decoration: none;
@@ -28,7 +28,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-seri
   transition: color 0.2s;
 }
 .topbar-home:hover { color: var(--accent); }
-.slide-counter { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 2px; }
+.slide-counter { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--accent); letter-spacing: 2px; }
 .progress-bar { display: flex; gap: 6px; align-items: center; }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.3s ease; cursor: pointer; }
 .dot.active { background: var(--accent); width: 20px; border-radius: 3px; }
@@ -36,48 +36,48 @@ body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-seri
 
 /* SLIDES */
 .slides-wrapper { flex: 1; overflow: hidden; position: relative; }
-.slide { position: absolute; inset: 0; padding: 0 10%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; opacity: 0; transform: translateX(60px); transition: all 0.45s cubic-bezier(0.4,0,0.2,1); pointer-events: none; overflow-y: auto; }
+.slide { position: absolute; inset: 0; padding: 0 4%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; opacity: 0; transform: translateX(60px); transition: all 0.45s cubic-bezier(0.4,0,0.2,1); pointer-events: none; overflow-y: auto; }
 .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
 .slide.exit { opacity: 0; transform: translateX(-60px); }
 
-h1 { font-size: clamp(36px,5.5vw,64px); font-weight: 800; line-height: 1.05; }
-h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
+h1 { font-size: clamp(45px,6.9vw,80px); font-weight: 800; line-height: 1.05; }
+h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 .accent-word { color: var(--accent); }
 .danger-word { color: var(--accent2); }
 
 /* BOTTOM NAV */
-.bottom-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-.nav-btn { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 28px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+.bottom-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.nav-btn { font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 2px; padding: 13px 35px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; border-radius: 4px; transition: all 0.2s; }
 .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 .nav-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
 .nav-btn.primary:hover { background: #d4e83e; }
 
 /* UI Elements */
-.purpose-box { border-left: 3px solid var(--accent); padding: 15px 20px; background: #161600; margin: 18px 0 20px; font-size: 16px; line-height: 1.7; color: #ccc; max-width: 820px; border-radius: 0 6px 6px 0; width: 100%; text-align: left; }
-.img-placeholder { max-width: 820px; width: 100%; height: 300px; border: 2px dashed var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; color: var(--muted); font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; margin-top: 4px; background: #111; }
-.quiz-q { font-size: 20px; color: #bbb; margin-bottom: 22px; line-height: 1.55; max-width: 100%; text-align: left; }
-.select-btn { background: var(--accent); color: #000; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; padding: 15px 36px; border: none; cursor: pointer; transition: all 0.2s; border-radius: 5px; margin-top: 20px;}
+.purpose-box { border-left: 3px solid var(--accent); padding: 19px 25px; background: #161600; margin: 22px 0 25px; font-size: 20px; line-height: 1.7; color: #ccc; max-width: 1025px; border-radius: 0 6px 6px 0; width: 100%; text-align: left; }
+.img-placeholder { max-width: 1025px; width: 100%; height: 375px; border: 2px dashed var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 13px; color: var(--muted); font-family: 'Space Mono', monospace; font-size: 15px; letter-spacing: 2px; margin-top: 5px; background: #111; }
+.quiz-q { font-size: 25px; color: #bbb; margin-bottom: 28px; line-height: 1.55; max-width: 100%; text-align: left; }
+.select-btn { background: var(--accent); color: #000; font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700; letter-spacing: 2px; padding: 19px 45px; border: none; cursor: pointer; transition: all 0.2s; border-radius: 5px; margin-top: 25px;}
 .select-btn:hover { background: #d4e83e; transform: translateY(-1px); }
 
 .select-btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 .select-btn.ghost:hover { background: rgba(232,255,71,0.08); }
 
 /* SLIDE 4 specific */
-.lab-textarea { padding: 16px; border-radius: 8px; background: #0a0a0a; border: 2px solid var(--border); color: white; width: 100%; height: 160px; font-size: 16px; resize: vertical; font-family: 'Syne'; outline: none; transition: border-color 0.3s; margin-bottom: 16px;}
+.lab-textarea { padding: 20px; border-radius: 8px; background: #0a0a0a; border: 2px solid var(--border); color: white; width: 100%; height: 200px; font-size: 20px; resize: vertical; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.3s; margin-bottom: 20px;}
 .lab-textarea:focus { border-color: var(--accent); }
-.sm-hints-box { background: #1a0d0d; border: 1px solid var(--accent2); padding: 20px; border-radius: 8px; text-align: left; margin-top: 16px; display: none;}
-.sm-hints-box h4 { color: var(--accent2); margin-bottom: 12px; font-size: 18px;}
-.sm-hints-box ul { padding-left: 20px; color: #ccc; font-size: 15px; line-height: 1.6;}
-.sm-hints-box li { margin-bottom: 10px; }
+.sm-hints-box { background: #1a0d0d; border: 1px solid var(--accent2); padding: 25px; border-radius: 8px; text-align: left; margin-top: 20px; display: none;}
+.sm-hints-box h4 { color: var(--accent2); margin-bottom: 15px; font-size: 22px;}
+.sm-hints-box ul { padding-left: 25px; color: #ccc; font-size: 19px; line-height: 1.6;}
+.sm-hints-box li { margin-bottom: 13px; }
 
 /* Ratings */
-.learning-list { display: flex; flex-direction: column; gap: 10px; max-width: 800px; width: 100%; margin-top: 24px; text-align: left; }
-.learning-item { display: flex; gap: 20px; align-items: center; padding: 15px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
-.learning-num { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; color: var(--accent); min-width: 28px; flex-shrink: 0; }
-.learning-text { font-size: 16px; color: var(--text); font-weight: 700; flex: 1; line-height: 1.3; }
-.star-row { display: flex; gap: 5px; flex-shrink: 0; }
-.star { font-size: 22px; cursor: pointer; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
+.learning-list { display: flex; flex-direction: column; gap: 13px; max-width: 1000px; width: 100%; margin-top: 30px; text-align: left; }
+.learning-item { display: flex; gap: 25px; align-items: center; padding: 19px 25px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.learning-num { font-family: 'Space Mono', monospace; font-size: 19px; font-weight: 700; color: var(--accent); min-width: 35px; flex-shrink: 0; }
+.learning-text { font-size: 20px; color: var(--text); font-weight: 700; flex: 1; line-height: 1.3; }
+.star-row { display: flex; gap: 6px; flex-shrink: 0; }
+.star { font-size: 28px; cursor: pointer; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
 .star:hover { transform: scale(1.2); }
 .star.filled { color: var(--accent); }
 
@@ -86,10 +86,10 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
 /* ====================================================== */
 .chemistry-dashboard {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1250px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 }
 
 /* Header Area */
@@ -97,33 +97,33 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 10px;
+  margin-bottom: 13px;
 }
 .dash-title {
-  font-size: 28px;
+  font-size: 35px;
   font-weight: 800;
   margin: 0;
   text-align: left;
 }
 .dash-status {
   display: flex;
-  gap: 40px;
+  gap: 50px;
   text-align: left;
 }
 .status-col {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 .status-label {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
   letter-spacing: 2px;
 }
 .status-value {
   font-family: 'Space Mono', monospace;
-  font-size: 15px;
+  font-size: 19px;
   color: var(--text);
   font-weight: 700;
 }
@@ -133,11 +133,11 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
   background: #0a0a0a;
   border: 1px solid var(--border);
   border-radius: 16px;
-  min-height: 460px;
+  min-height: 575px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 50px;
   position: relative;
   transition: opacity 0.3s ease;
 }
@@ -151,32 +151,32 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
   background: var(--surface);
   border: 1px solid #333;
   border-radius: 12px;
-  padding: 36px 40px;
+  padding: 45px 50px;
   width: 100%;
-  max-width: 760px;
+  max-width: 950px;
   text-align: left;
   position: relative;
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 .lethal-title {
   font-family: 'Space Mono', monospace;
-  font-size: 26px;
+  font-size: 33px;
   text-transform: uppercase;
   border-bottom: 1px solid #333;
-  padding-bottom: 16px;
-  margin-bottom: 24px;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
   letter-spacing: 1px;
   color: var(--text);
 }
 .lethal-stamp {
   position: absolute;
-  top: 30px;
-  right: -20px;
+  top: 38px;
+  right: -25px;
   color: var(--accent2);
   border: 4px solid var(--accent2);
-  padding: 10px 20px;
+  padding: 13px 25px;
   font-family: 'Space Mono', monospace;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 800;
   transform: rotate(-12deg);
   opacity: 0.85;
@@ -185,15 +185,15 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
   backdrop-filter: blur(4px);
 }
 .lethal-section-title {
-  font-size: 14px;
+  font-size: 18px;
   font-family: 'Space Mono', monospace;
-  margin-bottom: 10px;
-  margin-top: 28px;
+  margin-bottom: 13px;
+  margin-top: 35px;
   text-transform: uppercase;
   font-weight: 700;
 }
 .lethal-text {
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.65;
   color: #ccc;
 }
@@ -204,54 +204,54 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
 }
 .non-lethal-icon {
   font-family: 'Space Mono', monospace;
-  font-size: 48px;
+  font-size: 60px;
   color: var(--accent);
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   font-weight: 700;
   letter-spacing: -2px;
 }
 .non-lethal-title {
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 .non-lethal-desc {
   color: var(--muted);
-  max-width: 500px;
+  max-width: 625px;
   line-height: 1.6;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 /* Bottom Controls */
 .dash-controls {
   display: flex;
-  gap: 24px;
-  margin-top: 10px;
+  gap: 30px;
+  margin-top: 13px;
 }
 .control-group {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   background: var(--surface);
   border-radius: 8px;
-  padding: 8px 8px 8px 20px;
+  padding: 10px 10px 10px 25px;
   border: 1px solid var(--border);
 }
 .control-label {
-  font-size: 15px;
+  font-size: 19px;
   color: var(--text);
   white-space: nowrap;
 }
 .control-select {
   flex: 1;
-  padding: 12px;
+  padding: 15px;
   border-radius: 6px;
   background: #0a0a0a;
   border: 1px solid var(--border);
   color: var(--text);
-  font-size: 15px;
-  font-family: 'Syne', sans-serif;
+  font-size: 19px;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
   outline: none;
   transition: border-color 0.2s, opacity 0.2s;
@@ -273,54 +273,54 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
 }
 
 .lab-slide {
-  padding: 18px 5% !important;
+  padding: 22px 2% !important;
 }
 .lab-slide .chemistry-dashboard {
-  max-width: 900px;
-  gap: 12px;
+  max-width: 1125px;
+  gap: 15px;
 }
 .lab-slide .dash-header {
   margin-bottom: 0;
 }
 .lab-slide .dash-title {
-  font-size: 22px;
+  font-size: 28px;
 }
 .lab-slide .dash-status {
-  gap: 24px;
+  gap: 30px;
 }
 .lab-slide .dash-stage {
-  min-height: 300px;
-  padding: 24px;
+  min-height: 375px;
+  padding: 30px;
   border-radius: 12px;
 }
 .lab-slide .dash-controls {
-  gap: 14px;
+  gap: 18px;
   margin-top: 0;
 }
 .lab-slide .control-group {
-  gap: 12px;
-  padding: 6px 8px 6px 14px;
+  gap: 15px;
+  padding: 8px 10px 8px 18px;
 }
 .lab-slide .control-select {
-  padding: 10px;
+  padding: 13px;
 }
 .lab-slide .select-btn {
   margin-top: 0;
-  padding: 12px 28px;
+  padding: 15px 35px;
 }
 .lab-slide .lethal-card {
-  padding: 24px 28px;
+  padding: 30px 35px;
 }
 .lab-slide .lethal-title {
-  font-size: 22px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+  font-size: 28px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
 }
 .lab-slide .lethal-section-title {
-  margin-top: 18px;
+  margin-top: 23px;
 }
 .lab-slide .lethal-text {
-  font-size: 15px;
+  font-size: 19px;
   line-height: 1.5;
 }
 
@@ -355,7 +355,7 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
         The original intent of social media is to connect the world, allowing people to share life updates, exchange ideas, and find their communities. It serves as the infrastructure of modern digital life.
       </div>
     </div>
-    <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
+    <div style="flex:1 1 0; display:flex; align-items:center; justify-content:center; max-width:480px;">
       <div class="img-placeholder" style="height:400px;">
         <span>🖼️</span><span></span>
       </div>
@@ -368,7 +368,7 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
       The original intent of social media is to connect the world, allowing people to share life updates, exchange ideas, and find their communities. It serves as the infrastructure of modern digital life.
     </div>
   </div>
-  <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
+  <div style="flex:1 1 0; display:flex; align-items:center; justify-content:center; max-width:480px;">
     <img src="../images/social_media.png" alt="Social Media Platform"
          style="width:100%; height:400px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);"
          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -468,7 +468,7 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
   <!-- ═══ SLIDE 5: Evaluation ═══ -->
   <div class="slide" data-slide="5">
     <h2>Rate what you <span class="accent-word">learned</span></h2>
-    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1–5 stars based on how well you understood it.</p>
+    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1-5 stars based on how well you understood it.</p>
     <div class="learning-list">
       <div class="learning-item">
         <div class="learning-num">01</div>
@@ -505,7 +505,7 @@ h2 { font-size: clamp(24px,3.5vw,42px); font-weight: 700; line-height: 1.1; }
       <br><br>
     </div>
 
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">EXPLORE ANOTHER DEVICE</button>
+    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
   </div>
 
 </div>
@@ -613,7 +613,7 @@ function evaluateSMLab() {
             <a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal" target="_blank">The Cambridge Analytica scandal (2010s).</a><br><br>
             The firm utilized a seemingly harmless personality quiz app to collect data from up to 87 million Facebook users. This data fueled targeted political advertising to influence election behavior, resulting in a massive privacy breach.
           </div>
-          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('data','api')">GOT IT — NEXT COMBINATION →</button>
+          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('data','api')">GOT IT - NEXT COMBINATION →</button>
         </div>
       `;
     } else if (actor === 'state' && feature === 'algo') {
@@ -628,7 +628,7 @@ function evaluateSMLab() {
             <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia manipulating the US elections (2016).</a><br><br>
             The Russian Internet Research Agency (IRA) managed information and distributed tailored content across platforms such as Twitter, Facebook, and Instagram to manipulate group psychology and ultimately interfere in the US Presidential Election.
           </div>
-          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('state','algo')">GOT IT — NEXT COMBINATION →</button>
+          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('state','algo')">GOT IT - NEXT COMBINATION →</button>
         </div>
       `;
     } else if (actor === 'extremist' && feature === 'msg') {
@@ -643,7 +643,7 @@ function evaluateSMLab() {
             <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Extremist groups recruiting.</a><br><br>
             Extremists have increasingly adopted digital realm practices associated with gaming culture and meme usage to specifically target, isolate, and recruit young female users on social media platforms.
           </div>
-          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('extremist','msg')">GOT IT — NEXT COMBINATION →</button>
+          <button class="select-btn" style="margin-top:18px;font-size:12px;padding:12px 26px;" onclick="confirmMatch('extremist','msg')">GOT IT - NEXT COMBINATION →</button>
         </div>
       `;
     } else {
@@ -739,7 +739,7 @@ function addSmBox() {
   row.style = 'display:flex;align-items:center;gap:10px;';
   row.innerHTML = `
     <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">${String(num).padStart(2,'0')}</span>
-    <input type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+    <input type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
     <button onclick="smBoxDone(this)" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;border:1px solid #22c55e;background:transparent;color:#22c55e;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;" onmouseover="if(!this.disabled)this.style.background='rgba(34,197,94,0.1)'" onmouseout="if(!this.disabled)this.style.background='transparent'">DONE</button>
   `;
   list.appendChild(row);

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Generative AI</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
 <style>
   .topbar-home {
@@ -50,24 +50,22 @@
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 10</div>
+  <div class="slide-counter" id="slideCounter">01 / 09</div>
 </div>
 
 <div class="slides-wrapper">
 
   <!-- SLIDE 1: Intro -->
   <div class="slide" data-slide="1">
-    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:48px; padding:36px 6%; text-align:left;">
-      <div style="flex:1; max-width:420px;">
-        <h2>Generative<br><span class="accent-word">AI</span></h2>
+    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:64px; padding:36px 5%; text-align:left;">
+      <div style="flex:1 1 0; max-width:560px;">
+        <h2>Generative <span class="accent-word">AI</span></h2>
         <div class="purpose-box" style="margin-top:20px;">
-          <p style="margin-bottom:12px;">A digital tool that <strong style="color:#f0f0f0">generates text or images</strong> on demand. It uses vast internet data to respond to any prompt.</p>
-          <p style="margin-bottom:12px;">It can <strong style="color:#f0f0f0">learn from previous inputs</strong> to improve responses.</p>
-          <p>Asking it an explicit question can yield instant research results.</p>
+          A tool that <strong style="color:#f0f0f0">writes or draws</strong> anything you ask. Read every book, every Reddit thread, and every fanfiction ever written. Cites none of it.
         </div>
       </div>
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
-        <img src="../images/GenAI.png" alt="Generative AI interface" style="width:100%; max-height:420px; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);" onerror="this.style.display='none';"/>
+      <div style="flex:1 1 0; display:flex; align-items:center; justify-content:center; max-width:480px;">
+        <img src="../images/GenAI.png" alt="Generative AI interface" style="width:100%; max-height:480px; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);" onerror="this.style.display='none';"/>
       </div>
     </div>
   </div>
@@ -118,7 +116,7 @@
     <div id="riskCheckMsg" style="margin-top:16px; max-width:640px; width:100%; text-align:left;"></div>
   </div>
 
-  <!-- SLIDE 6: Quiz — Politician -->
+  <!-- SLIDE 6: Quiz - Politician -->
   <div class="slide" data-slide="6">
     <div class="quiz-layout">
       <div class="quiz-left">
@@ -135,12 +133,12 @@
     </div>
   </div>
 
-  <!-- SLIDE 7: Real World Story — Deepfakes -->
+  <!-- SLIDE 7: Real World Story - Deepfakes -->
   <div class="slide" data-slide="7">
     <img src="../images/Gen_RealWorldPolitics.png" alt="Slovakia election deepfake story" style="max-width:900px; width:100%; max-height:560px; object-fit:contain; border-radius:12px; box-shadow:0 20px 48px rgba(0,0,0,0.4);"/>
   </div>
 
-  <!-- SLIDE 8: Quiz — Scammer -->
+  <!-- SLIDE 8: Quiz - Scammer -->
   <div class="slide" data-slide="8">
     <div class="quiz-layout">
       <div class="quiz-left">
@@ -157,38 +155,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 9: Rate what you learned -->
+  <!-- SLIDE 9: Finish -->
   <div class="slide" data-slide="9">
-    <h2>Rate what you <span class="accent-word">learned</span></h2>
-    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1–5 stars based on how well you understood it.</p>
-    <div class="learning-list">
-      <div class="learning-item" style="animation-delay:0.05s">
-        <div class="learning-num">01</div>
-        <div class="learning-text">Identify potential misuse scenarios</div>
-        <div class="star-row" data-item="1">
-          <span class="star" onclick="rateLearning(1,1)">★</span>
-          <span class="star" onclick="rateLearning(1,2)">★</span>
-          <span class="star" onclick="rateLearning(1,3)">★</span>
-          <span class="star" onclick="rateLearning(1,4)">★</span>
-          <span class="star" onclick="rateLearning(1,5)">★</span>
-        </div>
-      </div>
-      <div class="learning-item" style="animation-delay:0.1s">
-        <div class="learning-num">02</div>
-        <div class="learning-text">Identify how each user type might exploit the tool</div>
-        <div class="star-row" data-item="2">
-          <span class="star" onclick="rateLearning(2,1)">★</span>
-          <span class="star" onclick="rateLearning(2,2)">★</span>
-          <span class="star" onclick="rateLearning(2,3)">★</span>
-          <span class="star" onclick="rateLearning(2,4)">★</span>
-          <span class="star" onclick="rateLearning(2,5)">★</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 10: Finish -->
-  <div class="slide" data-slide="10">
     <h1>Nice work.<br></h1>
     <h2>You thought like a <span class="accent-word">designer.</span></h2>
     <div class="purpose-box" style="margin-top:30px;">
@@ -196,7 +164,7 @@
       Every tool will reach people you didn't design for.
       The best designers ask <em>who</em> before <em>what</em>.
     </div>
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">← EXPLORE ANOTHER DEVICE</button>
+    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
   </div>
 
 </div>
@@ -207,6 +175,7 @@
 </div>
 
 <script src="../js/core.js"></script>
+<script src="../js/celebration.js"></script>
 <script>
 /* ── Quiz answer logic ── */
 const genaiQuizAnswered = { 1: false, 2: false };
@@ -225,7 +194,7 @@ const GENAI_QUIZ_CONFIG = {
     feedback: {
       correct: '✓ Correct. Before GenAI, phishing emails were generic and easy to spot. Now a scammer can craft millions of emails, each personalized with the victim\'s name, employer, and context, making them indistinguishable from legitimate messages. Click rates skyrocket.',
       B: '✗ Writing a résumé is a legitimate, zero-harm use. It helps the scammer get a job, not steal money. The answer is A: personalized phishing at scale is what turns GenAI into a weapon for fraud.',
-      C: '✗ Summarizing news is a benign task anyone might use. The real threat is A — AI that can write thousands of perfectly tailored phishing emails per hour, each designed to fool a specific person.'
+      C: '✗ Summarizing news is a benign task anyone might use. The real threat is A - AI that can write thousands of perfectly tailored phishing emails per hour, each designed to fool a specific person.'
     }
   }
 };
@@ -241,6 +210,7 @@ function answerGenaiQuiz(el, quizNum, key) {
     o.style.cursor = 'default';
   });
 
+  recordAnswer('genai', key === config.correct);
   if (key === config.correct) {
     el.classList.add('correct');
     fb.className = 'feedback-box show correct-fb';
@@ -285,7 +255,7 @@ function addActorBox() {
   row.style = 'display:flex;align-items:center;gap:10px;';
   row.innerHTML = `
     <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">${String(num).padStart(2,'0')}</span>
-    <input class="user-type-input" type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+    <input class="user-type-input" type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
     <button onclick="actorDone(this)" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;border:1px solid #22c55e;background:transparent;color:#22c55e;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;" onmouseover="if(!this.disabled)this.style.background='rgba(34,197,94,0.1)'" onmouseout="if(!this.disabled)this.style.background='transparent'">DONE</button>
   `;
   list.appendChild(row);
@@ -428,6 +398,7 @@ function checkRiskRatings() {
     const rating = riskRatings[idx];
     const isBadActor = BAD_ACTORS.has(i);
     const correct = isBadActor ? rating >= 3 : rating <= 3;
+    recordAnswer('genai', correct);
     if (!correct) wrongs.push(i);
 
     const row = document.querySelector(`[data-risk-item="${idx}"]`)?.closest('.learning-item');
@@ -484,10 +455,14 @@ goTo = function(n) {
   _coreGoTo(n);
   if (n === 3 && !slide3Initialised) { slide3Initialised = true; initActorList(); }
   if (n === 5) populateRiskRatings();
-  if (n === 10) { try { localStorage.setItem('completed:genai', '1'); } catch (e) {} }
+  if (n === 9) {
+    try { localStorage.setItem('completed:genai', '1'); } catch (e) {}
+    setTimeout(() => showCompletionCelebration('genai'), 600);
+  }
 };
 
-initSlides(10);
+initSlides(9);
+startProductTimer('genai');
 initOptionHovers();
 initActorList();
 slide3Initialised = true;
