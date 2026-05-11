@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Office Printer</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖨️</text></svg>"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../styles.css"/>
 <style>
   .topbar-home {
@@ -32,14 +32,14 @@
 
   <!-- SLIDE 1: Intro -->
   <div class="slide" data-slide="1">
-    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:48px; padding:36px 6%; text-align:left;">
-      <div style="flex:0 0 auto; max-width:340px;">
+    <div style="width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:64px; padding:36px 5%; text-align:left;">
+      <div style="flex:1 1 0; max-width:560px;">
         <h2>The Office <span class="accent-word">Printer</span></h2>
         <div class="purpose-box" style="margin-top:20px;">
-          A printer's primary purpose is to <strong style="color:#f0f0f0">convert digital data into a permanent physical document</strong> on paper. In an office it is a shared hub for printing, scanning, and copying.
+          The <strong style="color:#f0f0f0">office printer</strong>. Older than half the staff, still has the WiFi password, and has personally seen every contract, payslip, and resignation letter for the last decade.
         </div>
       </div>
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; max-width:400px;">
+      <div style="flex:1 1 0; display:flex; align-items:center; justify-content:center; max-width:480px;">
         <video src="../images/34594-402634196.mp4" controls autoplay loop muted playsinline style="max-height:480px; width:100%; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.2);" onerror="this.style.display='none';"></video>
       </div>
     </div>
@@ -80,16 +80,16 @@
     </div>
   </div>
 
-  <!-- SLIDE 4: Quiz 1 — Vulnerable components -->
+  <!-- SLIDE 4: Quiz 1 - Vulnerable components -->
   <div class="slide" data-slide="4">
     <div class="quiz-layout">
       <div class="quiz-left">
         <div class="quiz-heading">The printer is <em>live</em> in the office.<br>Which components make it <span class="danger-word">vulnerable?</span></div>
         <p class="quiz-q">An attacker wants to spy on documents while the printer is actively used. Which combination gives them a way in?</p>
         <div class="options-grid" id="quiz1Options">
-          <button class="option-btn" onclick="quiz1Answer(this,'A')" data-images="../images/mechanical_engine.png" data-labels="Mechanical Engine" data-panel="quiz1Panel"><span class="option-letter">A</span> Mechanical Engine &amp; Fuser</button>
-          <button class="option-btn" onclick="quiz1Answer(this,'B')" data-images="../images/internet_disk.png" data-labels="Internet Connectivity,Hard Disk Storage" data-panel="quiz1Panel"><span class="option-letter">B</span> Internet Connectivity &amp; Hard Disk Storage</button>
-          <button class="option-btn" onclick="quiz1Answer(this,'C')" data-images="../images/sensor.png" data-labels="Image Sensor" data-panel="quiz1Panel"><span class="option-letter">C</span> Image Sensor only</button>
+          <button class="option-btn" onclick="quiz1Answer(this,'A')" data-images="../images/mechanical_engine.png" data-labels="Engine" data-panel="quiz1Panel"><span class="option-letter">A</span> Engine</button>
+          <button class="option-btn" onclick="quiz1Answer(this,'B')" data-images="../images/internet_disk.png" data-labels="Internet Connection,Hard Disk Storage" data-panel="quiz1Panel"><span class="option-letter">B</span> Internet Connectivity &amp; Hard Disk Storage</button>
+          <button class="option-btn" onclick="quiz1Answer(this,'C')" data-images="../images/sensor.png" data-labels="Image Sensor" data-panel="quiz1Panel"><span class="option-letter">C</span> Image Sensor</button>
         </div>
         <div class="feedback-box" id="quiz1Feedback"></div>
       </div>
@@ -112,7 +112,7 @@
     <div class="teaser-big">What happens<br>when the printer<br><span class="accent-word">leaves</span> the building?</div>
   </div>
 
-  <!-- SLIDE 7: Quiz 2 — Discarded printer -->
+  <!-- SLIDE 7: Quiz 2 - Discarded printer -->
   <div class="slide" data-slide="7">
     <div class="quiz-layout">
       <div class="quiz-left">
@@ -121,7 +121,7 @@
         <div class="options-grid" id="quiz2Options">
           <button class="option-btn" onclick="quiz2Answer(this,'A')" data-images="../images/internet.png" data-labels="Internet Connectivity" data-panel="quiz2Panel"><span class="option-letter">A</span> Internet Connectivity</button>
           <button class="option-btn" onclick="quiz2Answer(this,'B')" data-images="../images/storage.png" data-labels="Hard Disk Storage" data-panel="quiz2Panel"><span class="option-letter">B</span> Hard Disk Storage</button>
-          <button class="option-btn" onclick="quiz2Answer(this,'C')" data-images="../images/mechanical_engine.png" data-labels="Mechanical Engine" data-panel="quiz2Panel"><span class="option-letter">C</span> Mechanical Engine</button>
+          <button class="option-btn" onclick="quiz2Answer(this,'C')" data-images="../images/mechanical_engine.png" data-labels="Engine" data-panel="quiz2Panel"><span class="option-letter">C</span> Engine</button>
         </div>
         <div class="feedback-box" id="quiz2Feedback"></div>
       </div>
@@ -138,7 +138,7 @@
   <!-- SLIDE 9: Rate what you learned -->
   <div class="slide" data-slide="9">
     <h2>Rate what you <span class="accent-word">learned</span></h2>
-    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1–5 stars based on how well you understood it.</p>
+    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1-5 stars based on how well you understood it.</p>
     <div class="learning-list">
       <div class="learning-item" style="animation-delay:0.05s">
         <div class="learning-num">01</div>
@@ -174,7 +174,7 @@
       Every device has hidden assumptions.
       The best engineers are the ones who question them before malicious users do.
     </div>
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">← EXPLORE ANOTHER DEVICE</button>
+    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
   </div>
 
 </div>
@@ -200,7 +200,7 @@ goTo = function(n) {
   _coreGoTo(n);
 };
 
-/* ── Quiz 1 — correct: B ── */
+/* ── Quiz 1 - correct: B ── */
 function quiz1Answer(btn, key) {
   document.querySelectorAll('#quiz1Options .option-btn').forEach(b => b.disabled = true);
   const fb = document.getElementById('quiz1Feedback');
@@ -213,14 +213,14 @@ function quiz1Answer(btn, key) {
     document.querySelectorAll('#quiz1Options .option-btn')[1].classList.add('correct');
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = key === 'A'
-      ? '✗ The Mechanical Engine is purely physical, heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
-      : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing, it needs a disk and a network to become dangerous.';
+      ? '✗ The Engine is purely physical, heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
+      : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing, so it needs a disk and a network to become dangerous.';
   }
   printerQuiz1Done = true;
   unlockNext();
 }
 
-/* ── Quiz 2 — correct: B ── */
+/* ── Quiz 2 - correct: B ── */
 function quiz2Answer(btn, key) {
   document.querySelectorAll('#quiz2Options .option-btn').forEach(b => b.disabled = true);
   const fb = document.getElementById('quiz2Feedback');
@@ -234,7 +234,7 @@ function quiz2Answer(btn, key) {
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = key === 'A'
       ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant, but the hard disk keeps all data regardless.'
-      : '✗ The Mechanical Engine is all moving parts: drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
+      : '✗ The Engine is all moving parts: drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
   }
   printerQuiz2Done = true;
   unlockNext();
@@ -271,7 +271,7 @@ const CORRECT_COMPONENTS_IMAGE = {
   'Hard Disk Storage':     { y: [278, 439],  x: [708, 980] },
   'CPU':                   { y: [523, 684],  x: [708, 980] },
   'Image Sensor':          { y: [782, 944],  x: [708, 980] },
-  'Mechanical Engine':     { y: [782, 951],  x: [10,  281] }
+  'Engine':     { y: [782, 951],  x: [10,  281] }
 };
 
 const HIGHLIGHT_IMAGES = {
@@ -279,7 +279,7 @@ const HIGHLIGHT_IMAGES = {
   'Hard Disk Storage':     '../images/components_highlighted/storage.png',
   'CPU':                   '../images/components_highlighted/cpu.png',
   'Image Sensor':          '../images/components_highlighted/sensor.png',
-  'Mechanical Engine':     '../images/components_highlighted/engine.png',
+  'Engine':     '../images/components_highlighted/engine.png',
   'default':               '../images/components_highlighted/nothing.png',
   'GPS':                   '../images/components_highlighted/nothing.png',
   'Vacuum Pump':           '../images/components_highlighted/nothing.png'
