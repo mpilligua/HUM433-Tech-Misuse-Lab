@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Meta-Learning · Tech Misuses Lab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  .topbar-home {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .topbar-home:hover { color: var(--accent); }
+
+  /* Calm the green on this page so the AI feedback box is the only strong accent. */
+  .accent-word { color: #f0f0f0; font-weight: 700; }
+  .meta-thanks strong { color: #f0f0f0 !important; }
+
+  /* Meta-learning questionnaire */
+  .meta-q-wrap {
+    width: 100%;
+    max-width: 880px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 28px;
+    text-align: left;
+  }
+  .meta-q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: fadeUp 0.4s ease both;
+  }
+  .meta-q-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .meta-q-text {
+    font-size: 20px;
+    line-height: 1.45;
+    color: #f0f0f0;
+    font-weight: 700;
+  }
+  .meta-q-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: -6px;
+  }
+  .meta-q-input {
+    width: 100%;
+    min-height: 110px;
+    resize: vertical;
+    background: #0e0e0e;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: #f0f0f0;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    line-height: 1.55;
+    padding: 14px 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .meta-q-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(204, 232, 60, 0.15);
+  }
+  .meta-q-input::placeholder { color: #555; }
+
+  .meta-progress {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .meta-progress .filled { color: var(--accent); }
+
+  .meta-thanks {
+    margin-top: 24px;
+    font-size: 17px;
+    color: #ccc;
+    line-height: 1.6;
+    max-width: 760px;
+  }
+
+  /* Q1: multi-select strategy chips */
+  .meta-q1-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .meta-q1-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #0e0e0e;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+  }
+  .meta-q1-opt:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #131500;
+  }
+  .meta-q1-opt.selected {
+    border-color: var(--accent);
+    background: #1a1e00;
+    color: var(--accent);
+  }
+  .meta-q1-opt.correct {
+    border-color: var(--accent);
+    background: #1a1e00;
+    color: var(--accent);
+  }
+  .meta-q1-opt.wrong {
+    border-color: var(--accent2);
+    background: #1a0000;
+    color: #ff8888;
+  }
+  .meta-q1-opt.missed {
+    border-color: var(--accent);
+    background: transparent;
+    color: var(--accent);
+    border-style: dashed;
+  }
+  .meta-q1-opt:disabled { cursor: default; }
+  .meta-q1-opt-mark {
+    flex: 0 0 22px;
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--accent);
+  }
+  .meta-q1-opt.selected .meta-q1-opt-mark,
+  .meta-q1-opt.correct .meta-q1-opt-mark { border-color: var(--accent); }
+  .meta-q1-opt.wrong .meta-q1-opt-mark { border-color: var(--accent2); color: var(--accent2); }
+
+  .meta-q1-feedback {
+    margin-top: 14px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .meta-q1-feedback.ok    { background: #1a1e00; border: 1px solid var(--accent); color: var(--accent); }
+  .meta-q1-feedback.partial { background: #1a0000; border: 1px solid var(--accent2); color: #ffb0b0; }
+
+  /* Inline LLM feedback - shows under each textarea after grading. */
+  .meta-q-feedback {
+    position: relative;
+    margin-top: 20px;
+    padding: 26px 28px 24px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #1e2400 0%, #181c00 100%);
+    border: 1.5px solid var(--accent);
+    box-shadow: 0 0 0 4px rgba(204, 232, 60, 0.08), 0 8px 24px rgba(0, 0, 0, 0.35);
+    animation: fadeUp 0.4s ease both;
+  }
+  .meta-q-feedback::before {
+    content: 'AI FEEDBACK';
+    position: absolute;
+    top: -10px;
+    left: 22px;
+    padding: 3px 10px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border-radius: 4px;
+  }
+  .meta-q-feedback.bad {
+    background: linear-gradient(180deg, #220606 0%, #1a0404 100%);
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 4px rgba(220, 50, 50, 0.10), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .meta-q-feedback.bad::before { background: var(--accent2); color: #fff; }
+  .meta-q-feedback.busy {
+    background: linear-gradient(180deg, #141414 0%, #0d0d0d 100%);
+    border-color: var(--muted);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .meta-q-feedback.busy::before { background: var(--muted); color: #000; content: 'CORRECTING'; }
+  .meta-q-feedback-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #f0f0f0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .meta-q-feedback.ok    .meta-q-feedback-status { color: var(--accent); }
+  .meta-q-feedback.bad   .meta-q-feedback-status { color: #ff9b9b; }
+  .meta-q-feedback-body {
+    font-size: 19px;
+    line-height: 1.6;
+    color: #ffffff;
+    font-weight: 500;
+  }
+  .meta-spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid #444;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: meta-spin 0.7s linear infinite;
+  }
+  @keyframes meta-spin { to { transform: rotate(360deg); } }
+
+  /* Survey slide chip buttons */
+  .survey-choice-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .survey-choice {
+    flex: 1;
+    min-width: 110px;
+    padding: 14px 22px;
+    background: #0e0e0e;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+  }
+  .survey-choice:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #131500;
+  }
+  .survey-choice.selected {
+    border-color: var(--accent);
+    background: #1a1e00;
+    color: var(--accent);
+  }
+  .survey-choice:disabled { cursor: default; opacity: 0.7; }
+  .survey-status {
+    margin-top: 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 18px;
+  }
+  .survey-status.ok  { color: var(--accent); }
+  .survey-status.bad { color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">TECH MISUSES LAB</div>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="slide-counter" id="slideCounter">01 / 04</div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- SLIDE 1: Intro -->
+  <div class="slide" data-slide="1">
+    <p style="color:var(--muted);font-size:22px;letter-spacing:2px;font-family:'Space Mono',monospace;">FINAL LEVEL</p>
+    <div class="teaser-big">What did you<br><span class="accent-word">actually learn?</span></div>
+    <div class="purpose-box" style="margin-top:18px;">
+      You worked through three levels, each with its own strategy for spotting tech misuse. Now take a moment to <strong style="color:#f0f0f0">put it in your own words</strong>. Reflecting on a method is how it sticks.
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Questionnaire -->
+  <div class="slide" data-slide="2">
+    <div style="width:100%; padding:24px 6%; display:flex; flex-direction:column; align-items:center;">
+      <h2>Meta-Learning <span class="accent-word">Reflection</span></h2>
+      <p style="font-size:15px;color:var(--muted);margin-top:8px;max-width:720px;text-align:center;">Answer in a sentence or two — you can skip any you want. Empty answers won't be graded.</p>
+
+      <div class="meta-q-wrap">
+
+        <div class="meta-q-card" style="animation-delay:0.05s">
+          <div class="meta-q-num">Question 01</div>
+          <div class="meta-q-text">Which of these strategies did you <span class="accent-word">actually</span> learn?</div>
+          <div class="meta-q-sub">Pick the three you saw in this lab. The other three are made up.</div>
+          <div class="meta-q1-options" id="metaQ1Options">
+            <!-- options injected by JS -->
+          </div>
+          <div class="meta-q1-feedback" id="metaQ1Feedback" hidden></div>
+        </div>
+
+        <div class="meta-q-card" style="animation-delay:0.1s">
+          <div class="meta-q-num">Question 02</div>
+          <div class="meta-q-text">How does <span class="accent-word">Component Breakdown</span> work?</div>
+          <div class="meta-q-sub">What do you look at, and what kind of risks does it surface?</div>
+          <textarea
+            class="meta-q-input"
+            id="metaQ2"
+            placeholder="In Component Breakdown, you start by…"
+            oninput="updateMetaProgress()"></textarea>
+          <div class="meta-q-feedback" id="fb-metaQ2" hidden></div>
+        </div>
+
+        <div class="meta-q-card" style="animation-delay:0.15s">
+          <div class="meta-q-num">Question 03</div>
+          <div class="meta-q-text">How does <span class="accent-word">Scenario Analysis</span> work?</div>
+          <div class="meta-q-sub">What questions do you ask, and what does it help you spot that Component Breakdown might miss?</div>
+          <textarea
+            class="meta-q-input"
+            id="metaQ3"
+            placeholder="Scenario Analysis is about imagining…"
+            oninput="updateMetaProgress()"></textarea>
+          <div class="meta-q-feedback" id="fb-metaQ3" hidden></div>
+        </div>
+
+        <div class="meta-q-card" style="animation-delay:0.2s">
+          <div class="meta-q-num">Question 04</div>
+          <div class="meta-q-text">How does <span class="accent-word">Threat Actor Analysis</span> work?</div>
+          <div class="meta-q-sub">Who do you think about, and how does that change the misuses you uncover?</div>
+          <textarea
+            class="meta-q-input"
+            id="metaQ4"
+            placeholder="Threat Actor Analysis starts from the person who…"
+            oninput="updateMetaProgress()"></textarea>
+          <div class="meta-q-feedback" id="fb-metaQ4" hidden></div>
+        </div>
+
+        <div class="meta-progress" id="metaProgress">
+          <span class="filled" id="metaFilled">0</span> / 4 answered — answer at least one to continue
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Survey -->
+  <div class="slide" data-slide="3">
+    <div style="width:100%; padding:24px 6%; display:flex; flex-direction:column; align-items:center;">
+      <h2>One last <span class="accent-word">check-in</span></h2>
+      <p style="font-size:15px;color:var(--muted);margin-top:8px;max-width:720px;text-align:center;">
+        Three quick questions so we can keep improving this. Anonymous.
+      </p>
+
+      <div class="meta-q-wrap">
+
+        <div class="meta-q-card" style="animation-delay:0.05s">
+          <div class="meta-q-num">Survey 01</div>
+          <div class="meta-q-text">After using this tool, would you say you learned something new?</div>
+          <div class="survey-choice-row" id="surveyQ1Row">
+            <button type="button" class="survey-choice" data-q="1" data-val="Yes">Yes</button>
+            <button type="button" class="survey-choice" data-q="1" data-val="No">No</button>
+          </div>
+        </div>
+
+        <div class="meta-q-card" style="animation-delay:0.1s">
+          <div class="meta-q-num">Survey 02</div>
+          <div class="meta-q-text">What do you consider the tool showed you?</div>
+          <div class="meta-q-sub">One or two lines, whatever comes to mind.</div>
+          <textarea
+            class="meta-q-input"
+            id="surveyQ2"
+            placeholder="The thing that stuck with me was…"
+            oninput="updateSurveyProgress()"></textarea>
+        </div>
+
+        <div class="meta-q-card" style="animation-delay:0.15s">
+          <div class="meta-q-num">Survey 03</div>
+          <div class="meta-q-text">Would you use this tool again?</div>
+          <div class="survey-choice-row" id="surveyQ3Row">
+            <button type="button" class="survey-choice" data-q="3" data-val="Yes">Yes</button>
+            <button type="button" class="survey-choice" data-q="3" data-val="Maybe">Maybe</button>
+            <button type="button" class="survey-choice" data-q="3" data-val="No">No</button>
+          </div>
+        </div>
+
+        <button class="select-btn" id="surveySubmitBtn" onclick="submitSurvey()" disabled
+                style="margin-top:14px; align-self:center;">
+          SUBMIT & FINISH
+        </button>
+        <div class="survey-status" id="surveyStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Finish -->
+  <div class="slide" data-slide="4">
+    <h1>That's a wrap.</h1>
+    <h2>You now have a <span class="accent-word">toolkit.</span></h2>
+    <div class="meta-thanks">
+      Three lenses you can point at any new technology, not just the ones in this lab: <strong style="color:var(--accent)">components</strong>, <strong style="color:var(--accent)">scenarios</strong>, and <strong style="color:var(--accent)">threat actors</strong>.
+    </div>
+
+    <button class="select-btn" onclick="window.location.href='../index.html#slide-1'" style="margin-top:28px;">Go to next level →</button>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()">← PREV</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+</div>
+
+<script src="../js/core.js"></script>
+<script>
+/* ── Q1: multi-select strategies (3 real, 3 made up) ── */
+const Q1_STRATEGIES = [
+  { id: 'component', label: 'Component Breakdown',     real: true },
+  { id: 'scenario',  label: 'Scenario Analysis',       real: true },
+  { id: 'actor',     label: 'Threat Actor Analysis',   real: true },
+  { id: 'entropy',   label: 'Entropy Profiling',       real: false },
+  { id: 'attack',    label: 'Attack Surface Inversion',real: false },
+  { id: 'trust',     label: 'Trust Boundary Sampling', real: false }
+];
+const Q1_REAL_IDS = Q1_STRATEGIES.filter(s => s.real).map(s => s.id);
+
+let q1Selected = new Set();
+let q1Order = null; // shuffled order, fixed once per render-session
+
+function renderQ1() {
+  const host = document.getElementById('metaQ1Options');
+  host.innerHTML = '';
+  // Shuffle once, then keep the order stable across re-renders so toggling
+  // a checkbox doesn't rearrange the list.
+  if (!q1Order) {
+    q1Order = [...Q1_STRATEGIES].sort(() => Math.random() - 0.5);
+  }
+  q1Order.forEach(s => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'meta-q1-opt' + (q1Selected.has(s.id) ? ' selected' : '');
+    btn.dataset.id = s.id;
+    btn.innerHTML = `
+      <span class="meta-q1-opt-mark">${q1Selected.has(s.id) ? '✓' : ''}</span>
+      <span>${s.label}</span>
+    `;
+    btn.onclick = () => toggleQ1(s.id);
+    host.appendChild(btn);
+  });
+}
+
+function toggleQ1(id) {
+  if (q1Selected.has(id)) q1Selected.delete(id);
+  else                    q1Selected.add(id);
+  try { localStorage.setItem('meta:Q1', JSON.stringify([...q1Selected])); } catch (e) {}
+  // Update only the affected button in place — don't rebuild the list.
+  const btn = document.querySelector(`.meta-q1-opt[data-id="${id}"]`);
+  if (btn) {
+    const on = q1Selected.has(id);
+    btn.classList.toggle('selected', on);
+    const mark = btn.querySelector('.meta-q1-opt-mark');
+    if (mark) mark.textContent = on ? '✓' : '';
+  }
+  updateMetaProgress();
+}
+
+function gradeQ1() {
+  const realSet = new Set(Q1_REAL_IDS);
+  const picked = q1Selected;
+  const allCorrect = picked.size === realSet.size && [...picked].every(x => realSet.has(x));
+
+  // Style every option with its final state.
+  document.querySelectorAll('.meta-q1-opt').forEach(btn => {
+    const id = btn.dataset.id;
+    const isReal   = realSet.has(id);
+    const isPicked = picked.has(id);
+    btn.classList.remove('selected');
+    if (isReal && isPicked)       btn.classList.add('correct');
+    else if (!isReal && isPicked) btn.classList.add('wrong');
+    else if (isReal && !isPicked) btn.classList.add('missed');
+    btn.disabled = true;
+    const mark = btn.querySelector('.meta-q1-opt-mark');
+    if (mark) {
+      if (isReal && isPicked)       mark.textContent = '✓';
+      else if (!isReal && isPicked) mark.textContent = '✗';
+      else if (isReal && !isPicked) mark.textContent = '+';
+      else                          mark.textContent = '';
+    }
+  });
+
+  const fb = document.getElementById('metaQ1Feedback');
+  fb.hidden = false;
+  if (allCorrect) {
+    fb.className = 'meta-q1-feedback ok';
+    fb.textContent = '✓ Right — the three you picked are the strategies we actually used. The other three are plausible-sounding but invented.';
+  } else {
+    fb.className = 'meta-q1-feedback partial';
+    fb.innerHTML = `The real strategies are <strong>Component Breakdown</strong>, <strong>Scenario Analysis</strong>, and <strong>Threat Actor Analysis</strong> — one per level. The others were made up.`;
+  }
+}
+
+/* ── Gate state ──
+   Slide 2 (questionnaire) gates Next until at least ONE answer is provided.
+   When the user clicks Next from slide 2, we intercept: grade Q1 + run inline
+   LLM feedback boxes under the textareas, stay on slide 2. After grading
+   finishes, the next click advances to slide 3 (survey). */
+let metaDone = false;
+let currentSlide = 1;
+let gradingShown = false;
+let gradingRunning = false;
+
+const _coreGoTo = goTo;
+goTo = function(n) {
+  if (currentSlide === 2 && n === 3 && !gradingShown && !gradingRunning) {
+    showInlineGrading();
+    return;
+  }
+  currentSlide = n;
+  nextGated = (n === 2 && !metaDone);
+  _coreGoTo(n);
+  if (n === 4) {
+    try { localStorage.setItem('completed:meta_learning', '1'); } catch (e) {}
+  }
+};
+
+async function showInlineGrading() {
+  gradingRunning = true;
+  lockNext();
+  gradeQ1();
+  await runLlmGrading();
+  gradingShown = true;
+  gradingRunning = false;
+  unlockNext();
+  const btn = document.getElementById('nextBtn');
+  if (btn) btn.textContent = 'CONTINUE →';
+}
+
+const META_TEXT_KEYS = ['metaQ2', 'metaQ3', 'metaQ4'];
+
+function loadMetaAnswers() {
+  // Q1 selections
+  try {
+    const raw = localStorage.getItem('meta:Q1');
+    if (raw) q1Selected = new Set(JSON.parse(raw));
+  } catch (e) {}
+  // Q2–Q4 text
+  META_TEXT_KEYS.forEach(k => {
+    try {
+      const v = localStorage.getItem('meta:' + k);
+      if (v) {
+        const el = document.getElementById(k);
+        if (el) el.value = v;
+      }
+    } catch (e) {}
+  });
+  renderQ1();
+  updateMetaProgress();
+}
+
+function updateMetaProgress() {
+  let filled = q1Selected.size > 0 ? 1 : 0;
+  META_TEXT_KEYS.forEach(k => {
+    const el = document.getElementById(k);
+    if (!el) return;
+    const v = el.value.trim();
+    try { localStorage.setItem('meta:' + k, v); } catch (e) {}
+    if (v.length > 0) filled++;
+  });
+  const fEl = document.getElementById('metaFilled');
+  if (fEl) fEl.textContent = filled;
+
+  // Allow advancing as soon as the user has answered anything.
+  metaDone = filled >= 1;
+  if (currentSlide === 2) {
+    if (metaDone) unlockNext(); else lockNext();
+  }
+}
+
+/* ── LLM grading via Groq (optional) ──
+   Reads the key from localStorage (set on the home page). If absent, the
+   grading panel stays hidden and the page falls back to the static wrap copy.
+   Groq exposes an OpenAI-compatible chat-completions API. */
+const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const STRATEGY_RUBRIC = {
+  metaQ2: {
+    title: 'Component Breakdown',
+    canonical: 'Component Breakdown means splitting a device into its constituent parts (sensors, storage, network, processors, mechanical parts) and asking what each part could leak or enable on its own. It surfaces misuses that come from individual components — e.g. a hard disk retaining data after disposal, a network port being a foothold.'
+  },
+  metaQ3: {
+    title: 'Scenario Analysis',
+    canonical: 'Scenario Analysis means imagining concrete situations in which the device is used or misused (in the office, on the move, at end-of-life, in someone else\'s hands) and asking what could go wrong in each. It catches misuses that emerge from how a device is deployed or who is around it — things a component-only view would miss.'
+  },
+  metaQ4: {
+    title: 'Threat Actor Analysis',
+    canonical: 'Threat Actor Analysis starts from the person who might misuse the device — a jealous partner, a corporate insider, a foreign attacker, a stalker, a script kiddie — and asks what each one is motivated and capable of doing. Different actors uncover different misuses because their goals and resources differ.'
+  }
+};
+
+async function runLlmGrading() {
+  let key = '';
+  try { key = localStorage.getItem('groq_api_key') || ''; } catch (e) {}
+
+  // Only grade questions that actually have an answer.
+  const toGrade = META_TEXT_KEYS.filter(k => {
+    const el = document.getElementById(k);
+    const stored = (() => { try { return localStorage.getItem('meta:' + k) || ''; } catch (e) { return ''; } })();
+    const v = ((el && el.value) || stored || '').trim();
+    return v.length > 0;
+  });
+
+  if (toGrade.length === 0) return;
+
+  // No key: explain that grading is skipped (only on first answered question).
+  if (!key) {
+    toGrade.forEach(k => {
+      const fb = document.getElementById('fb-' + k);
+      if (!fb) return;
+      fb.hidden = false;
+      fb.className = 'meta-q-feedback busy';
+      fb.innerHTML = `
+        <div class="meta-q-feedback-status">No Groq key</div>
+        <div class="meta-q-feedback-body">Set a Groq key on the home page to get AI feedback on your answer.</div>
+      `;
+    });
+    return;
+  }
+
+  // Prime each inline box to "Correcting your answer…" with a spinner.
+  toGrade.forEach(k => {
+    const fb = document.getElementById('fb-' + k);
+    if (!fb) return;
+    fb.hidden = false;
+    fb.className = 'meta-q-feedback busy';
+    fb.innerHTML = `
+      <div class="meta-q-feedback-status"><span class="meta-spinner"></span> Correcting your answer…</div>
+      <div class="meta-q-feedback-body" hidden></div>
+    `;
+  });
+
+  // Sequential to stay well under Groq's free-tier per-minute rate.
+  for (const k of toGrade) {
+    await gradeOne(k, key);
+  }
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function gradeOne(qKey, apiKey) {
+  const rubric = STRATEGY_RUBRIC[qKey];
+  let answer = '';
+  try { answer = (document.getElementById(qKey) || {}).value || localStorage.getItem('meta:' + qKey) || ''; } catch (e) {}
+  answer = answer.trim();
+
+  const fb = document.getElementById('fb-' + qKey);
+  if (!fb) return;
+  function setFeedback(cls, statusText, bodyText) {
+    fb.className = 'meta-q-feedback ' + cls;
+    fb.hidden = false;
+    fb.innerHTML = `
+      <div class="meta-q-feedback-status">${statusText}</div>
+      <div class="meta-q-feedback-body">${bodyText}</div>
+    `;
+  }
+
+  if (!answer) {
+    fb.hidden = true;
+    return;
+  }
+
+  const prompt =
+    `You are speaking DIRECTLY TO the learner, like a teacher giving a one-line comment on their paper.\n\n` +
+    `Strategy being tested: ${rubric.title}\n` +
+    `Reference description: ${rubric.canonical}\n\n` +
+    `Their answer: "${answer}"\n\n` +
+    `Judge ONLY whether they captured the core concept (what the strategy looks at and what kind of misuses it surfaces). ` +
+    `Ignore grammar and phrasing. Be generous, if it's partially correct, mark it correct.\n\n` +
+    `STRICT RULE - second person only. You are TALKING TO them. Use "you" and "your". DO NOT write "the student", "the learner", "they", "the user", or any third-person reference.\n\n` +
+    `GOOD examples:\n` +
+    `  - "You correctly identified that this strategy breaks a device into parts to surface risks each one introduces."\n` +
+    `  - "You're on the right track, you mentioned X, but you missed that it also surfaces Y."\n\n` +
+    `Use simple B2-level English. Be kind. One or two sentences.\n\n` +
+    `Respond with strict JSON, no markdown, in this exact shape:\n` +
+    `{"verdict": "correct" | "partial" | "incorrect", "feedback": "<one or two sentences in SECOND PERSON, starting with 'You'>"}`;
+
+  async function callGroq() {
+    return fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        temperature: 0.2,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: 'You give feedback DIRECTLY to a student on their short answer. Always address them in the second person ("you", "your"), never in the third person ("the student", "they"). Always respond with strict JSON only, no markdown, no commentary.' },
+          { role: 'user', content: prompt }
+        ]
+      })
+    });
+  }
+
+  try {
+    let res = await callGroq();
+    if (res.status === 429) {
+      setFeedback('busy', '<span class="meta-spinner"></span> Rate-limited, retrying…', '');
+      await sleep(8000);
+      res = await callGroq();
+    }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const text = data?.choices?.[0]?.message?.content || '';
+    let parsed;
+    try { parsed = JSON.parse(text); } catch (e) {
+      parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    }
+    const verdict = (parsed.verdict || '').toLowerCase();
+    let feedback = parsed.feedback || '';
+    // Safety net: rewrite third-person slips to second person.
+    feedback = feedback
+      .replace(/\bThe student\b/g, 'You')
+      .replace(/\bthe student\b/g, 'you')
+      .replace(/\bThe learner\b/g, 'You')
+      .replace(/\bthe learner\b/g, 'you')
+      .replace(/\bThe user\b/g, 'You')
+      .replace(/\bthe user\b/g, 'you');
+    const cls =
+      verdict === 'correct' ? 'ok'  :
+      verdict === 'partial' ? 'ok'  :
+      verdict === 'incorrect' ? 'bad' : '';
+    const statusText =
+      verdict === 'correct'   ? '✓ Captured it'    :
+      verdict === 'partial'   ? '~ Partial, close'  :
+      verdict === 'incorrect' ? '✗ Off the mark'   : 'Graded';
+    setFeedback(cls, statusText, feedback);
+  } catch (err) {
+    setFeedback('bad', 'Grading failed', 'Could not reach Groq: ' + (err.message || err));
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Survey slide (slide 3): three responses, POSTs to a Google Form so we
+   can compare answers across users on different machines.
+   ════════════════════════════════════════════════════════════════════ */
+const GOOGLE_FORM_CONFIG = {
+  formId:  '1FAIpQLSeHozbYxgG_oYJg5bjVeLEGREzrpIkhA1fCC9W-g-wLGI3C5A',
+  entryQ1: 'entry.1030252630', // yes/no - learned new?
+  entryQ2: 'entry.687732759',  // free text - what the tool showed
+  entryQ3: 'entry.636194233'   // yes/maybe/no - use again?
+};
+
+const surveyAnswers = { q1: null, q2: '', q3: null };
+
+function selectSurveyChoice(q, val) {
+  surveyAnswers['q' + q] = val;
+  document.querySelectorAll(`.survey-choice[data-q="${q}"]`).forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.val === val);
+  });
+  updateSurveyProgress();
+}
+
+function updateSurveyProgress() {
+  const q2 = document.getElementById('surveyQ2');
+  if (q2) surveyAnswers.q2 = q2.value.trim();
+  const ready = surveyAnswers.q1 && surveyAnswers.q2.length > 0 && surveyAnswers.q3;
+  const btn = document.getElementById('surveySubmitBtn');
+  if (btn) btn.disabled = !ready;
+}
+
+// Wire up the yes/no/maybe buttons after parse.
+document.querySelectorAll('.survey-choice').forEach(btn => {
+  btn.onclick = () => selectSurveyChoice(btn.dataset.q, btn.dataset.val);
+});
+
+async function submitSurvey() {
+  const btn = document.getElementById('surveySubmitBtn');
+  const status = document.getElementById('surveyStatus');
+  btn.disabled = true;
+  status.className = 'survey-status';
+  status.textContent = 'Sending…';
+
+  try {
+    localStorage.setItem('survey:meta_learning', JSON.stringify({
+      ...surveyAnswers,
+      timestamp: new Date().toISOString()
+    }));
+  } catch (e) {}
+
+  const { formId, entryQ1, entryQ2, entryQ3 } = GOOGLE_FORM_CONFIG;
+  if (!formId || !entryQ1 || !entryQ2 || !entryQ3) {
+    status.className = 'survey-status ok';
+    status.textContent = 'Saved locally. (Form not configured.)';
+    btn.textContent = 'CONTINUE →';
+    btn.disabled = false;
+    btn.onclick = () => goNext();
+    return;
+  }
+
+  const url = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
+  const body = new URLSearchParams();
+  body.append(entryQ1, surveyAnswers.q1);
+  body.append(entryQ2, surveyAnswers.q2);
+  body.append(entryQ3, surveyAnswers.q3);
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString()
+    });
+    status.className = 'survey-status ok';
+    status.textContent = '✓ Thanks. Your answers were saved.';
+    btn.textContent = 'CONTINUE →';
+    btn.disabled = false;
+    btn.onclick = () => goNext();
+  } catch (err) {
+    status.className = 'survey-status bad';
+    status.textContent = 'Could not send to the form. Saved locally instead.';
+    btn.textContent = 'CONTINUE ANYWAY →';
+    btn.disabled = false;
+    btn.onclick = () => goNext();
+  }
+}
+
+window.updateSurveyProgress = updateSurveyProgress;
+window.submitSurvey = submitSurvey;
+
+/* ── Init ── */
+initSlides(4);
+loadMetaAnswers();
+</script>
+</body>
+</html>
