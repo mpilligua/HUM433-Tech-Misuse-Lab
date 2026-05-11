@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tech Misuses Lab</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
@@ -13,37 +13,13 @@
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 03</div>
+  <div class="slide-counter" id="slideCounter">01 / 01</div>
 </div>
 
 <div class="slides-wrapper">
 
-  <!-- SLIDE 1: Learning Objectives -->
+  <!-- SLIDE 1: Path home -->
   <div class="slide" data-slide="1">
-    <div class="tool-name">Tech Misuses Lab</div>
-    <h2>Learning Objectives</h2>
-    <div class="obj-list">
-      <div class="obj-item">
-        <div class="obj-num">01</div>
-        <div class="obj-text"><strong>Explore different strategies</strong> <span>on how to identify possible misuses.</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 2: Why This Matters -->
-  <div class="slide" data-slide="2">
-    <h2>Why This Matters</h2>
-    <div class="why-body">
-      <p style="font-size:20px;color:#ddd;line-height:1.6;margin-bottom:16px;">You are (or will be) a <strong style="color:#f0f0f0">designer of products</strong>, and at some point you will ship something into the world.</p>
-      <p style="font-size:20px;color:#ddd;line-height:1.6;margin-bottom:0;">When you do, others will use it in ways you never intended, some clever, some malicious.</p>
-    </div>
-    <div class="why-highlight">
-      This tool gives you the instinct to see misuse early, before a product ships, before an attacker finds it, and before it becomes your responsibility.
-    </div>
-  </div>
-
-  <!-- SLIDE 3: Choose Device -->
-  <div class="slide" data-slide="3">
     <h2 id="chooseHeading">Which device do you<br>want to <span class="accent-word">explore?</span></h2>
     <div class="object-grid" id="productGrid">
       <!-- Cards are injected by loadProducts() -->
@@ -57,6 +33,62 @@
     <button class="path-reset" id="pathReset" onclick="resetPathProgress()" hidden>Reset progress</button>
   </div>
 
+</div>
+
+<!-- Groq API key (optional, for the final reflection's auto-grading) -->
+<button id="apiKeyBtn"
+        onclick="openApiKeyModal()"
+        style="position:fixed; bottom:18px; left:18px; z-index:50;
+               padding:8px 14px; background:var(--surface); color:var(--muted);
+               border:1px solid var(--border); border-radius:6px;
+               font-family:'Space Mono',monospace; font-size:11px;
+               letter-spacing:1.5px; cursor:pointer; text-transform:uppercase;">
+  🔑 <span id="apiKeyStatus">Set Groq key</span>
+</button>
+
+<div id="apiKeyModal"
+     style="position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.7);
+            display:none; align-items:center; justify-content:center;">
+  <div style="background:#0f0f0f; border:1px solid var(--border); border-radius:10px;
+              padding:28px 30px; max-width:520px; width:90%;
+              box-shadow:0 30px 60px rgba(0,0,0,0.5);">
+    <h3 style="margin:0 0 8px; font-family:'Inter',sans-serif;">Groq API key <span style="color:var(--muted); font-weight:400; font-size:14px;">- optional</span></h3>
+    <p style="font-size:14px; color:var(--muted); line-height:1.6; margin:0 0 16px;">
+      Used only to give feedback on your written answers in the final reflection.
+      Stored in this browser's localStorage. Never sent anywhere except Groq.
+      Get a free key at <a href="https://console.groq.com/keys" target="_blank" style="color:var(--accent);">console.groq.com/keys</a>.
+      Without a key, the reflection still works; you just won't get auto-feedback.
+    </p>
+    <input type="password" id="apiKeyInput" placeholder="gsk_…"
+           style="width:100%; padding:12px 14px; background:#0a0a0a;
+                  border:1px solid var(--border); border-radius:6px;
+                  color:#f0f0f0; font-family:'Space Mono',monospace;
+                  font-size:14px; box-sizing:border-box;"/>
+    <div style="display:flex; gap:10px; margin-top:16px; justify-content:flex-end;">
+      <button onclick="clearApiKey()"
+              style="padding:9px 16px; background:transparent; color:var(--muted);
+                     border:1px solid var(--border); border-radius:6px;
+                     font-family:'Space Mono',monospace; font-size:11px;
+                     letter-spacing:1.5px; cursor:pointer; text-transform:uppercase;">
+        Clear
+      </button>
+      <button onclick="closeApiKeyModal()"
+              style="padding:9px 16px; background:transparent; color:var(--muted);
+                     border:1px solid var(--border); border-radius:6px;
+                     font-family:'Space Mono',monospace; font-size:11px;
+                     letter-spacing:1.5px; cursor:pointer; text-transform:uppercase;">
+        Cancel
+      </button>
+      <button onclick="saveApiKey()"
+              style="padding:9px 16px; background:var(--accent); color:#000;
+                     border:none; border-radius:6px;
+                     font-family:'Space Mono',monospace; font-size:11px;
+                     font-weight:700; letter-spacing:1.5px; cursor:pointer;
+                     text-transform:uppercase;">
+        Save
+      </button>
+    </div>
+  </div>
 </div>
 
 <div class="bottom-nav">
@@ -132,19 +164,55 @@
     }
   }
 
-  /* ── Serpentine path home (feature-flagged) ──
-     Six products in a single snaking line. Levels are pairs: nodes 0+1 = level 1,
-     2+3 = level 2, 4+5 = level 3. Completing either node in a level unlocks the
-     next pair. Completion is read from localStorage 'completed:<id>'. */
-  const PATH_NODES = [
-    { id: 'airtag',       name: 'AirTag',               icon: '', file: 'products/airtag.html' },
-    { id: 'self_driving', name: 'Self-driving vehicle', icon: '🚗', file: 'products/self_driving.html' },
-    { id: 'genai',        name: 'Generative AI',        icon: '🤖', file: 'products/genai.html' },
-    { id: 'social_media', name: 'Social Media',         icon: '📱', file: 'products/social_media.html' },
-    { id: 'printer',      name: 'Office Printer',       icon: '🖨️', file: 'products/printer.html' },
-    { id: 'tbd',          name: 'Coming soon',          icon: '⏳', file: null, locked: true }
+  /* ── Path structure ──
+     Five levels: intro (solo), three product pairs, final reflection (solo).
+     Completion is tracked in localStorage as 'completed:<id>'. */
+  const LEVEL_GROUPS = [
+    {
+      solo: true,
+      label: 'Introduction',
+      icon: '🏁',
+      node: { id: 'intro', name: 'Introduction', icon: '🏁', file: 'products/intro.html' }
+    },
+    {
+      label: 'Scenario Analysis',
+      icon: '🎯',
+      nodes: [
+        { id: 'airtag',       name: 'AirTag',               icon: '',     file: 'products/airtag.html' },
+        { id: 'self_driving', name: 'Self-driving vehicle', icon: '🚗', file: 'products/self_driving.html' }
+      ]
+    },
+    {
+      label: 'Actor Analysis',
+      icon: '🕵️',
+      nodes: [
+        { id: 'genai',        name: 'Generative AI', icon: '🤖', file: 'products/genai.html' },
+        { id: 'social_media', name: 'Social Media',  icon: '📱', file: 'products/social_media.html' }
+      ]
+    },
+    {
+      label: 'Component Breakdown',
+      icon: '🧩',
+      nodes: [
+        { id: 'printer',               name: 'Office Printer',            icon: '🖨️', file: 'products/printer.html' },
+        { id: 'health_monitor_device', name: 'Health Monitoring Devices', icon: '⌚',           file: 'products/health_monitor_device.html' }
+      ]
+    },
+    {
+      solo: true,
+      label: 'Final reflection',
+      icon: '🎓',
+      node: { id: 'final', name: 'Final reflection', icon: '🎓', file: 'products/meta_learning.html' }
+    }
   ];
+
+  // Legacy flat list used by the (feature-flagged) serpentine + reset routines.
+  const PATH_NODES = LEVEL_GROUPS.flatMap(g => g.solo ? [g.node] : g.nodes);
   const NODES_PER_LEVEL = 2;
+
+  // DEBUG: when true, every level is unlocked regardless of completion state.
+  // Flip back to false (or remove) before shipping.
+  const DEBUG_UNLOCK_ALL = true;
 
   function isCompleted(id) {
     try { return localStorage.getItem('completed:' + id) === '1'; } catch (e) { return false; }
@@ -160,7 +228,7 @@
     for (let lvl = 1; lvl < numLevels; lvl++) {
       const prevSlice = PATH_NODES.slice((lvl - 1) * NODES_PER_LEVEL, lvl * NODES_PER_LEVEL);
       const prevDone = prevSlice.some(n => !n.locked && isCompleted(n.id));
-      levelUnlocked[lvl] = levelUnlocked[lvl - 1] && prevDone;
+      levelUnlocked[lvl] = DEBUG_UNLOCK_ALL || (levelUnlocked[lvl - 1] && prevDone);
     }
     function nodeUnlocked(idx) { return levelUnlocked[Math.floor(idx / NODES_PER_LEVEL)]; }
 
@@ -259,14 +327,11 @@
   window.resetPathProgress = resetPathProgress;
 
   /* ── Levels home (?path=levels) ──
-     Three Level N cards, stacked vertically. Clicking an unlocked level expands it
-     into the two options for that level. Picking an option navigates to that product. */
+     One card per level, stacked vertically. Clicking an unlocked level expands it
+     into the options for that level. Picking an option navigates to that page. */
   function levelsData() {
-    const groups = [];
-    for (let i = 0; i < PATH_NODES.length; i += NODES_PER_LEVEL) {
-      groups.push(PATH_NODES.slice(i, i + NODES_PER_LEVEL));
-    }
-    return groups;
+    // Returns arrays of nodes per level (solo levels yield a 1-item array).
+    return LEVEL_GROUPS.map(g => g.solo ? [g.node] : g.nodes);
   }
 
   function renderLevels() {
@@ -277,7 +342,7 @@
     // Same gating as the serpentine: a level is unlocked if every prior level had any node completed.
     const unlocked = [true];
     for (let i = 1; i < groups.length; i++) {
-      unlocked[i] = unlocked[i - 1] && groups[i - 1].some(n => !n.locked && isCompleted(n.id));
+      unlocked[i] = DEBUG_UNLOCK_ALL || (unlocked[i - 1] && groups[i - 1].some(n => !n.locked && isCompleted(n.id)));
     }
 
     groups.forEach((group, idx) => {
@@ -292,7 +357,7 @@
       card.innerHTML = `
         <div class="level-card-meta">
           <div class="level-card-num">Level ${idx + 1}</div>
-          <div class="level-card-hint">${open ? 'Pick one of two scenarios' : 'Locked — finish the previous level'}</div>
+          <div class="level-card-hint">${open ? 'Pick one of two scenarios' : 'Locked. Finish the previous level'}</div>
         </div>
         <div class="level-card-state">${!open ? '🔒' : (done ? '✓' : '→')}</div>
       `;
@@ -338,67 +403,74 @@
   });
 
   /* ── Duolingo home (?path=duolingo) ──
-     Three serpentine "stops" — one per level. Clicking an unlocked stop opens an
-     inline popover with the two product options. */
+     Serpentine "stops" - one per level, laid out left → right. Solo levels
+     (intro, final reflection) show a single full-width action; product levels
+     show two side-by-side options. */
   function renderDuolingo() {
     const wrap = document.getElementById('duoWrap');
     wrap.innerHTML = '';
-    const groups = levelsData(); // reuses the levels mode pairing
+    const groups = LEVEL_GROUPS;
 
     const unlocked = [true];
     for (let i = 1; i < groups.length; i++) {
-      unlocked[i] = unlocked[i - 1] && groups[i - 1].some(n => !n.locked && isCompleted(n.id));
+      const prev = groups[i - 1];
+      const prevNodes = prev.solo ? [prev.node] : prev.nodes;
+      unlocked[i] = DEBUG_UNLOCK_ALL || (unlocked[i - 1] && prevNodes.some(n => !n.locked && isCompleted(n.id)));
     }
 
-    // Geometry: 3 stops, alternating x-offset, generous spacing.
-    const W = 360;
-    const STRIDE = 180;
-    const PAD_TOP = 90;
-    const OFFSET = 70;
-    const NODE_R = 56; // matches CSS .duo-pill 112px
+    // Geometry: stops snaking left → right, alternating y-offset.
+    // PAD_LEFT must be ≥ popover half-width (440/2 = 220) so edge popovers
+    // never clip past the stage. STRIDE = 260 gives W = 1500 for 5 stops.
+    const STRIDE = 260;     // horizontal distance between stops
+    const PAD_LEFT = 230;   // room for the first stop + popover wing
+    const OFFSET = 110;     // ± vertical offset around the horizontal midline (taller snake)
+    const NODE_R = 56;      // matches CSS .duo-pill 112px
+    const W = PAD_LEFT * 2 + (groups.length - 1) * STRIDE;
+    // Vertical room for popovers above the upper row and below the lower row.
+    // Popover height ≈ 280px including arrow + gap; add buffer.
+    const ABOVE_PAD = 320;
+    const BELOW_PAD = 340;
+    const MID_Y = ABOVE_PAD + OFFSET + NODE_R;
+    const H = MID_Y + OFFSET + NODE_R + BELOW_PAD;
 
     const positions = groups.map((_, i) => ({
-      x: W / 2 + (i % 2 === 0 ? -OFFSET : OFFSET),
-      y: PAD_TOP + i * STRIDE
+      x: PAD_LEFT + i * STRIDE,
+      y: MID_Y + (i % 2 === 0 ? -OFFSET : OFFSET)
     }));
-    const H = PAD_TOP + (groups.length - 1) * STRIDE + 140;
 
-    const CURVE = 0.7;
+    const CURVE = 0.55;
     function buildD(pts) {
       if (!pts.length) return '';
       let d = `M ${pts[0].x} ${pts[0].y}`;
       for (let i = 1; i < pts.length; i++) {
         const p0 = pts[i - 1], p1 = pts[i];
-        const dy = p1.y - p0.y;
-        d += ` C ${p0.x} ${p0.y + dy * CURVE}, ${p1.x} ${p1.y - dy * CURVE}, ${p1.x} ${p1.y}`;
+        const dx = p1.x - p0.x;
+        d += ` C ${p0.x + dx * CURVE} ${p0.y}, ${p1.x - dx * CURVE} ${p1.y}, ${p1.x} ${p1.y}`;
       }
       return d;
     }
     const fullD = buildD(positions);
 
+    function isLevelDone(g) {
+      const nodes = g.solo ? [g.node] : g.nodes;
+      return nodes.some(n => !n.locked && isCompleted(n.id));
+    }
+
     let lastDoneIdx = -1;
-    groups.forEach((g, i) => { if (g.some(n => !n.locked && isCompleted(n.id))) lastDoneIdx = i; });
+    groups.forEach((g, i) => { if (isLevelDone(g)) lastDoneIdx = i; });
     const doneD = lastDoneIdx >= 0 ? buildD(positions.slice(0, lastDoneIdx + 1)) : '';
 
-    // Section banner.
-    const banner = document.createElement('div');
-    banner.className = 'duo-banner';
-    banner.innerHTML = `
-      <div class="duo-banner-meta">Section 1 · Tech Misuses Lab</div>
-      <div class="duo-banner-title">Three levels, one strategy</div>
-    `;
-    wrap.appendChild(banner);
-
-    // Scrollable stage holding the SVG + stops.
+    // Stage holding the SVG + stops. Aspect ratio keeps SVG and stops aligned
+    // at any container width because stops position as a % of W.
     const stage = document.createElement('div');
     stage.className = 'duo-stage';
-    stage.style.height = H + 'px';
+    stage.style.aspectRatio = `${W} / ${H}`;
 
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('class', 'duo-svg');
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+    svg.setAttribute('preserveAspectRatio', 'none');
 
     const trackPath = document.createElementNS(svgNS, 'path');
     trackPath.setAttribute('d', fullD);
@@ -412,59 +484,104 @@
       svg.appendChild(donePath);
     }
 
+    // Direction arrows: one chevron at the midpoint of each segment between
+    // adjacent stops, rotated to match the bezier's tangent at t=0.5.
+    // Coloured to match whether that segment is part of the completed path.
+    for (let i = 0; i < positions.length - 1; i++) {
+      const p0 = positions[i], p1 = positions[i + 1];
+      const dx = p1.x - p0.x;
+      const c1 = { x: p0.x + dx * CURVE, y: p0.y };
+      const c2 = { x: p1.x - dx * CURVE, y: p1.y };
+      // Cubic bezier at t = 0.5.
+      const mx = (p0.x + 3 * c1.x + 3 * c2.x + p1.x) / 8;
+      const my = (p0.y + 3 * c1.y + 3 * c2.y + p1.y) / 8;
+      // Tangent at t = 0.5: derivative of cubic bezier.
+      // B'(t) = 3(1-t)²(c1-p0) + 6(1-t)t(c2-c1) + 3t²(p1-c2)
+      // At t = 0.5: 0.75(c1-p0) + 1.5(c2-c1) + 0.75(p1-c2)
+      const tx = 0.75 * (c1.x - p0.x) + 1.5 * (c2.x - c1.x) + 0.75 * (p1.x - c2.x);
+      const ty = 0.75 * (c1.y - p0.y) + 1.5 * (c2.y - c1.y) + 0.75 * (p1.y - c2.y);
+      const angle = Math.atan2(ty, tx) * 180 / Math.PI;
+      const segmentDone = i < lastDoneIdx;
+
+      const arrow = document.createElementNS(svgNS, 'polygon');
+      // Chevron shape pointing along +x, ~26px across. SVG units (stretched by viewBox).
+      arrow.setAttribute('points', '-14,-14 14,0 -14,14 -6,0');
+      arrow.setAttribute('transform', `translate(${mx} ${my}) rotate(${angle})`);
+      arrow.setAttribute('class', segmentDone ? 'duo-arrow done' : 'duo-arrow');
+      svg.appendChild(arrow);
+    }
+
     stage.appendChild(svg);
 
-    // Find the "current" stop = first unlocked, not-done stop.
+    // "Current" stop = first unlocked, not-done stop.
     let currentIdx = -1;
     for (let i = 0; i < groups.length; i++) {
-      const done = groups[i].some(n => !n.locked && isCompleted(n.id));
-      if (unlocked[i] && !done) { currentIdx = i; break; }
+      if (unlocked[i] && !isLevelDone(groups[i])) { currentIdx = i; break; }
     }
 
     groups.forEach((group, idx) => {
       const open = unlocked[idx];
-      const done = group.some(n => !n.locked && isCompleted(n.id));
+      const done = isLevelDone(group);
       const isCurrent = idx === currentIdx;
+      // Stops on the upper row (negative y-offset) open below; lower row opens
+      // above. Popovers always land on the outside of the curve.
+      const popAbove = idx % 2 === 1;
+      const label = group.label || `Level ${idx + 1}`;
+      const pillIcon = group.icon || (idx + 1);
 
       const stop = document.createElement('div');
       stop.className = 'duo-stop'
         + (open ? '' : ' locked')
         + (done ? ' done' : '')
-        + (isCurrent ? ' current' : '');
-      stop.style.left = `calc(50% + ${positions[idx].x - W / 2}px)`;
-      stop.style.top  = `${positions[idx].y - NODE_R}px`;
+        + (isCurrent ? ' current' : '')
+        + (group.solo ? ' solo' : '');
+      stop.style.left = `${(positions[idx].x / W) * 100}%`;
+      stop.style.top  = `${(positions[idx].y / H) * 100}%`;
 
-      const symbol = !open ? '🔒' : (done ? '✓' : (idx + 1));
+      const symbol = !open ? '🔒' : (done ? '✓' : pillIcon);
+      const popoverTitle = group.solo
+        ? label
+        : `${label}: choose a product`;
       stop.innerHTML = `
         <button class="duo-pill" ${open ? '' : 'disabled aria-disabled="true"'}>
           <span class="duo-pill-symbol">${symbol}</span>
         </button>
-        <div class="duo-stop-label">Level ${idx + 1}</div>
-        <div class="duo-popover">
+        <div class="duo-stop-label">${label}</div>
+        <div class="duo-popover ${popAbove ? 'above' : 'below'}${group.solo ? ' solo' : ''}">
           <div class="duo-popover-arrow"></div>
-          <div class="duo-popover-title">Level ${idx + 1} — pick a scenario</div>
+          <div class="duo-popover-title">${popoverTitle}</div>
           <div class="duo-popover-options"></div>
         </div>
       `;
 
       const optsHost = stop.querySelector('.duo-popover-options');
-      group.forEach(opt => {
+      const nodes = group.solo ? [group.node] : group.nodes;
+      nodes.forEach(opt => {
         const completed = !opt.locked && isCompleted(opt.id);
         const reachable = open && !opt.locked;
         const btn = document.createElement('button');
         btn.className = 'duo-popover-option' + (opt.locked ? ' tbd' : '') + (completed ? ' done' : '');
         btn.disabled = !reachable;
+        const ctaLabel = group.solo
+          ? (completed ? 'Review' : (idx === 0 ? 'Start introduction' : 'Start reflection'))
+          : opt.name;
         btn.innerHTML = `
           <span class="duo-popover-icon">${opt.locked ? '⏳' : (completed ? '✓' : opt.icon)}</span>
-          <span class="duo-popover-name">${opt.name}</span>
+          <span class="duo-popover-name">${group.solo ? ctaLabel : opt.name}</span>
         `;
         if (reachable) btn.onclick = (e) => { e.stopPropagation(); window.location.href = opt.file; };
         optsHost.appendChild(btn);
       });
 
       if (open) {
+        // Solo stops (intro, final reflection): skip the popover and go straight to the page.
+        const directNav = group.solo;
         stop.querySelector('.duo-pill').onclick = (e) => {
           e.stopPropagation();
+          if (directNav) {
+            window.location.href = group.node.file;
+            return;
+          }
           document.querySelectorAll('.duo-stop.open').forEach(s => { if (s !== stop) s.classList.remove('open'); });
           stop.classList.toggle('open');
         };
@@ -500,10 +617,51 @@
     loadProducts();
   }
 
-  initSlides(3);
-  if (window.location.hash === '#slide-3') {
-    goTo(3);
+  initSlides(1);
+
+  /* ── Groq API key UI (optional) ──
+     The modal uses an inline `display:flex` for layout, which would override
+     the [hidden] attribute, so we toggle `display` directly. */
+  function refreshApiKeyStatus() {
+    const status = document.getElementById('apiKeyStatus');
+    if (!status) return;
+    let v = '';
+    try { v = localStorage.getItem('groq_api_key') || ''; } catch (e) {}
+    status.textContent = v ? 'Groq key set ✓' : 'Set Groq key';
   }
+  function openApiKeyModal() {
+    const modal = document.getElementById('apiKeyModal');
+    modal.style.display = 'flex';
+    // Pre-fill with the existing key so the user can edit it.
+    try {
+      const v = localStorage.getItem('groq_api_key') || '';
+      document.getElementById('apiKeyInput').value = v;
+    } catch (e) {}
+  }
+  function closeApiKeyModal() {
+    document.getElementById('apiKeyModal').style.display = 'none';
+    document.getElementById('apiKeyInput').value = '';
+  }
+  function saveApiKey() {
+    const input = document.getElementById('apiKeyInput');
+    const v = (input.value || '').trim();
+    try {
+      if (v) localStorage.setItem('groq_api_key', v);
+      else   localStorage.removeItem('groq_api_key');
+    } catch (e) {}
+    closeApiKeyModal();
+    refreshApiKeyStatus();
+  }
+  function clearApiKey() {
+    try { localStorage.removeItem('groq_api_key'); } catch (e) {}
+    document.getElementById('apiKeyInput').value = '';
+    refreshApiKeyStatus();
+  }
+  window.openApiKeyModal = openApiKeyModal;
+  window.closeApiKeyModal = closeApiKeyModal;
+  window.saveApiKey = saveApiKey;
+  window.clearApiKey = clearApiKey;
+  refreshApiKeyStatus();
 </script>
 </body>
 </html>

@@ -430,6 +430,7 @@
 </div>
 
 <script src="../js/core.js"></script>
+<script src="../js/celebration.js"></script>
 <script>
 /* ── Q1: multi-select strategies (3 real, 3 made up) ── */
 const Q1_STRATEGIES = [
@@ -493,9 +494,9 @@ function gradeQ1() {
     const isReal   = realSet.has(id);
     const isPicked = picked.has(id);
     btn.classList.remove('selected');
-    if (isReal && isPicked)       btn.classList.add('correct');
-    else if (!isReal && isPicked) btn.classList.add('wrong');
-    else if (isReal && !isPicked) btn.classList.add('missed');
+    if (isReal && isPicked)       { btn.classList.add('correct'); recordAnswer('meta_learning', true); }
+    else if (!isReal && isPicked) { btn.classList.add('wrong');   recordAnswer('meta_learning', false); }
+    else if (isReal && !isPicked) { btn.classList.add('missed');  recordAnswer('meta_learning', false); }
     btn.disabled = true;
     const mark = btn.querySelector('.meta-q1-opt-mark');
     if (mark) {
@@ -538,6 +539,7 @@ goTo = function(n) {
   _coreGoTo(n);
   if (n === 4) {
     try { localStorage.setItem('completed:meta_learning', '1'); } catch (e) {}
+    setTimeout(() => showCompletionCelebration('meta_learning'), 600);
   }
 };
 
@@ -847,6 +849,7 @@ window.submitSurvey = submitSurvey;
 
 /* ── Init ── */
 initSlides(4);
+startProductTimer('meta_learning');
 loadMetaAnswers();
 </script>
 </body>

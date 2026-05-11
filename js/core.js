@@ -53,3 +53,6 @@ function initSlides(n) {
   document.querySelector('[data-slide="1"]').classList.add('active');
   updateUI();
 }
+
+/* Duolingo-style level-complete celebration lives in js/celebration.js so it
+   can also be used by pages (like social_media) that don't load core.js. */

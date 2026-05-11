@@ -342,7 +342,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 06</div>
+  <div class="slide-counter" id="slideCounter">01 / 05</div>
 </div>
 
 <div class="slides-wrapper">
@@ -465,37 +465,8 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
     </div>
   </div>
 
-  <!-- ═══ SLIDE 5: Evaluation ═══ -->
+  <!-- ═══ SLIDE 5: Final Reflection ═══ -->
   <div class="slide" data-slide="5">
-    <h2>Rate what you <span class="accent-word">learned</span></h2>
-    <p style="font-size:18px;color:var(--muted);margin-top:12px;">Give each concept 1-5 stars based on how well you understood it.</p>
-    <div class="learning-list">
-      <div class="learning-item">
-        <div class="learning-num">01</div>
-        <div class="learning-text">Identify potential misuse scenarios from different actors' perspectives</div>
-        <div class="star-row" data-item="1">
-          <span class="star" onclick="rateLearning(1,1)">★</span><span class="star" onclick="rateLearning(1,2)">★</span><span class="star" onclick="rateLearning(1,3)">★</span><span class="star" onclick="rateLearning(1,4)">★</span><span class="star" onclick="rateLearning(1,5)">★</span>
-        </div>
-      </div>
-      <div class="learning-item">
-        <div class="learning-num">02</div>
-        <div class="learning-text">Understand that spreading misinformation is a misuse of platform features, which can deeply influence group psychology.</div>
-        <div class="star-row" data-item="2">
-          <span class="star" onclick="rateLearning(2,1)">★</span><span class="star" onclick="rateLearning(2,2)">★</span><span class="star" onclick="rateLearning(2,3)">★</span><span class="star" onclick="rateLearning(2,4)">★</span><span class="star" onclick="rateLearning(2,5)">★</span>
-        </div>
-      </div>
-      <div class="learning-item">
-        <div class="learning-num">03</div>
-        <div class="learning-text">Recognize that inappropriate data collection is a misuse, and designers must ensure data compliance.</div>
-        <div class="star-row" data-item="3">
-          <span class="star" onclick="rateLearning(3,1)">★</span><span class="star" onclick="rateLearning(3,2)">★</span><span class="star" onclick="rateLearning(3,3)">★</span><span class="star" onclick="rateLearning(3,4)">★</span><span class="star" onclick="rateLearning(3,5)">★</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SLIDE 6: Final Reflection ═══ -->
-  <div class="slide" data-slide="6">
     <!-- <h1>Final <span class="accent-word">Reflection</span></h1> -->
      <h1><span class="accent-word">Nice Work</span></h1>
 
@@ -515,9 +486,10 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
   <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
 </div>
 
+<script src="../js/celebration.js"></script>
 <script>
 let current = 1;
-const total = 6;
+const total = 5;
 
 function buildDots() {
   const bar = document.getElementById('progressBar');
@@ -556,7 +528,10 @@ function goTo(n) {
   current = n;
   updateUI();
   setTimeout(() => document.querySelectorAll('.slide.exit').forEach(s => s.classList.remove('exit')), 500);
-  if (n === total) { try { localStorage.setItem('completed:social_media', '1'); } catch (e) {} }
+  if (n === total) {
+    try { localStorage.setItem('completed:social_media', '1'); } catch (e) {}
+    setTimeout(() => showCompletionCelebration('social_media'), 600);
+  }
 }
 
 function goNext() { if (current < total) goTo(current + 1); }
@@ -781,6 +756,7 @@ function revealSmHint() {
 
 // Initialize
 buildDots();
+startProductTimer('social_media');
 addSmBox();
 addSmBox();
 </script>

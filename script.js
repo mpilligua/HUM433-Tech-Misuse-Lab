@@ -66,7 +66,7 @@ function selectDevice(el, mode) {
   goNext(); // Navigate to slide 4
 }
 
-/* QUIZ 1 — correct: B */
+/* QUIZ 1 - correct: B */
 function quiz1Answer(btn, key) {
   document.querySelectorAll('#quiz1Options .option-btn').forEach(b => b.disabled = true);
   const fb = document.getElementById('quiz1Feedback');
@@ -79,26 +79,26 @@ function quiz1Answer(btn, key) {
     document.querySelectorAll('#quiz1Options .option-btn')[1].classList.add('correct');
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = key === 'A'
-      ? '✗ The Mechanical Engine is purely physical — heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
-      : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing — it needs a disk and a network to become dangerous.';
+      ? '✗ The Mechanical Engine is purely physical - heat and rollers, no memory and no network. There is nothing for an attacker to capture here.'
+      : '✗ The Image Sensor only reads a page in the moment of scanning. On its own it stores nothing and transmits nothing - it needs a disk and a network to become dangerous.';
   }
 }
 
-/* QUIZ 2 — correct: B */
+/* QUIZ 2 - correct: B */
 function quiz2Answer(btn, key) {
   document.querySelectorAll('#quiz2Options .option-btn').forEach(b => b.disabled = true);
   const fb = document.getElementById('quiz2Feedback');
   if (key === 'B') {
     btn.classList.add('correct');
     fb.className = 'feedback-box show correct-fb';
-    fb.textContent = '✓ Correct! The Hard Disk retains every document even after the printer is powered off and discarded. No network needed — just a $5 adapter and free software is enough to recover everything.';
+    fb.textContent = '✓ Correct! The Hard Disk retains every document even after the printer is powered off and discarded. No network needed - just a $5 adapter and free software is enough to recover everything.';
   } else {
     btn.classList.add('wrong');
     document.querySelectorAll('#quiz2Options .option-btn')[1].classList.add('correct');
     fb.className = 'feedback-box show wrong-fb';
     fb.textContent = key === 'A'
-      ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant — but the hard disk keeps all data regardless.'
-      : '✗ The Mechanical Engine is all moving parts — drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
+      ? '✗ Internet Connectivity needs the printer to be powered on and connected. Once discarded, the network is irrelevant - but the hard disk keeps all data regardless.'
+      : '✗ The Mechanical Engine is all moving parts - drums, rollers, heat. It processes paper in real time but stores nothing. No data, no risk at end of life.';
   }
 }
 

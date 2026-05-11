@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Groq API Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+  /* Override the global styles.css rule that sets body { height: 100vh; overflow: hidden }
+     so this single-page test scrolls normally. */
+  html { height: auto !important; overflow: auto !important; }
+  body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: auto !important;
+    display: block !important;
+    padding: 40px 5% 80px;
+    font-family: 'Inter', sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .panel pre {
+    max-height: 320px;
+    overflow: auto;
+  }
+  h1 { font-size: 32px; margin-bottom: 8px; }
+  .sub {
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .row label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .row input, .row textarea, .row select {
+    background: #0e0e0e;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    color: #f0f0f0;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .row textarea { min-height: 120px; resize: vertical; }
+  .row input:focus, .row textarea:focus, .row select:focus {
+    outline: none; border-color: var(--accent);
+  }
+  button.run {
+    background: var(--accent); color: #000; border: none;
+    padding: 14px 28px; font-family: 'Space Mono', monospace;
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; border-radius: 6px; cursor: pointer;
+  }
+  button.run:hover { background: #d4e83e; }
+  button.run:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .panel {
+    margin-top: 28px;
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .panel-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .panel pre {
+    margin: 0;
+    color: #ddd;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .status {
+    margin-top: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .status.ok  { color: var(--accent); }
+  .status.bad { color: var(--accent2); }
+  .status.busy { color: var(--muted); }
+  .row-h { display: flex; gap: 12px; align-items: end; }
+  .row-h .row { flex: 1; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1>Groq API <span class="accent-word">test bench</span></h1>
+<div class="sub">Isolated single call · POST api.groq.com/openai/v1/chat/completions</div>
+
+<div class="row">
+  <label>API key</label>
+  <input id="key" type="password" placeholder="gsk_…"/>
+</div>
+
+<div class="row-h">
+  <div class="row">
+    <label>Model</label>
+    <select id="model">
+      <option value="llama-3.3-70b-versatile" selected>llama-3.3-70b-versatile</option>
+      <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
+      <option value="llama-3.1-70b-versatile">llama-3.1-70b-versatile</option>
+      <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+      <option value="gemma2-9b-it">gemma2-9b-it</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>JSON mode</label>
+    <select id="jsonMode">
+      <option value="off">off - plain text</option>
+      <option value="on" selected>on - response_format: json_object</option>
+    </select>
+  </div>
+</div>
+
+<div class="row">
+  <label>Prompt (sent as user message)</label>
+  <textarea id="prompt">Reply with strict JSON, no markdown, in this exact shape:
+{"verdict": "correct", "feedback": "Hello from Groq."}</textarea>
+</div>
+
+<button class="run" id="runBtn" onclick="runTest()">Run request</button>
+<button class="run" style="background:transparent; color:var(--muted); border:1px solid var(--border); margin-left:10px;" onclick="document.getElementById('key').value = localStorage.getItem('groq_api_key') || ''">Load saved key</button>
+<button class="run" style="background:transparent; color:var(--muted); border:1px solid var(--border); margin-left:10px;" onclick="saveKey()">Save key</button>
+
+<div class="status" id="status"></div>
+
+<div class="panel">
+  <div class="panel-title">HTTP response</div>
+  <pre id="httpOut">- not run yet -</pre>
+</div>
+
+<div class="panel">
+  <div class="panel-title">Raw body</div>
+  <pre id="rawOut">- not run yet -</pre>
+</div>
+
+<div class="panel">
+  <div class="panel-title">Extracted text (choices[0].message.content)</div>
+  <pre id="textOut">- not run yet -</pre>
+</div>
+
+<div class="panel">
+  <div class="panel-title">Parsed JSON (if applicable)</div>
+  <pre id="parsedOut">- not run yet -</pre>
+</div>
+
+<p style="margin-top:30px; font-size:13px; color:var(--muted); line-height:1.6;">
+  Tips:
+  <br/>· <strong>HTTP 401</strong> = bad key. Get one at <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a>.
+  <br/>· <strong>HTTP 429</strong> = rate-limited. Groq free tier is generous (~30 req/min on most models); just wait a few seconds.
+  <br/>· <strong>HTTP 400</strong> = bad model name or unsupported parameter. Try another model from the dropdown.
+  <br/>· Check usage and limits at <a href="https://console.groq.com/settings/limits" target="_blank">console.groq.com/settings/limits</a>.
+</p>
+
+<script>
+function saveKey() {
+  const v = document.getElementById('key').value.trim();
+  try {
+    if (v) localStorage.setItem('groq_api_key', v);
+    else   localStorage.removeItem('groq_api_key');
+  } catch (e) {}
+  setStatus('Saved.', 'ok');
+}
+function setStatus(msg, cls) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status ' + (cls || '');
+}
+
+async function runTest() {
+  const key    = document.getElementById('key').value.trim();
+  const model  = document.getElementById('model').value;
+  const prompt = document.getElementById('prompt').value;
+  const jsonOn = document.getElementById('jsonMode').value === 'on';
+
+  document.getElementById('httpOut').textContent   = '…';
+  document.getElementById('rawOut').textContent    = '…';
+  document.getElementById('textOut').textContent   = '…';
+  document.getElementById('parsedOut').textContent = '…';
+
+  if (!key) { setStatus('Paste an API key first.', 'bad'); return; }
+
+  setStatus('Calling ' + model + '…', 'busy');
+  document.getElementById('runBtn').disabled = true;
+
+  const body = {
+    model: model,
+    temperature: 0.2,
+    messages: [
+      { role: 'system', content: 'You always respond with strict JSON only - no markdown.' },
+      { role: 'user', content: prompt }
+    ]
+  };
+  if (jsonOn) body.response_format = { type: 'json_object' };
+
+  const url = 'https://api.groq.com/openai/v1/chat/completions';
+
+  const t0 = performance.now();
+  let res, rawText = '';
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + key
+      },
+      body: JSON.stringify(body)
+    });
+    rawText = await res.text();
+  } catch (err) {
+    document.getElementById('runBtn').disabled = false;
+    setStatus('Network error: ' + (err.message || err), 'bad');
+    document.getElementById('httpOut').textContent = String(err);
+    return;
+  }
+  const ms = Math.round(performance.now() - t0);
+  document.getElementById('runBtn').disabled = false;
+
+  // HTTP line
+  const headerLines = [];
+  res.headers.forEach((v, k) => headerLines.push(`${k}: ${v}`));
+  document.getElementById('httpOut').textContent =
+    `HTTP ${res.status} ${res.statusText}  (${ms} ms)\n\n` + headerLines.join('\n');
+
+  // Raw body
+  document.getElementById('rawOut').textContent = rawText || '(empty body)';
+
+  let data = null;
+  try { data = JSON.parse(rawText); } catch (e) {}
+
+  // Extracted text
+  let extracted = '';
+  if (data) {
+    extracted = data?.choices?.[0]?.message?.content || '';
+  }
+  document.getElementById('textOut').textContent = extracted || '(none - response had no message content)';
+
+  // Parsed
+  let parsed = null;
+  if (extracted) {
+    try { parsed = JSON.parse(extracted); }
+    catch (e) {
+      try { parsed = JSON.parse(extracted.replace(/```json|```/g, '').trim()); }
+      catch (e2) { parsed = null; }
+    }
+  }
+  document.getElementById('parsedOut').textContent =
+    parsed ? JSON.stringify(parsed, null, 2) : '(not valid JSON - see extracted text above)';
+
+  if (res.ok) {
+    setStatus(`✓ ${res.status} OK in ${ms}ms`, 'ok');
+  } else {
+    setStatus(`✗ ${res.status} ${res.statusText} (${ms}ms) - see raw body for the error message`, 'bad');
+  }
+}
+
+// Auto-load any previously-saved key.
+try {
+  const v = localStorage.getItem('groq_api_key') || '';
+  if (v) document.getElementById('key').value = v;
+} catch (e) {}
+</script>
+</body>
+</html>

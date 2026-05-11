@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Introduction · Tech Misuses Lab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../styles.css"/>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">TECH MISUSES LAB</div>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="slide-counter" id="slideCounter">01 / 02</div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- SLIDE 1: Learning Objectives -->
+  <div class="slide" data-slide="1">
+    <h2>Learning Objectives</h2>
+    <div class="obj-list">
+      <div class="obj-item">
+        <div class="obj-text"><strong>Explore different strategies</strong> <span>on how to identify possible misuses.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Why This Matters -->
+  <div class="slide" data-slide="2">
+    <h2>Why This Matters</h2>
+    <div class="why-body">
+      <p style="font-size:20px;color:#ddd;line-height:1.6;margin-bottom:16px;">You are (or will be) a <strong style="color:#f0f0f0">designer of products</strong>, and at some point you will ship something into the world.</p>
+      <p style="font-size:20px;color:#ddd;line-height:1.6;margin-bottom:0;">When you do, others will use it in ways you never intended, some clever, some malicious.</p>
+    </div>
+    <div class="why-highlight">
+      This tool gives you the instinct to see misuse early, before a product ships, before an attacker finds it, and before it becomes your responsibility.
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()">← PREV</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+</div>
+
+<script src="../js/core.js"></script>
+<script>
+  initSlides(2);
+
+  /* On the last intro slide:
+     - auto-mark the intro as completed;
+     - turn the NEXT button (normally hidden on the final slide) into a
+       BACK-TO-PATH button so the user's hand stays in the same place. */
+  (function() {
+    const TOTAL = 2;
+    const nextBtn = document.getElementById('nextBtn');
+    const origText = nextBtn.textContent;
+    const origClick = nextBtn.onclick;
+
+    function syncButton(n) {
+      if (n === TOTAL) {
+        nextBtn.textContent = '← BACK TO PATH';
+        nextBtn.onclick = () => { window.location.href = '../index.html'; };
+        nextBtn.style.visibility = 'visible';
+      } else {
+        nextBtn.textContent = origText;
+        nextBtn.onclick = origClick;
+      }
+    }
+
+    const _origGoTo = goTo;
+    goTo = function(n) {
+      _origGoTo(n);
+      syncButton(n);
+      if (n === TOTAL) { try { localStorage.setItem('completed:intro', '1'); } catch (e) {} }
+    };
+    syncButton(1); // initial state
+  })();
+</script>
+</body>
+</html>
