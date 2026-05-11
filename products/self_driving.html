@@ -60,26 +60,51 @@
   .at-tag-row .row-label { grid-row: 1; }
   .at-tag-row .row-buttons { grid-row: 1; }
   .at-tag-row .row-diagnosis { grid-row: 2; grid-column: 2 / 4; }
-  .at-tag-row.present { border-color: var(--accent3); background: #0a1419; }
-  .at-tag-row.absent { opacity: 0.55; }
-  .at-tag-row .row-dot { width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--muted); justify-self: center; transition: background 0.3s, border-color 0.3s; }
-  .at-tag-row.present .row-dot { background: var(--accent3); border-color: var(--accent3); }
-  .at-tag-row.absent .row-dot { background: transparent; border-color: var(--muted); }
+  /* Rows stay neutral while picking. Only diagnosis text below carries verdict accent. */
+  .at-tag-row.revealed.absent { opacity: 0.55; }
+  .at-tag-row .row-dot { width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--muted); justify-self: center; }
   .at-tag-row .row-label { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .at-tag-row .row-label-title { font-size: 19px; font-weight: 700; }
   .at-tag-row .row-label-question { font-size: 16px; color: #999; font-weight: 400; line-height: 1.4; }
-  .at-tag-row .row-diagnosis { font-size: 16px; color: #aaa; line-height: 1.5; opacity: 0; max-height: 0; overflow: hidden; transition: opacity 0.4s ease, max-height 0.4s ease; }
-  .at-tag-row.revealed .row-diagnosis { opacity: 1; max-height: 250px; margin-top: 8px; }
-  .at-tag-row .row-correction { display: block; margin-bottom: 5px; color: #ffb6b6; }
+  /* Diagnosis explanation pops in larger + brighter than the static description. */
+  .at-tag-row .row-diagnosis { font-size: 18px; color: #f0f0f0; font-weight: 500; line-height: 1.55; opacity: 0; max-height: 0; overflow: hidden; transition: opacity 0.4s ease, max-height 0.4s ease, transform 0.4s ease; transform: translateY(6px); }
+  .at-tag-row.revealed .row-diagnosis {
+    opacity: 1;
+    max-height: 350px;
+    margin-top: 14px;
+    padding: 14px 18px;
+    background: rgba(71, 200, 255, 0.08);
+    border-left: 3px solid var(--accent3);
+    border-radius: 6px;
+    transform: translateY(0);
+    animation: at-diag-pop 0.55s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+  }
+  .at-tag-row.revealed.absent .row-diagnosis {
+    background: rgba(255, 71, 71, 0.08);
+    border-left-color: var(--accent2);
+  }
+  @keyframes at-diag-pop {
+    0%   { transform: translateY(8px) scale(0.98); }
+    50%  { transform: translateY(0) scale(1.01); }
+    100% { transform: translateY(0) scale(1); }
+  }
+  .at-tag-row .row-correction { display: block; margin-bottom: 6px; color: #ffb6b6; font-weight: 600; }
   .at-tag-row .row-buttons { display: flex; gap: 10px; }
   .at-tag-btn { font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 2px; padding: 9px 18px; border-radius: 5px; cursor: pointer; background: transparent; color: #bbb; border: 1px solid var(--border); transition: all 0.2s; }
-  .at-tag-btn:hover:not(:disabled) { border-color: var(--accent3); color: var(--accent3); }
-  .at-tag-btn.active { background: var(--accent3); color: #000; border-color: var(--accent3); }
+  .at-tag-btn:hover:not(:disabled) { border-color: #fff; color: #fff; }
+  /* User's pick: cyan for Present, white for Absent. Distinct from verdict accent. */
+  .at-tag-btn.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.18); }
+  .at-tag-btn.active[onclick*="'present'"] {
+    background: var(--accent3); border-color: var(--accent3);
+    box-shadow: 0 0 0 3px rgba(71,200,255,0.22);
+  }
   .at-tag-btn:disabled { cursor: default; opacity: 0.5; }
 
   .at-reveal-btn { font-family: 'Space Mono', monospace; font-size: 15px; letter-spacing: 2px; padding: 14px 33px; border-radius: 5px; cursor: pointer; background: var(--accent); color: #000; border: 1px solid var(--accent); font-weight: 700; text-transform: uppercase; transition: all 0.2s; opacity: 0; pointer-events: none; }
   .at-reveal-btn.show { opacity: 1; pointer-events: all; }
   .at-reveal-btn:hover { background: #d4e83e; }
+  /* Inline scenario reveal buttons replaced by NEXT-as-CORRECT-ANSWERS morph. */
+  #breakupRevealBtn, #custodyRevealBtn, #journalistRevealBtn { display: none !important; }
 
   .at-punchline { font-size: 21px; line-height: 1.6; color: #ddd; padding: 20px 25px; border-radius: 10px; background: #131600; border: 1px solid rgba(232,255,71,0.3); width: 100%; max-width: 900px; opacity: 0; transform: translateY(6px); }
   .at-punchline.in { animation: at-fade-up 0.5s ease forwards; }
@@ -103,7 +128,7 @@
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 10</div>
+  <div class="slide-counter" id="slideCounter">01 / 07</div>
 </div>
 
 <div class="slides-wrapper">
@@ -167,209 +192,195 @@
           A tired driver wants the car to take over, but the system refuses to activate in a construction zone.
         </div>
       </div>
-
-      <button class="at-reveal-btn" id="atInvestigateBtn" onclick="atInvestigate()" disabled style="opacity:0.4;">Investigate</button>
     </div>
   </div>
 
-  <!-- ═══ Slide 4: Breakup comic ═══ -->
-  <div class="slide" data-slide="4">
+  <!-- ═══ Slide 4: Scenario 1 — Exhausted commute (combined comic + tag) ═══ -->
+  <div class="slide" data-slide="4" data-scenario="breakup">
     <div class="airtag-stack center" style="gap:18px;">
       <div class="at-scene-label">Scenario <span id="breakupOrder">1</span> of 3</div>
       <div class="at-comic-wrap">
         <img src="../images/comic4.png" alt="Comic illustrating scenario 1"/>
       </div>
-    </div>
-  </div>
-
-  <!-- ═══ Slide 5: Breakup tagging + reveal ═══ -->
-  <div class="slide" data-slide="5">
-    <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-tag-block" id="breakupTagBlock">
-        <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
-        <div class="at-tag-rows" id="breakupTagRows">
-          <div class="at-tag-row" data-row="motive">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
+      <div class="at-tag-reveal" data-tag-reveal>
+        <div class="at-tag-block" id="breakupTagBlock">
+          <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
+          <div class="at-tag-rows" id="breakupTagRows">
+            <div class="at-tag-row" data-row="motive">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Motive</div>
+                <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswer(this,'motive','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswer(this,'motive','absent')">Absent</button>
+              </div>
             </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswer(this,'motive','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswer(this,'motive','absent')">Absent</button>
+            <div class="at-tag-row" data-row="access">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Access</div>
+                <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswer(this,'access','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswer(this,'access','absent')">Absent</button>
+              </div>
+            </div>
+            <div class="at-tag-row" data-row="opportunity">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Opportunity</div>
+                <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswer(this,'opportunity','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswer(this,'opportunity','absent')">Absent</button>
+              </div>
             </div>
           </div>
-          <div class="at-tag-row" data-row="access">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Access</div>
-              <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswer(this,'access','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswer(this,'access','absent')">Absent</button>
-            </div>
-          </div>
-          <div class="at-tag-row" data-row="opportunity">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswer(this,'opportunity','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswer(this,'opportunity','absent')">Absent</button>
-            </div>
+          <div style="display:flex; justify-content:center; margin-top:18px;">
+            <button class="at-reveal-btn" id="breakupRevealBtn" onclick="atReveal()">Reveal</button>
           </div>
         </div>
-        <div style="display:flex; justify-content:center; margin-top:18px;">
-          <button class="at-reveal-btn" id="breakupRevealBtn" onclick="atReveal()">Reveal</button>
-        </div>
-      </div>
 
-      <div class="at-punchline" id="breakupPunchline" style="display:none;">
-        <strong>All three legs are present.</strong> This is what a misuse vector looks like.
-        <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
+        <div class="at-punchline" id="breakupPunchline" style="display:none;">
+          <strong>All three legs are present.</strong> This is what a misuse vector looks like.
+          <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 6: Custody comic ═══ -->
-  <div class="slide" data-slide="6">
+  <!-- ═══ Slide 5: Scenario 2 — Inhaler in the backpack (combined) ═══ -->
+  <div class="slide" data-slide="5" data-scenario="custody">
     <div class="airtag-stack center" style="gap:18px;">
       <div class="at-scene-label">Scenario <span id="custodyOrder">2</span> of 3</div>
       <div class="at-comic-wrap">
         <img src="../images/comic5.png" alt="Comic illustrating scenario 2"/>
       </div>
-    </div>
-  </div>
-
-  <!-- ═══ Slide 7: Custody tagging + reveal ═══ -->
-  <div class="slide" data-slide="7">
-    <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-tag-block" id="custodyTagBlock">
-        <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
-        <div class="at-tag-rows" id="custodyTagRows">
-          <div class="at-tag-row" data-row="motive">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
+      <div class="at-tag-reveal" data-tag-reveal>
+        <div class="at-tag-block" id="custodyTagBlock">
+          <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
+          <div class="at-tag-rows" id="custodyTagRows">
+            <div class="at-tag-row" data-row="motive">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Motive</div>
+                <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'motive','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'motive','absent')">Absent</button>
+              </div>
             </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'motive','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'motive','absent')">Absent</button>
+            <div class="at-tag-row" data-row="access">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Access</div>
+                <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'access','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'access','absent')">Absent</button>
+              </div>
+            </div>
+            <div class="at-tag-row" data-row="opportunity">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Opportunity</div>
+                <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'opportunity','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'opportunity','absent')">Absent</button>
+              </div>
             </div>
           </div>
-          <div class="at-tag-row" data-row="access">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Access</div>
-              <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'access','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'access','absent')">Absent</button>
-            </div>
-          </div>
-          <div class="at-tag-row" data-row="opportunity">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'opportunity','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerCustody(this,'opportunity','absent')">Absent</button>
-            </div>
+          <div style="display:flex; justify-content:center; margin-top:18px;">
+            <button class="at-reveal-btn" id="custodyRevealBtn" onclick="atRevealCustody()">Reveal</button>
           </div>
         </div>
-        <div style="display:flex; justify-content:center; margin-top:18px;">
-          <button class="at-reveal-btn" id="custodyRevealBtn" onclick="atRevealCustody()">Reveal</button>
-        </div>
-      </div>
 
-      <div class="at-punchline" id="custodyPunchline" style="display:none;">
-        <strong>All three legs are present.</strong> The motive is caring, but the structure still creates a misuse vector.
-        <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
+        <div class="at-punchline" id="custodyPunchline" style="display:none;">
+          <strong>All three legs are present.</strong> The motive is caring, but the structure still creates a misuse vector.
+          <span class="pulse-dots"><span class="on"></span><span class="on"></span><span class="on"></span></span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 8: Journalist comic ═══ -->
-  <div class="slide" data-slide="8">
+  <!-- ═══ Slide 6: Scenario 3 — Driver-assist unavailable (combined) ═══ -->
+  <div class="slide" data-slide="6" data-scenario="journalist">
     <div class="airtag-stack center" style="gap:18px;">
       <div class="at-scene-label">Scenario <span id="journalistOrder">3</span> of 3</div>
       <div class="at-comic-wrap at-comic-placeholder">
         <img src="../images/comic6.png" alt="Comic illustrating scenario 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
         <div class="at-comic-fallback">comic pending - images/comic6.png</div>
       </div>
-    </div>
-  </div>
-
-  <!-- ═══ Slide 9: Journalist tagging + reveal ═══ -->
-  <div class="slide" data-slide="9">
-    <div class="airtag-stack center" style="gap:18px;">
-      <div class="at-tag-block" id="journalistTagBlock">
-        <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
-        <div class="at-tag-rows" id="journalistTagRows">
-          <div class="at-tag-row" data-row="motive">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Motive</div>
-              <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
+      <div class="at-tag-reveal" data-tag-reveal>
+        <div class="at-tag-block" id="journalistTagBlock">
+          <div class="at-tag-q">Identify motive, access, and opportunity in this scene.</div>
+          <div class="at-tag-rows" id="journalistTagRows">
+            <div class="at-tag-row" data-row="motive">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Motive</div>
+                <div class="row-label-question">Someone has a reason to use the product in a risky or unintended way.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'motive','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'motive','absent')">Absent</button>
+              </div>
             </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'motive','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'motive','absent')">Absent</button>
+            <div class="at-tag-row" data-row="access">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Access</div>
+                <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'access','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'access','absent')">Absent</button>
+              </div>
+            </div>
+            <div class="at-tag-row" data-row="opportunity">
+              <div class="row-dot"></div>
+              <div class="row-label">
+                <div class="row-label-title">Opportunity</div>
+                <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
+              </div>
+              <div class="row-diagnosis"></div>
+              <div class="row-buttons">
+                <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'opportunity','present')">Present</button>
+                <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'opportunity','absent')">Absent</button>
+              </div>
             </div>
           </div>
-          <div class="at-tag-row" data-row="access">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Access</div>
-              <div class="row-label-question">They can use the product, feature, controls or physical device.</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'access','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'access','absent')">Absent</button>
-            </div>
-          </div>
-          <div class="at-tag-row" data-row="opportunity">
-            <div class="row-dot"></div>
-            <div class="row-label">
-              <div class="row-label-title">Opportunity</div>
-              <div class="row-label-question">The product gives them a capability that makes the misuse possible or easier.</div>
-            </div>
-            <div class="row-diagnosis"></div>
-            <div class="row-buttons">
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'opportunity','present')">Present</button>
-              <button class="at-tag-btn" onclick="atTagAnswerJournalist(this,'opportunity','absent')">Absent</button>
-            </div>
+          <div style="display:flex; justify-content:center; margin-top:18px;">
+            <button class="at-reveal-btn" id="journalistRevealBtn" onclick="atRevealJournalist()">Reveal</button>
           </div>
         </div>
-        <div style="display:flex; justify-content:center; margin-top:18px;">
-          <button class="at-reveal-btn" id="journalistRevealBtn" onclick="atRevealJournalist()">Reveal</button>
-        </div>
-      </div>
 
-      <div class="at-punchline" id="journalistPunchline" style="display:none;">
-        <strong>Only two of three legs are present.</strong> Without opportunity, the structure falls.
-        <span class="pulse-dots"><span class="on"></span><span class="on"></span><span></span></span>
+        <div class="at-punchline" id="journalistPunchline" style="display:none;">
+          <strong>Only two of three legs are present.</strong> Without opportunity, the structure falls.
+          <span class="pulse-dots"><span class="on"></span><span class="on"></span><span></span></span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Slide 10: Wrap ═══ -->
-  <div class="slide" data-slide="10">
+  <!-- ═══ Slide 7: Wrap ═══ -->
+  <div class="slide" data-slide="7">
     <div class="airtag-stack center" style="gap:20px;">
       <h2>Driver-assist misuse isn't about bad drivers or bad intentions.</h2>
       <p class="airtag-prose" style="max-width:680px;">In these scenarios, the risk appears when three things line up:</p>
@@ -396,7 +407,7 @@
 
       <div class="select-btn-row">
         <button class="select-btn ghost" id="atTryAnotherBtn" onclick="atTryAnother()">Try another scenario</button>
-        <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
+        <button class="select-btn" onclick="window.location.href='../index.html'">Go to next level →</button>
       </div>
     </div>
   </div>
@@ -430,23 +441,53 @@
     }
   }
 
-  /* Re-trigger stagger when slides 2 or 10 (wrap) become active.
-     Tag slides 5/7/9 are gated until their scenario is revealed.
-     Slide 3 (picker) always hides NEXT - user must use "Investigate". */
+  /* Each scenario lives on a single slide. The tag block is hidden by default
+     and revealed by the first NEXT press; NEXT then morphs into CORRECT ANSWERS
+     (disabled until all 3 rows answered). After reveal, NEXT restores. */
+  const SCENARIO_SLIDE = { 4: 'breakup', 5: 'custody', 6: 'journalist' };
+  const WRAP_SLIDE = 7;
   const visitedScenarios = new Set();
 
+  const nextBtn = document.getElementById('nextBtn');
+  const NEXT_DEFAULT_LABEL = nextBtn.textContent;
+  const NEXT_DEFAULT_ONCLICK = nextBtn.onclick;
+
+  function _restoreNext() {
+    nextBtn.textContent = NEXT_DEFAULT_LABEL;
+    nextBtn.onclick = NEXT_DEFAULT_ONCLICK;
+    nextBtn.disabled = false;
+  }
+  function _setNextAsReveal(key) {
+    nextBtn.textContent = 'CORRECT ANSWERS';
+    nextBtn.onclick = () => { _reveal(key); };
+    const allAnswered = Object.values(atTagState[key].answers).every(v => v !== null);
+    nextBtn.disabled = !allAnswered;
+  }
+  window._syncRevealButton = function(key) {
+    if (SCENARIO_SLIDE[current] !== key) return;
+    if (atTagState[key].revealed) return;
+    const allAnswered = Object.values(atTagState[key].answers).every(v => v !== null);
+    nextBtn.disabled = !allAnswered;
+  };
+
   const _origGoTo = goTo;
-  const TAG_SLIDE_KEY = { 5: 'breakup', 7: 'custody', 9: 'journalist' };
   goTo = function(n) {
-    if (n === 3) {
-      nextGated = true;
-    } else {
-      const key = TAG_SLIDE_KEY[n];
-      nextGated = key ? !atTagState[key].revealed : false;
-    }
+    nextGated = (n === 3); // Picker hides NEXT — selection auto-advances.
     _origGoTo(n);
+
+    const sKey = SCENARIO_SLIDE[n];
+    if (sKey) {
+      if (tagShown[sKey] && !atTagState[sKey].revealed) {
+        _setNextAsReveal(sKey);
+      } else {
+        _restoreNext();
+      }
+    } else if (n !== 3) {
+      _restoreNext();
+    }
+
     if (n === 2) atStaggerMao('screen2MaoRow', 'screen2Final');
-    if (n === 10) {
+    if (n === WRAP_SLIDE) {
       atStaggerMao('screen7MaoRow', null);
       if (atPickedScenario) visitedScenarios.add(atPickedScenario);
       const tryBtn = document.getElementById('atTryAnotherBtn');
@@ -456,7 +497,7 @@
     }
   };
   if (document.querySelector('[data-slide="2"]').classList.contains('active')) atStaggerMao('screen2MaoRow', 'screen2Final');
-  if (document.querySelector('[data-slide="10"]').classList.contains('active')) atStaggerMao('screen7MaoRow', null);
+  if (document.querySelector(`[data-slide="${WRAP_SLIDE}"]`).classList.contains('active')) atStaggerMao('screen7MaoRow', null);
 
   /* ── Scenario data ──
      Each scenario maps to a slide number, owns a truth table, the DOM ids it uses, and a punchline. */
@@ -465,8 +506,7 @@
      and driver-assist unavailable. */
   const SCENARIOS = {
     breakup: { // Exhausted commute
-      comicSlide: 4,
-      tagSlide: 5,
+      scenarioSlide: 4,
       truth: {
         motive: { state: 'present', diagnosis: 'Alex is exhausted after a long shift and wants relief from the burden of driving.' },
         access: { state: 'present', diagnosis: 'Alex is the driver and can activate driver-assist mode.' },
@@ -483,8 +523,7 @@
       orderLabelId: 'breakupOrder'
     },
     custody: { // Inhaler in the backpack
-      comicSlide: 6,
-      tagSlide: 7,
+      scenarioSlide: 5,
       truth: {
         motive: { state: 'present', diagnosis: 'The dad urgently wants to help his daughter find her inhaler.' },
         access: { state: 'present', diagnosis: 'The dad is driving the car and can activate driver-assist.' },
@@ -501,8 +540,7 @@
       orderLabelId: 'custodyOrder'
     },
     journalist: { // Driver-assist unavailable
-      comicSlide: 8,
-      tagSlide: 9,
+      scenarioSlide: 6,
       truth: {
         motive: { state: 'present', diagnosis: 'The driver is exhausted and wants the car to reduce or remove the burden of driving.' },
         access: { state: 'present', diagnosis: 'He is in the car and can try to activate the driver-assist feature.' },
@@ -521,7 +559,6 @@
   };
 
   const SCENARIO_KEYS = ['breakup', 'custody', 'journalist'];
-  const WRAP_SLIDE = 10;
 
   /* ── Per-scenario tag/reveal state ── */
   const atTagState = {
@@ -543,6 +580,7 @@
 
     const allAnswered = Object.values(st.answers).every(v => v !== null);
     document.getElementById(sc.revealBtnId).classList.toggle('show', allAnswered);
+    if (window._syncRevealButton) window._syncRevealButton(key);
   }
 
   function _reveal(key) {
@@ -557,6 +595,7 @@
       const punch = document.getElementById(sc.punchId);
       punch.style.display = 'block';
       requestAnimationFrame(() => punch.classList.add('in'));
+      _restoreNext();
       unlockNext();
     }, rows.length * 600 + 200);
   }
@@ -595,7 +634,7 @@
   window.atRevealCustody       = function() { _reveal('custody'); };
   window.atRevealJournalist    = function() { _reveal('journalist'); };
 
-  /* ── Screen 3: pick a scenario ── */
+  /* ── Slide 3: pick a scenario (auto-advance) ── */
   let atPickedScenario = null;
 
   function atPick(card) {
@@ -604,16 +643,9 @@
     card.classList.add('selected');
     atPickedScenario = card.dataset.pick;
     atUpdateScenarioLabels();
-    const btn = document.getElementById('atInvestigateBtn');
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    btn.classList.add('show');
+    setTimeout(() => { if (current === 3) goNext(); }, 220);
   }
-
-  function atInvestigate() {
-    if (!atPickedScenario) return;
-    goNext();
-  }
+  window.atPick = atPick;
 
   /* Picked scenario gets label "1", the others fill 2/3 in their natural order. */
   function atUpdateScenarioLabels() {
@@ -626,23 +658,47 @@
     });
   }
 
-  /* ── Routing: 3 → picked.comicSlide → picked.tagSlide → wrap. Other scenarios skipped. ── */
+  /* On a scenario slide: first NEXT reveals the tag block (and pans to it).
+     The CORRECT ANSWERS morph then takes over. After reveal, NEXT advances. */
+  const tagShown = { breakup: false, custody: false, journalist: false };
+  function _showTagBlock(key) {
+    const slide = document.querySelector(`[data-slide="${SCENARIOS[key].scenarioSlide}"]`);
+    const block = slide ? slide.querySelector('[data-tag-reveal]') : null;
+    if (block) {
+      block.classList.add('in');
+      requestAnimationFrame(() => {
+        block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+    tagShown[key] = true;
+    _setNextAsReveal(key);
+  }
+  function _hideTagBlock(key) {
+    const slide = document.querySelector(`[data-slide="${SCENARIOS[key].scenarioSlide}"]`);
+    const block = slide ? slide.querySelector('[data-tag-reveal]') : null;
+    if (block) block.classList.remove('in');
+    tagShown[key] = false;
+  }
+
+  /* ── Routing: 3 → picked.scenarioSlide → wrap. ── */
   function atPicked() {
     return SCENARIOS[atPickedScenario || 'breakup'];
   }
 
   goNext = function() {
     const sc = atPicked();
-    if (current === 3) { goTo(sc.comicSlide); return; }
-    if (current === sc.comicSlide) { goTo(sc.tagSlide); return; }
-    if (current === sc.tagSlide) { goTo(WRAP_SLIDE); return; }
+    const key = atPickedScenario || 'breakup';
+    if (current === 3) { goTo(sc.scenarioSlide); return; }
+    if (current === sc.scenarioSlide) {
+      if (!tagShown[key]) { _showTagBlock(key); return; }
+      goTo(WRAP_SLIDE); return;
+    }
     goTo(current + 1);
   };
   goPrev = function() {
     const sc = atPicked();
-    if (current === WRAP_SLIDE) { goTo(sc.tagSlide); return; }
-    if (current === sc.tagSlide) { goTo(sc.comicSlide); return; }
-    if (current === sc.comicSlide) { goTo(3); return; }
+    if (current === WRAP_SLIDE) { goTo(sc.scenarioSlide); return; }
+    if (current === sc.scenarioSlide) { goTo(3); return; }
     goTo(current - 1);
   };
 
@@ -653,6 +709,7 @@
       const st = atTagState[key];
       st.answers = { motive: null, access: null, opportunity: null };
       st.revealed = false;
+      _hideTagBlock(key);
 
       document.querySelectorAll(`#${sc.rowsId} .at-tag-row`).forEach(row => {
         row.classList.remove('present', 'absent', 'revealed');
@@ -673,15 +730,12 @@
     });
     atPickedScenario = null;
     atUpdateScenarioLabels();
-    const inv = document.getElementById('atInvestigateBtn');
-    if (inv) { inv.disabled = true; inv.style.opacity = '0.4'; inv.classList.remove('show'); }
-
     goTo(3);
   }
   window.atTryAnother = atTryAnother;
 
   /* ── Init ── */
-  initSlides(10);
+  initSlides(7);
   startProductTimer('self_driving');
 </script>
 </body>
