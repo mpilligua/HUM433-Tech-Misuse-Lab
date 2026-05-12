@@ -18,6 +18,73 @@
     transition: color 0.2s;
   }
   .topbar-home:hover { color: var(--accent); }
+
+  /* ─────────────────────────────────────────────────────────────────────
+     GENERAL SCALE-UP: fill the screen across all printer slides.
+     Each rule below bumps a slide's content sizing while keeping the
+     same layout. Mirrors the per-slide pattern used by airtag + genai.
+     ───────────────────────────────────────────────────────────────────── */
+
+  /* Slide 2: Strategy intro */
+  .slide[data-slide="2"] h2 { font-size: clamp(36px, 5vw, 60px) !important; }
+  .slide[data-slide="2"] p {
+    font-size: 26px !important;
+    line-height: 1.6 !important;
+    max-width: 1500px !important;
+  }
+  .slide[data-slide="2"] p:last-child { font-size: 22px !important; }
+
+  /* Slide 3: Match the Components (drag & drop game) */
+  .slide[data-slide="3"] > div > div { max-width: 1700px !important; }
+  .slide[data-slide="3"] h2 { font-size: clamp(34px, 4.6vw, 56px) !important; }
+  .slide[data-slide="3"] > div > div > p { font-size: 20px !important; margin-bottom: 32px !important; max-width: 1100px !important; }
+  .slide[data-slide="3"] .image-drag-container { max-width: 1700px !important; gap: 56px !important; }
+  .slide[data-slide="3"] .printer-canvas { max-width: 920px !important; }
+  .slide[data-slide="3"] .components-sidebar { flex: 0 0 460px !important; padding: 28px !important; }
+  .slide[data-slide="3"] .sidebar-label { font-size: 18px !important; margin-bottom: 24px !important; }
+  .slide[data-slide="3"] .placed-component { font-size: 19px !important; padding: 18px 22px !important; }
+  .slide[data-slide="3"] .component-label-overlay { font-size: 17px !important; }
+  .slide[data-slide="3"] .reset-btn { font-size: 18px !important; padding: 18px 48px !important; }
+
+  /* Slides 4 + 7: Quizzes — wider, larger text */
+  .slide[data-slide="4"] .quiz-layout,
+  .slide[data-slide="7"] .quiz-layout { max-width: 1700px !important; gap: 64px !important; }
+  .slide[data-slide="4"] .quiz-left,
+  .slide[data-slide="7"] .quiz-left { flex: 0 0 760px !important; }
+  .slide[data-slide="4"] .quiz-heading,
+  .slide[data-slide="7"] .quiz-heading { font-size: clamp(32px, 4vw, 50px) !important; margin-bottom: 22px !important; }
+  .slide[data-slide="4"] .quiz-q,
+  .slide[data-slide="7"] .quiz-q { font-size: 22px !important; margin-bottom: 32px !important; }
+  .slide[data-slide="4"] .options-grid,
+  .slide[data-slide="7"] .options-grid { gap: 18px !important; }
+  .slide[data-slide="4"] .option-btn,
+  .slide[data-slide="7"] .option-btn { font-size: 22px !important; padding: 22px 26px !important; }
+  .slide[data-slide="4"] .option-letter,
+  .slide[data-slide="7"] .option-letter { font-size: 20px !important; }
+  .slide[data-slide="4"] .feedback-box,
+  .slide[data-slide="7"] .feedback-box { font-size: 18px !important; }
+  .slide[data-slide="4"] .quiz-right,
+  .slide[data-slide="7"] .quiz-right { min-height: 540px !important; font-size: 20px !important; }
+
+  /* Slide 5: Invisible Proxy Attack story */
+  .slide[data-slide="5"] > div { max-width: 1500px !important; }
+  .slide[data-slide="5"] h2 { font-size: clamp(40px, 5.4vw, 64px) !important; }
+  .slide[data-slide="5"] .story-intro { font-size: 26px !important; max-width: 1300px !important; }
+  .slide[data-slide="5"] img { max-width: 1300px !important; max-height: 65vh !important; }
+
+  /* Slide 6: Teaser — already big via clamp, just nudge the lead-in */
+  .slide[data-slide="6"] > p { font-size: 32px !important; }
+  .slide[data-slide="6"] .teaser-big { font-size: clamp(56px, 8vw, 110px) !important; }
+
+  /* Slide 8: Real-world story image */
+  .slide[data-slide="8"] h2 { font-size: clamp(40px, 5.4vw, 64px) !important; }
+  .slide[data-slide="8"] img { max-width: 1200px !important; max-height: 65vh !important; }
+
+  /* Slide 9: Finish */
+  .slide[data-slide="9"] h1 { font-size: clamp(60px, 8vw, 96px) !important; }
+  .slide[data-slide="9"] h2 { font-size: clamp(36px, 4.6vw, 56px) !important; }
+  .slide[data-slide="9"] .purpose-box { font-size: 24px !important; max-width: 1100px !important; padding: 28px 34px !important; line-height: 1.65 !important; }
+  .slide[data-slide="9"] .select-btn { font-size: 18px !important; padding: 20px 56px !important; }
 </style>
 </head>
 <body>
@@ -57,7 +124,20 @@
     <div style="width:100%; padding:36px 5%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
       <div style="width:100%; max-width:1200px;">
         <h2 style="margin-bottom:8px;">Match the <span class="accent-word">Components</span></h2>
-        <p style="font-size:16px;color:var(--muted);margin-bottom:28px;">Drag components from the list onto the printer image. When you place a component correctly, the label will appear. You have as many tries as you want.</p>
+        <p style="font-size:16px;color:var(--muted);margin:0 auto 28px;text-align:center;max-width:900px;">Drag components from the list onto the printer image. When you place a component correctly, the label will appear. You have as many tries as you want.</p>
+
+        <div style="display:flex; justify-content:center; margin:-12px 0 28px;">
+          <button id="showHowBtn" type="button" onclick="toggleHowVideo()"
+                  style="padding:10px 22px; font-family:'Space Mono', monospace; font-size:13px; letter-spacing:2px; color:var(--muted); background:transparent; border:1px solid var(--border); border-radius:5px; cursor:pointer; transition:all 0.2s;"
+                  onmouseover="this.style.color='#ccc'; this.style.borderColor='var(--muted)';"
+                  onmouseout="this.style.color='var(--muted)'; this.style.borderColor='var(--border)';">Show me how to do it</button>
+        </div>
+
+        <div id="howVideoWrap" style="display:none; margin:0 auto 28px; width:100%; max-width:1300px;">
+          <video id="howVideo" src="../images/example_printer.mov" controls loop muted playsinline
+                 style="width:100%; max-height:60vh; object-fit:contain; border-radius:12px; box-shadow:0 20px 40px rgba(0,0,0,0.25);"
+                 onerror="this.style.display='none';"></video>
+        </div>
 
         <div class="image-drag-container">
           <div class="printer-pool">
@@ -66,9 +146,9 @@
               <img id="componentHighlight" class="highlight-overlay" src="../images/components_highlighted/nothing.png" alt="" aria-hidden="true"/>
               <div class="completion-message" id="completionMessage">Well done!</div>
             </div>
-            <div class="drag-drop-footer">
+            <!-- <div class="drag-drop-footer">
               <button class="reset-btn" onclick="resetImageGame()">RESET</button>
-            </div>
+            </div> -->
           </div>
 
           <div class="components-sidebar">
@@ -144,7 +224,7 @@
       Every device has hidden assumptions.
       The best engineers are the ones who question them before malicious users do.
     </div>
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
+    <!-- <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button> -->
   </div>
 
   <!-- SLIDE 10: Celebration -->
@@ -159,7 +239,26 @@
   <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
 </div>
 
-<script src="../js/core.js"></script>
+<script src="../js/core.js">
+function toggleHowVideo() {
+  const wrap = document.getElementById('howVideoWrap');
+  const btn  = document.getElementById('showHowBtn');
+  const vid  = document.getElementById('howVideo');
+  if (!wrap || !btn) return;
+  const open = wrap.style.display !== 'none';
+  if (open) {
+    wrap.style.display = 'none';
+    btn.textContent = 'Show me how to do it';
+    if (vid) { try { vid.pause(); } catch (e) {} }
+  } else {
+    wrap.style.display = 'block';
+    btn.textContent = 'Hide example';
+    if (vid) { try { vid.currentTime = 0; vid.play(); } catch (e) {} }
+  }
+}
+window.toggleHowVideo = toggleHowVideo;
+
+</script>
 <script src="../js/celebration.js"></script>
 <script>
 /* ── Gate state ── */
@@ -245,25 +344,25 @@ document.querySelectorAll('.option-btn[data-images]').forEach(btn => {
    ══════════════════════════════════════════════ */
 
 const CORRECT_COMPONENTS_IMAGE = {
-  'Internet Connectivity': { y: [38, 199],   x: [708, 980] },
-  'Hard Disk Storage':     { y: [278, 439],  x: [708, 980] },
-  'CPU':                   { y: [523, 684],  x: [708, 980] },
-  'Image Sensor':          { y: [782, 944],  x: [708, 980] },
-  'Engine':     { y: [782, 951],  x: [10,  281] }
+  'Internet Connectivity': { y: [38+40, 150+40],   x: [735-10, 980-10] },
+  'Disk Storage':     { y: [278+30, 375+50],  x: [735-10, 980-10] },
+  'CPU':                   { y: [523+30, 630+30],  x: [735-10, 980-10] },
+  'Sensor':          { y: [782, 900],  x: [735-10, 980-10] },
+  'Engine':     { y: [782, 900],  x: [30,  272] }
 };
 
 const HIGHLIGHT_IMAGES = {
   'Internet Connectivity': '../images/components_highlighted/internet.png',
-  'Hard Disk Storage':     '../images/components_highlighted/storage.png',
+  'Disk Storage':     '../images/components_highlighted/storage.png',
   'CPU':                   '../images/components_highlighted/cpu.png',
-  'Image Sensor':          '../images/components_highlighted/sensor.png',
+  'Sensor':          '../images/components_highlighted/sensor.png',
   'Engine':     '../images/components_highlighted/engine.png',
   'default':               '../images/components_highlighted/nothing.png',
-  'GPS':                   '../images/components_highlighted/nothing.png',
-  'Vacuum Pump':           '../images/components_highlighted/nothing.png'
+  // 'GPS':                   '../images/components_highlighted/nothing.png',
+  // 'Vacuum Pump':           '../images/components_highlighted/nothing.png'
 };
 
-const INCORRECT_COMPONENTS = ['GPS', 'Vacuum Pump'];
+const INCORRECT_COMPONENTS = [];
 const ALL_COMPONENTS_LIST = [...Object.keys(CORRECT_COMPONENTS_IMAGE), ...INCORRECT_COMPONENTS].sort(() => Math.random() - 0.5);
 
 let gameState = { placedComponents: {} };
@@ -392,10 +491,10 @@ startProductTimer('printer');
   const _origGoTo = goTo;
   goTo = function(n) {
     _origGoTo(n);
-    if (n === 9) {
+    if (n === 10) {
       try { localStorage.setItem('completed:printer', '1'); } catch (e) {}
     }
-    if (n === 10) {
+    if (n === 9) {
       const container = document.querySelector('[data-slide="10"] .completion-slide-inner');
       if (container) {
         container.dataset.mounted = '';

@@ -402,10 +402,7 @@
           </div>
         </div>
 
-        <button class="select-btn" id="surveySubmitBtn" onclick="submitSurvey()" disabled
-                style="margin-top:14px; align-self:center;">
-          SUBMIT & FINISH
-        </button>
+        <button id="surveySubmitBtn" disabled style="display:none;" aria-hidden="true"></button>
         <div class="survey-status" id="surveyStatus"></div>
       </div>
     </div>
@@ -419,7 +416,7 @@
       Three lenses you can point at any new technology, not just the ones in this lab: <strong style="color:var(--accent)">components</strong>, <strong style="color:var(--accent)">scenarios</strong>, and <strong style="color:var(--accent)">threat actors</strong>.
     </div>
 
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-1'" style="margin-top:28px;">Go to next level →</button>
+    <!-- <button class="select-btn" onclick="window.location.href='../index.html#slide-1'" style="margin-top:28px;">Finish →</button>} -->
   </div>
 
   <!-- SLIDE 5: Celebration -->
@@ -430,8 +427,8 @@
 </div>
 
 <div class="bottom-nav">
-  <button class="nav-btn" id="prevBtn" onclick="goPrev()">← PREV</button>
-  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+  <button class="nav-btn" id="prevBtn" onclick="goPrev()">← Prev</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">Next →</button>
 </div>
 
 <script src="../js/core.js"></script>
@@ -533,14 +530,32 @@ let currentSlide = 1;
 let gradingShown = false;
 let gradingRunning = false;
 
+let surveySubmitted = false;
+let surveySubmitting = false;
+
 const _coreGoTo = goTo;
 goTo = function(n) {
   if (currentSlide === 2 && n === 3 && !gradingShown && !gradingRunning) {
     showInlineGrading();
     return;
   }
+  // On slide 3, pressing NEXT submits the survey (one-shot). After the submit
+  // completes, submitSurvey() calls goNext() to advance to slide 4.
+  if (currentSlide === 3 && n === 4 && !surveySubmitted && !surveySubmitting) {
+    submitSurvey();
+    return;
+  }
   currentSlide = n;
-  nextGated = (n === 2 && !metaDone);
+  // Slide 2 gated until grading finishes. Slide 3 gated until all 3 survey
+  // answers are filled (surveySubmitBtn.disabled tracks that).
+  if (n === 2) {
+    nextGated = !metaDone;
+  } else if (n === 3) {
+    const submitBtn = document.getElementById('surveySubmitBtn');
+    nextGated = !!(submitBtn && submitBtn.disabled);
+  } else {
+    nextGated = false;
+  }
   _coreGoTo(n);
   if (n === 4) {
     try { localStorage.setItem('completed:meta_learning', '1'); } catch (e) {}
@@ -797,6 +812,12 @@ function updateSurveyProgress() {
   const ready = surveyAnswers.q1 && surveyAnswers.q2.length > 0 && surveyAnswers.q3;
   const btn = document.getElementById('surveySubmitBtn');
   if (btn) btn.disabled = !ready;
+  // Refresh the bottom-nav NEXT button's gated state so the user can press
+  // it as soon as all three answers are filled.
+  if (currentSlide === 3) {
+    nextGated = !ready;
+    if (typeof updateUI === 'function') updateUI();
+  }
 }
 
 // Wire up the yes/no/maybe buttons after parse.
@@ -805,11 +826,12 @@ document.querySelectorAll('.survey-choice').forEach(btn => {
 });
 
 async function submitSurvey() {
-  const btn = document.getElementById('surveySubmitBtn');
+  if (surveySubmitting || surveySubmitted) return;
+  surveySubmitting = true;
   const status = document.getElementById('surveyStatus');
-  btn.disabled = true;
   status.className = 'survey-status';
   status.textContent = 'Sending…';
+  lockNext();
 
   try {
     localStorage.setItem('survey:meta_learning', JSON.stringify({
@@ -818,13 +840,19 @@ async function submitSurvey() {
     }));
   } catch (e) {}
 
+  const finish = (statusClass, statusText) => {
+    surveySubmitting = false;
+    surveySubmitted = true;
+    status.className = 'survey-status ' + statusClass;
+    status.textContent = statusText;
+    unlockNext();
+    // Auto-advance to the wrap slide now that the submit completed.
+    goNext();
+  };
+
   const { formId, entryQ1, entryQ2, entryQ3 } = GOOGLE_FORM_CONFIG;
   if (!formId || !entryQ1 || !entryQ2 || !entryQ3) {
-    status.className = 'survey-status ok';
-    status.textContent = 'Saved locally. (Form not configured.)';
-    btn.textContent = 'CONTINUE →';
-    btn.disabled = false;
-    btn.onclick = () => goNext();
+    finish('ok', 'Saved locally. (Form not configured.)');
     return;
   }
 
@@ -841,17 +869,9 @@ async function submitSurvey() {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body.toString()
     });
-    status.className = 'survey-status ok';
-    status.textContent = '✓ Thanks. Your answers were saved.';
-    btn.textContent = 'CONTINUE →';
-    btn.disabled = false;
-    btn.onclick = () => goNext();
+    finish('ok', '✓ Thanks. Your answers were saved.');
   } catch (err) {
-    status.className = 'survey-status bad';
-    status.textContent = 'Could not send to the form. Saved locally instead.';
-    btn.textContent = 'CONTINUE ANYWAY →';
-    btn.disabled = false;
-    btn.onclick = () => goNext();
+    finish('bad', 'Could not send to the form. Saved locally instead.');
   }
 }
 
