@@ -349,7 +349,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 05</div>
+  <div class="slide-counter" id="slideCounter">01 / 06</div>
 </div>
 
 <div class="slides-wrapper">
@@ -359,7 +359,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
     <div style="flex:0 0 auto; max-width:380px;">
       <h2>Social Media <span class="accent-word">Platform</span></h2>
       <div class="purpose-box" style="margin-top:20px;">
-        The original intent of social media is to connect the world, allowing people to share life updates, exchange ideas, and find their communities. It serves as the infrastructure of modern digital life.
+        Platforms designed to <strong style="color:#f0f0f0">connect humanity</strong>. The algorithm has one job: keep you scrolling. It is extremely good at it. Your weekend is the proof.
       </div>
     </div>
     <div style="flex:1 1 0; display:flex; align-items:center; justify-content:center; max-width:480px;">
@@ -372,7 +372,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
   <div style="flex:0 0 auto; max-width:380px;">
     <h2>Social Media <span class="accent-word">Platform</span></h2>
     <div class="purpose-box" style="margin-top:20px;">
-      The original intent of social media is to connect the world, allowing people to share life updates, exchange ideas, and find their communities. It serves as the infrastructure of modern digital life.
+      Platforms designed to <strong style="color:#f0f0f0">connect humanity</strong>. The algorithm has one job: keep you scrolling. It is extremely good at it. Your weekend is the proof.
     </div>
   </div>
   <div style="flex:1 1 0; display:flex; align-items:center; justify-content:center; max-width:480px;">
@@ -459,7 +459,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
     <div style="width:100%; max-width:700px; margin-top:4px;">
       <div id="smChallengeList" style="display:flex; flex-direction:column; gap:10px; width:100%; text-align:left; margin-bottom:16px;"></div>
 
-      <button class="select-btn ghost" id="smHintBtn" style="padding:10px 24px;font-size:12px;margin-top:0;" onclick="revealSmHint()">HINT</button>
+      <button id="smHintBtn" style="padding:8px 18px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:2px; background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.color='#ccc'; this.style.borderColor='var(--muted)';" onmouseout="this.style.color='var(--muted)'; this.style.borderColor='var(--border)';" onclick="revealSmHint()">Stuck? Show a hint</button>
 
       <div id="smHintBox" style="display:none; background:#1a0d0d; border:1px solid var(--accent2); padding:16px 20px; border-radius:8px; text-align:left; margin-top:12px;">
         <h4 style="color:var(--accent2);margin-bottom:10px;font-size:15px;">⚠️ Potential Misuse Scenarios</h4>
@@ -483,7 +483,12 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
       <br><br>
     </div>
 
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
+    <!-- <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button> -->
+  </div>
+
+  <!-- ═══ SLIDE 6: Celebration ═══ -->
+  <div class="slide" data-slide="6">
+    <div class="completion-slide-inner" data-product="social_media"></div>
   </div>
 
 </div>
@@ -496,7 +501,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 <script src="../js/celebration.js"></script>
 <script>
 let current = 1;
-const total = 5;
+const total = 6;
 
 function buildDots() {
   const bar = document.getElementById('progressBar');
@@ -535,9 +540,15 @@ function goTo(n) {
   current = n;
   updateUI();
   setTimeout(() => document.querySelectorAll('.slide.exit').forEach(s => s.classList.remove('exit')), 500);
-  if (n === total) {
+  if (n === 5) {
     try { localStorage.setItem('completed:social_media', '1'); } catch (e) {}
-    setTimeout(() => showCompletionCelebration('social_media'), 600);
+  }
+  if (n === total) {
+    const container = document.querySelector('[data-slide="6"] .completion-slide-inner');
+    if (container) {
+      container.dataset.mounted = '';
+      setTimeout(() => mountCelebrationSlide('social_media', container), 300);
+    }
   }
 }
 
@@ -727,11 +738,32 @@ function rateLearning(item, rating) {
   stars.forEach((s, i) => s.classList.toggle('filled', i < rating));
 }
 
-/* ── Slide 4: Designer Challenge input boxes ── */
+/* ── Slide 4: Designer Challenge input boxes (no per-row button — typing
+   is enough). Reaching 2 non-empty inputs unlocks NEXT; a trailing empty
+   row appears whenever the last visible row gets text, so the user can
+   keep adding more user groups without clicking anything. ── */
 let smChallengeDone = false;
-let smBoxDoneCount = 0;
 const SM_HINTS_TOTAL = 3;
 let smHintsRevealed = 0;
+
+function _readSmEntries() {
+  return Array.from(document.querySelectorAll('#smChallengeList input'))
+    .map(i => i.value.trim())
+    .filter(v => v.length > 0);
+}
+
+function _refreshSmBoxState() {
+  const filled = _readSmEntries().length;
+  if (filled >= 2 && !smChallengeDone) {
+    smChallengeDone = true;
+    updateUI();
+  }
+  // Ensure there's always one trailing empty row.
+  const list = document.getElementById('smChallengeList');
+  const rows = Array.from(list.querySelectorAll('input'));
+  const lastEmpty = rows.length > 0 && rows[rows.length - 1].value.trim() === '';
+  if (!lastEmpty) addSmBox();
+}
 
 function addSmBox() {
   const list = document.getElementById('smChallengeList');
@@ -740,37 +772,9 @@ function addSmBox() {
   row.style = 'display:flex;align-items:center;gap:10px;';
   row.innerHTML = `
     <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">${String(num).padStart(2,'0')}</span>
-    <input type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
-    <button onclick="smBoxDone(this)" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;border:1px solid #22c55e;background:transparent;color:#22c55e;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;" onmouseover="if(!this.disabled)this.style.background='rgba(34,197,94,0.1)'" onmouseout="if(!this.disabled)this.style.background='transparent'">DONE</button>
+    <input type="text" placeholder="Type a user group…" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" oninput="_refreshSmBoxState()" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
   `;
   list.appendChild(row);
-  row.querySelector('input').focus();
-}
-
-function smBoxDone(btn) {
-  const row = btn.parentElement;
-  const input = row.querySelector('input');
-  const val = input.value.trim();
-  if (!val) { input.style.borderColor = 'var(--accent2)'; return; }
-
-  input.disabled = true;
-  input.style.borderColor = 'var(--accent)';
-  input.style.opacity = '0.75';
-  btn.disabled = true;
-  btn.textContent = '✓';
-  btn.style.borderColor = 'var(--accent)';
-  btn.style.color = 'var(--accent)';
-
-  smBoxDoneCount++;
-
-  if (smBoxDoneCount === 2) {
-    smChallengeDone = true;
-    updateUI();
-  }
-
-  if (smBoxDoneCount >= 2) {
-    addSmBox();
-  }
 }
 
 function revealSmHint() {

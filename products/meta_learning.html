@@ -287,7 +287,7 @@
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 04</div>
+  <div class="slide-counter" id="slideCounter">01 / 05</div>
 </div>
 
 <div class="slides-wrapper">
@@ -422,6 +422,11 @@
     <button class="select-btn" onclick="window.location.href='../index.html#slide-1'" style="margin-top:28px;">Go to next level →</button>
   </div>
 
+  <!-- SLIDE 5: Celebration -->
+  <div class="slide" data-slide="5">
+    <div class="completion-slide-inner" data-product="meta_learning"></div>
+  </div>
+
 </div>
 
 <div class="bottom-nav">
@@ -539,7 +544,13 @@ goTo = function(n) {
   _coreGoTo(n);
   if (n === 4) {
     try { localStorage.setItem('completed:meta_learning', '1'); } catch (e) {}
-    setTimeout(() => showCompletionCelebration('meta_learning'), 600);
+  }
+  if (n === 5) {
+    const container = document.querySelector('[data-slide="5"] .completion-slide-inner');
+    if (container) {
+      container.dataset.mounted = '';
+      setTimeout(() => mountCelebrationSlide('meta_learning', container), 300);
+    }
   }
 };
 
@@ -848,7 +859,7 @@ window.updateSurveyProgress = updateSurveyProgress;
 window.submitSurvey = submitSurvey;
 
 /* ── Init ── */
-initSlides(4);
+initSlides(5);
 startProductTimer('meta_learning');
 loadMetaAnswers();
 </script>

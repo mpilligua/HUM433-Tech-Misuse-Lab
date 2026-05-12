@@ -25,7 +25,7 @@
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 09</div>
+  <div class="slide-counter" id="slideCounter">01 / 10</div>
 </div>
 
 <div class="slides-wrapper">
@@ -145,6 +145,11 @@
       The best engineers are the ones who question them before malicious users do.
     </div>
     <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
+  </div>
+
+  <!-- SLIDE 10: Celebration -->
+  <div class="slide" data-slide="10">
+    <div class="completion-slide-inner" data-product="printer"></div>
   </div>
 
 </div>
@@ -380,17 +385,22 @@ dragObserver.observe(document.body, { attributes: true, subtree: true });
 setTimeout(initImageDragGame, 500);
 
 /* ── Init ── */
-initSlides(9);
+initSlides(10);
 startProductTimer('printer');
 
-/* Mark this product as completed once the user reaches the wrap slide. */
 (function() {
   const _origGoTo = goTo;
   goTo = function(n) {
     _origGoTo(n);
     if (n === 9) {
       try { localStorage.setItem('completed:printer', '1'); } catch (e) {}
-      setTimeout(() => showCompletionCelebration('printer'), 600);
+    }
+    if (n === 10) {
+      const container = document.querySelector('[data-slide="10"] .completion-slide-inner');
+      if (container) {
+        container.dataset.mounted = '';
+        setTimeout(() => mountCelebrationSlide('printer', container), 300);
+      }
     }
   };
 })();

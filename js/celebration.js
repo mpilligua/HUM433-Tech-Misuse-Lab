@@ -128,3 +128,55 @@ function dismissCompletionCelebration() {
   overlay.classList.remove('show');
   setTimeout(() => overlay.remove(), 300);
 }
+
+/* ── Embedded celebration: renders into a slide instead of a fullscreen overlay.
+   Each product page has a final slide containing
+     <div class="completion-slide-inner" data-product="<key>"></div>
+   and calls mountCelebrationSlide on slide enter. */
+function mountCelebrationSlide(productKey, container) {
+  if (!container || container.dataset.mounted === '1') return;
+  const line = _pickLine(productKey);
+  const meta = PRODUCT_META[productKey] || { emoji: "🏆", label: "Lesson" };
+  const time = _elapsedTime(productKey);
+  const acc  = _accuracy(productKey);
+
+  container.innerHTML = `
+    <div class="completion-confetti completion-confetti-inline" aria-hidden="true"></div>
+    <div class="completion-card completion-card-inline">
+      <div class="completion-mascot">${meta.emoji}</div>
+      <div class="completion-title">${line}</div>
+      <div class="completion-subtitle">You made it. Time to brag.</div>
+      <div class="completion-stats">
+        <div class="stat-card stat-yellow">
+          <div class="stat-label">LEVEL CLEARED</div>
+          <div class="stat-value"><span class="stat-icon">⚡</span>${meta.label}</div>
+        </div>
+        <div class="stat-card stat-green">
+          <div class="stat-label">ACCURACY</div>
+          <div class="stat-value"><span class="stat-icon">🎯</span>${acc}</div>
+        </div>
+        <div class="stat-card stat-blue">
+          <div class="stat-label">TIME</div>
+          <div class="stat-value"><span class="stat-icon">⏱</span>${time}</div>
+        </div>
+      </div>
+      <button class="completion-btn" onclick="window.location.href='../index.html'">CLAIM XP</button>
+    </div>
+  `;
+
+  const confetti = container.querySelector('.completion-confetti');
+  const colors = ['#ffd900','#58cc02','#1cb0f6','#ff4b4b','#ce82ff'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = (Math.random() * 0.4) + 's';
+    piece.style.animationDuration = (1.6 + Math.random() * 1.6) + 's';
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confetti.appendChild(piece);
+  }
+
+  requestAnimationFrame(() => container.classList.add('show'));
+  container.dataset.mounted = '1';
+}

@@ -234,7 +234,7 @@
 <div class="topbar">
   <a class="topbar-home" href="../index.html">HOME</a>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 08</div>
+  <div class="slide-counter" id="slideCounter">01 / 09</div>
 </div>
 
 <div class="slides-wrapper">
@@ -245,7 +245,7 @@
       <div style="flex:1 1 0; max-width:560px;">
         <h2>Health Monitoring <span class="accent-word">Devices</span></h2>
         <div class="purpose-box" style="margin-top:20px;">
-          Small devices, such as <strong style="color:#f0f0f0">watches</strong>, that track heart rate, steps, or similar physiological data. These statistics can be shown clearly on the device itself or in a connected app.
+          A <strong style="color:#f0f0f0">watch that watches you back</strong>. Counts your steps, judges your sleep, congratulates you on standing up. The data sleeps soundly on a server in Virginia.
         </div>
       </div>
       <div style="flex:1 1 0; display:flex; align-items:center; justify-content:center; max-width:480px;">
@@ -393,6 +393,11 @@
     <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
   </div>
 
+  <!-- SLIDE 9: Celebration -->
+  <div class="slide" data-slide="9">
+    <div class="completion-slide-inner" data-product="health_monitor_device"></div>
+  </div>
+
 </div>
 
 <div class="bottom-nav">
@@ -527,18 +532,23 @@ function hmdQuiz2(btn, key) {
   }
 }
 
-initSlides(8);
+initSlides(9);
 startProductTimer('health_monitor_device');
 initHmdSort();
 
-/* Mark completed and celebrate on the final slide. */
 (function() {
   const _origGoTo = goTo;
   goTo = function(n) {
     _origGoTo(n);
     if (n === 8) {
       try { localStorage.setItem('completed:health_monitor_device', '1'); } catch (e) {}
-      setTimeout(() => showCompletionCelebration('health_monitor_device'), 600);
+    }
+    if (n === 9) {
+      const container = document.querySelector('[data-slide="9"] .completion-slide-inner');
+      if (container) {
+        container.dataset.mounted = '';
+        setTimeout(() => mountCelebrationSlide('health_monitor_device', container), 300);
+      }
     }
   };
 })();

@@ -843,3 +843,69 @@ h3 { font-size: clamp(22px,3.1vw,35px); font-weight: 700; line-height: 1.2; }
   .stat-value { font-size: 17px; }
   .stat-icon { font-size: 19px; }
 }
+
+/* ── Inline (embedded-in-slide) celebration ───────────────────────────── */
+.completion-slide-inner {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.completion-slide-inner.show { opacity: 1; }
+
+.completion-card-inline {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 24px;
+  padding: 48px 44px 36px;
+  text-align: center;
+  max-width: 640px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(232,255,71,0.18), 0 0 0 1px rgba(232,255,71,0.08);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  z-index: 2;
+  transform: scale(0.85);
+  opacity: 0;
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+}
+.completion-slide-inner.show .completion-card-inline {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.completion-card-inline .completion-title {
+  color: var(--accent);
+  text-shadow: 0 4px 16px rgba(232,255,71,0.25);
+}
+.completion-card-inline .completion-subtitle {
+  color: var(--muted);
+}
+.completion-card-inline .stat-card {
+  background: #0d0d0d;
+}
+.completion-card-inline .stat-value {
+  color: var(--text);
+}
+.completion-card-inline .completion-btn {
+  background: var(--accent);
+  color: #000;
+  box-shadow: 0 5px 0 0 #5e6a00;
+}
+.completion-card-inline .completion-btn:hover  { background: #d4e83e; }
+.completion-card-inline .completion-btn:active { box-shadow: 0 1px 0 0 #5e6a00; }
+
+/* Confetti scoped to the inline container (doesn't cover the topbar/nav) */
+.completion-confetti-inline {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 24px;
+}

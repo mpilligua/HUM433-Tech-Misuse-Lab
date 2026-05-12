@@ -43,6 +43,87 @@
     padding: 6px 12px;
   }
   .drop-zone .persona-card:hover { transform: none; box-shadow: none; }
+
+  /* ─────────────────────────────────────────────────────────────────────
+     GENERAL SCALE-UP: fill the screen across all genai slides.
+     Each rule below boosts a slide's content sizing while keeping the
+     same layout. Mirrors airtag's slide-2 scale-up approach but per-slide.
+     ───────────────────────────────────────────────────────────────────── */
+
+  /* Slide 2: Strategy intro */
+  .slide[data-slide="2"] h2 { font-size: clamp(36px, 5vw, 60px) !important; }
+  .slide[data-slide="2"] p {
+    font-size: 28px !important;
+    line-height: 1.6 !important;
+    max-width: 1500px !important;
+  }
+
+  /* Slide 3: Brainstorm user types */
+  .slide[data-slide="3"] > div { max-width: 1100px !important; }
+  .slide[data-slide="3"] h2 { font-size: clamp(34px, 4.5vw, 56px) !important; margin-bottom: 14px !important; }
+  .slide[data-slide="3"] .body-text { font-size: 24px !important; margin-bottom: 32px !important; }
+  .slide[data-slide="3"] .user-type-input { font-size: 22px !important; padding: 18px 22px !important; }
+  .slide[data-slide="3"] #actorList > div > span { font-size: 18px !important; min-width: 38px !important; }
+  .slide[data-slide="3"] #genaiHintBtn { font-size: 14px !important; padding: 12px 26px !important; letter-spacing: 2.5px !important; }
+  .slide[data-slide="3"] .sm-hints-box h4 { font-size: 22px !important; }
+  .slide[data-slide="3"] .sm-hints-box ul { font-size: 19px !important; line-height: 1.65 !important; }
+  .slide[data-slide="3"] .sm-hints-box li { margin-bottom: 12px !important; }
+
+  /* Slide 4: Transition (it's not humanly possible…) */
+  .slide[data-slide="4"] > div { max-width: 1500px !important; }
+  .slide[data-slide="4"] .line1 { font-size: 34px !important; }
+  .slide[data-slide="4"] .line2 { font-size: clamp(48px, 6vw, 64px) !important; margin-top: 28px !important; }
+
+  /* Slide 5: Risk ratings */
+  .slide[data-slide="5"] h2 { font-size: clamp(36px, 4.6vw, 52px) !important; margin-bottom: 12px !important; }
+  .slide[data-slide="5"] .body-text { font-size: 22px !important; margin-bottom: 22px !important; }
+  .slide[data-slide="5"] #riskRatingList { max-width: 1100px !important; }
+  .slide[data-slide="5"] .learning-item { padding: 22px 28px !important; gap: 32px !important; }
+  .slide[data-slide="5"] .learning-num { font-size: 22px !important; }
+  .slide[data-slide="5"] .learning-text { font-size: 22px !important; }
+  .slide[data-slide="5"] .risk-slider { width: 220px !important; height: 6px !important; }
+  .slide[data-slide="5"] .risk-slider::-webkit-slider-thumb { width: 26px !important; height: 26px !important; }
+  .slide[data-slide="5"] .select-btn { font-size: 18px !important; padding: 18px 48px !important; }
+  .slide[data-slide="5"] #riskCheckMsg { max-width: 1100px !important; font-size: 18px !important; }
+
+  /* Slides 6 + 8: Text-only quizzes — single centered column, bigger text. */
+  .slide[data-slide="6"] .quiz-layout,
+  .slide[data-slide="8"] .quiz-layout {
+    max-width: 1100px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0 !important;
+  }
+  .slide[data-slide="6"] .quiz-left,
+  .slide[data-slide="8"] .quiz-left {
+    flex: 0 1 auto !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .slide[data-slide="6"] .quiz-heading,
+  .slide[data-slide="8"] .quiz-heading { font-size: clamp(34px, 4.4vw, 56px) !important; margin-bottom: 22px !important; text-align: center !important; }
+  .slide[data-slide="6"] .quiz-q,
+  .slide[data-slide="8"] .quiz-q { font-size: 24px !important; margin-bottom: 32px !important; text-align: center !important; max-width: 900px !important; }
+  .slide[data-slide="6"] .options-grid,
+  .slide[data-slide="8"] .options-grid { gap: 18px !important; width: 100% !important; max-width: 800px !important; text-align: left !important; }
+  .slide[data-slide="6"] .option,
+  .slide[data-slide="8"] .option { font-size: 22px !important; padding: 22px 26px !important; }
+  .slide[data-slide="6"] .option .opt-key,
+  .slide[data-slide="8"] .option .opt-key { font-size: 20px !important; }
+  .slide[data-slide="6"] .feedback-box,
+  .slide[data-slide="8"] .feedback-box { font-size: 18px !important; max-width: 800px !important; }
+
+  /* Slide 7: Real-world story image */
+  .slide[data-slide="7"] img { max-width: 1400px !important; max-height: 75vh !important; }
+
+  /* Slide 9: Finish */
+  .slide[data-slide="9"] h1 { font-size: clamp(60px, 8vw, 96px) !important; }
+  .slide[data-slide="9"] h2 { font-size: clamp(36px, 4.6vw, 56px) !important; }
+  .slide[data-slide="9"] .purpose-box { font-size: 24px !important; max-width: 1100px !important; padding: 28px 34px !important; line-height: 1.65 !important; }
+  .slide[data-slide="9"] .select-btn { font-size: 18px !important; padding: 20px 56px !important; }
 </style>
 </head>
 <body>
@@ -50,7 +131,7 @@
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 09</div>
+  <div class="slide-counter" id="slideCounter">01 / 10</div>
 </div>
 
 <div class="slides-wrapper">
@@ -84,7 +165,7 @@
 
       <div id="actorList" style="display:flex; flex-direction:column; gap:10px; width:100%; text-align:left; margin-bottom:20px;"></div>
 
-      <button class="select-btn ghost" id="genaiHintBtn" style="padding:10px 24px;font-size:12px;margin-top:0;" onclick="revealGenaiHint()">HINT</button>
+      <button id="genaiHintBtn" style="padding:8px 18px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:2px; background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.color='#ccc'; this.style.borderColor='var(--muted)';" onmouseout="this.style.color='var(--muted)'; this.style.borderColor='var(--border)';" onclick="revealGenaiHint()">Stuck? Show a hint</button>
 
       <div id="genaiHints" class="sm-hints-box" style="margin-top:16px;border-color:rgba(71,200,255,0.3);background:#0d1219;text-align:left;">
         <h4 style="color:var(--accent3);">Think about...</h4>
@@ -101,7 +182,7 @@
 
   <!-- SLIDE 4: Can't catch everyone -->
   <div class="slide" data-slide="4">
-    <div style="text-align:center; max-width:600px;">
+    <div style="text-align:center; max-width:1100px;">
       <div class="line1" style="color:var(--muted);font-size:26px;">It's not humanly possible to anticipate every user.</div>
       <div class="line2" style="font-size:38px; font-weight:900; line-height:1.1; margin-top:20px;">So designers focus on the <span style="color:var(--accent)">biggest holes</span> first, ranked by misuse impact.</div>
     </div>
@@ -123,13 +204,12 @@
         <div class="quiz-heading">A politician wants to win an election. Which GenAI capability makes this <span style="color:var(--accent2)">most dangerous?</span></div>
         <p class="quiz-q">Think about what creates the most visceral, trust-breaking impact on voters.</p>
         <div class="options-grid" id="genaiQuiz1Options">
-          <div class="option" data-key="A" data-image="../images/Gen_solveMath.png" data-panel="genaiQuiz1Panel" onclick="answerGenaiQuiz(this,1,'A')"><span class="opt-key">A</span> Can solve math equations quickly</div>
-          <div class="option" data-key="B" data-image="../images/Gen_Deepfake.png"  data-panel="genaiQuiz1Panel" onclick="answerGenaiQuiz(this,1,'B')"><span class="opt-key">B</span> Can produce realistic fake images and video</div>
-          <div class="option" data-key="C" data-image="../images/Gen_Darkmode.png"  data-panel="genaiQuiz1Panel" onclick="answerGenaiQuiz(this,1,'C')"><span class="opt-key">C</span> Has a dark mode interface</div>
+          <div class="option" data-key="A" onclick="answerGenaiQuiz(this,1,'A')"><span class="opt-key">A</span> Can solve math equations quickly</div>
+          <div class="option" data-key="B" onclick="answerGenaiQuiz(this,1,'B')"><span class="opt-key">B</span> Can produce realistic fake images and video</div>
+          <div class="option" data-key="C" onclick="answerGenaiQuiz(this,1,'C')"><span class="opt-key">C</span> Has a dark mode interface</div>
         </div>
         <div class="feedback-box" id="genaiQuiz1Feedback"></div>
       </div>
-      <div class="quiz-right" id="genaiQuiz1Panel"></div>
     </div>
   </div>
 
@@ -145,13 +225,12 @@
         <div class="quiz-heading">A scammer wants money. What's their <span style="color:var(--accent2)">worst move</span> with GenAI?</div>
         <p class="quiz-q">Pick the option that causes the most harm at scale.</p>
         <div class="options-grid" id="genaiQuiz2Options">
-          <div class="option" data-key="A" data-image="../images/gen_phishing.png" data-panel="genaiQuiz2Panel" onclick="answerGenaiQuiz(this,2,'A')"><span class="opt-key">A</span> Generate personalized phishing emails at scale</div>
-          <div class="option" data-key="B" data-image="../images/Gen_resume.png"   data-panel="genaiQuiz2Panel" onclick="answerGenaiQuiz(this,2,'B')"><span class="opt-key">B</span> Use it to write a résumé</div>
-          <div class="option" data-key="C" data-image="../images/Gen_news.png"     data-panel="genaiQuiz2Panel" onclick="answerGenaiQuiz(this,2,'C')"><span class="opt-key">C</span> Ask it to summarize news articles</div>
+          <div class="option" data-key="A" onclick="answerGenaiQuiz(this,2,'A')"><span class="opt-key">A</span> Generate personalized phishing emails at scale</div>
+          <div class="option" data-key="B" onclick="answerGenaiQuiz(this,2,'B')"><span class="opt-key">B</span> Use it to write a CV</div>
+          <div class="option" data-key="C" onclick="answerGenaiQuiz(this,2,'C')"><span class="opt-key">C</span> Ask it to summarize news articles</div>
         </div>
         <div class="feedback-box" id="genaiQuiz2Feedback"></div>
       </div>
-      <div class="quiz-right" id="genaiQuiz2Panel"></div>
     </div>
   </div>
 
@@ -164,7 +243,12 @@
       Every tool will reach people you didn't design for.
       The best designers ask <em>who</em> before <em>what</em>.
     </div>
-    <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button>
+    <!-- <button class="select-btn" onclick="window.location.href='../index.html#slide-3'">Go to next level →</button> -->
+  </div>
+
+  <!-- SLIDE 10: Celebration -->
+  <div class="slide" data-slide="10">
+    <div class="completion-slide-inner" data-product="genai"></div>
   </div>
 
 </div>
@@ -244,9 +328,31 @@ function revealGenaiHint() {
 let slide3Done = false;
 let slide5Done = false;
 
-/* ── Slide 3: dynamic actor boxes ── */
+/* ── Slide 3: dynamic actor boxes (no per-row button — typing is enough)
+   - Reaching 2 non-empty inputs unlocks NEXT.
+   - When the last visible row gets text, a fresh empty row is appended.
+   - actorEntries is read live from the inputs whenever populateRiskRatings
+     runs, so we don't need to track a separate list. ── */
 let actorEntries = [];
-let actorDoneCount = 0;
+
+function _readActorEntries() {
+  return Array.from(document.querySelectorAll('#actorList input'))
+    .map(i => i.value.trim())
+    .filter(v => v.length > 0);
+}
+
+function _refreshActorState() {
+  actorEntries = _readActorEntries();
+  if (actorEntries.length >= 2 && !slide3Done) {
+    slide3Done = true;
+    unlockNext();
+  }
+  // Ensure there's always one trailing empty row so the user can keep adding.
+  const list = document.getElementById('actorList');
+  const rows = Array.from(list.querySelectorAll('input'));
+  const lastEmpty = rows.length > 0 && rows[rows.length - 1].value.trim() === '';
+  if (!lastEmpty) addActorBox();
+}
 
 function addActorBox() {
   const list = document.getElementById('actorList');
@@ -255,43 +361,13 @@ function addActorBox() {
   row.style = 'display:flex;align-items:center;gap:10px;';
   row.innerHTML = `
     <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);min-width:24px;">${String(num).padStart(2,'0')}</span>
-    <input class="user-type-input" type="text" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
-    <button onclick="actorDone(this)" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;border:1px solid #22c55e;background:transparent;color:#22c55e;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;" onmouseover="if(!this.disabled)this.style.background='rgba(34,197,94,0.1)'" onmouseout="if(!this.disabled)this.style.background='transparent'">DONE</button>
+    <input class="user-type-input" type="text" placeholder="Type a user type…" style="flex:1;padding:12px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;" oninput="_refreshActorState()" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
   `;
   list.appendChild(row);
-  row.querySelector('input').focus();
-}
-
-function actorDone(btn) {
-  const row = btn.parentElement;
-  const input = row.querySelector('input');
-  const val = input.value.trim();
-  if (!val) { input.style.borderColor = 'var(--accent2)'; return; }
-
-  input.disabled = true;
-  input.style.borderColor = 'var(--accent)';
-  input.style.opacity = '0.75';
-  btn.disabled = true;
-  btn.textContent = '✓';
-  btn.style.borderColor = 'var(--accent)';
-  btn.style.color = 'var(--accent)';
-
-  actorEntries.push(val);
-  actorDoneCount++;
-
-  if (actorDoneCount === 2) {
-    slide3Done = true;
-    unlockNext();
-  }
-
-  if (actorDoneCount >= 2) {
-    addActorBox();
-  }
 }
 
 function initActorList() {
   actorEntries = [];
-  actorDoneCount = 0;
   slide3Done = false;
   document.getElementById('actorList').innerHTML = '';
   addActorBox();
@@ -304,6 +380,8 @@ let riskRatings = {};
 let ourFiveStartIdx = 0;
 
 function populateRiskRatings() {
+  // Pick up anything the user typed but hadn't blurred yet.
+  actorEntries = _readActorEntries();
   const userEntries = actorEntries;
   ourFiveStartIdx = userEntries.length;
   riskRatings = {};
@@ -421,27 +499,6 @@ function checkRiskRatings() {
   if (current === 5) unlockNext();
 }
 
-/* ── Option image hover panels (mirrors printer behaviour) ── */
-function initOptionHovers() {
-  document.querySelectorAll('.option[data-image]').forEach(opt => {
-    opt.addEventListener('mouseenter', () => {
-      const panel = document.getElementById(opt.dataset.panel);
-      if (!panel) return;
-      panel.classList.add('active');
-      panel.innerHTML = `
-        <div class="quiz-img-item">
-          <img src="${opt.dataset.image}" alt="">
-        </div>`;
-    });
-    opt.addEventListener('mouseleave', () => {
-      const panel = document.getElementById(opt.dataset.panel);
-      if (!panel) return;
-      panel.classList.remove('active');
-      panel.innerHTML = '';
-    });
-  });
-}
-
 /* ── Gate: slide 3 requires all inputs filled, slide 5 requires CHECK,
          slides 6 and 8 require answering their quiz before NEXT ── */
 let slide3Initialised = false;
@@ -457,13 +514,18 @@ goTo = function(n) {
   if (n === 5) populateRiskRatings();
   if (n === 9) {
     try { localStorage.setItem('completed:genai', '1'); } catch (e) {}
-    setTimeout(() => showCompletionCelebration('genai'), 600);
+  }
+  if (n === 10) {
+    const container = document.querySelector('[data-slide="10"] .completion-slide-inner');
+    if (container) {
+      container.dataset.mounted = '';
+      setTimeout(() => mountCelebrationSlide('genai', container), 300);
+    }
   }
 };
 
-initSlides(9);
+initSlides(10);
 startProductTimer('genai');
-initOptionHovers();
 initActorList();
 slide3Initialised = true;
 </script>

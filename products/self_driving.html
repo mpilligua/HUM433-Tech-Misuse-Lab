@@ -35,6 +35,17 @@
   .at-mao-final.in { animation: at-fade-up 0.5s ease forwards; }
   @keyframes at-fade-up { to { opacity: 1; transform: translateY(0); } }
 
+  /* Slide 2 (Scenario Analysis intro + MAO triad): scale everything up
+     so the screen breathes instead of feeling like a paragraph on the side. */
+  .slide[data-slide="2"] .airtag-stack { max-width: 1600px; gap: 36px; }
+  .slide[data-slide="2"] .airtag-prose { max-width: 1500px !important; font-size: 26px !important; line-height: 1.65; }
+  .slide[data-slide="2"] .at-mao-row { max-width: 1600px; gap: 28px; }
+  .slide[data-slide="2"] .at-mao-card { padding: 38px 36px; }
+  .slide[data-slide="2"] .at-mao-card .dot { width: 14px; height: 14px; margin-bottom: 18px; }
+  .slide[data-slide="2"] .at-mao-card .label { font-size: 30px; margin-bottom: 10px; }
+  .slide[data-slide="2"] .at-mao-card .def { font-size: 20px; line-height: 1.55; }
+  .slide[data-slide="2"] .at-mao-final { font-size: 26px; max-width: 1500px; margin-top: 14px; }
+
   /* ── Screen 3 scenario picker ── */
   .at-pick-grid { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 950px; }
   .at-pick-card { background: #fff; color: #111; border: 1.5px solid #d8d8d8; border-radius: 12px; padding: 20px 23px; cursor: pointer; font-size: 20px; line-height: 1.5; position: relative; transition: border-color 0.2s, background 0.2s, opacity 0.2s; }
@@ -128,7 +139,7 @@
 <div class="topbar">
   <div class="topbar-brand">TECH MISUSES LAB</div>
   <div class="progress-bar" id="progressBar"></div>
-  <div class="slide-counter" id="slideCounter">01 / 07</div>
+  <div class="slide-counter" id="slideCounter">01 / 08</div>
 </div>
 
 <div class="slides-wrapper">
@@ -406,17 +417,22 @@
       <p class="airtag-prose" style="max-width:680px;"><strong>MAO helps you ask: not "is this feature dangerous?", but "in this scenario, does the feature enable misuse?"</strong></p>
 
       <div class="select-btn-row">
-        <button class="select-btn ghost" id="atTryAnotherBtn" onclick="atTryAnother()">Try another scenario</button>
-        <button class="select-btn" onclick="window.location.href='../index.html'">Go to next level →</button>
+        <!-- <button class="select-btn ghost" id="atTryAnotherBtn" onclick="atTryAnother()">Try another scenario</button> -->
+        <!-- <button class="select-btn" onclick="window.location.href='../index.html'">Go to next level →</button> -->
       </div>
     </div>
+  </div>
+
+  <!-- SLIDE 8: Celebration -->
+  <div class="slide" data-slide="8">
+    <div class="completion-slide-inner" data-product="self_driving"></div>
   </div>
 
 </div>
 
 <div class="bottom-nav">
   <button class="nav-btn" id="prevBtn" onclick="goPrev()">← PREV</button>
-  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">NEXT →</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="goNext()">Next →</button>
 </div>
 
 <script src="../js/core.js"></script>
@@ -493,7 +509,13 @@
       const tryBtn = document.getElementById('atTryAnotherBtn');
       if (tryBtn) tryBtn.style.display = visitedScenarios.size >= 3 ? 'none' : '';
       try { localStorage.setItem('completed:self_driving', '1'); } catch (e) {}
-      setTimeout(() => showCompletionCelebration('self_driving'), 600);
+    }
+    if (n === 8) {
+      const container = document.querySelector('[data-slide="8"] .completion-slide-inner');
+      if (container) {
+        container.dataset.mounted = '';
+        setTimeout(() => mountCelebrationSlide('self_driving', container), 300);
+      }
     }
   };
   if (document.querySelector('[data-slide="2"]').classList.contains('active')) atStaggerMao('screen2MaoRow', 'screen2Final');
@@ -735,7 +757,7 @@
   window.atTryAnother = atTryAnother;
 
   /* ── Init ── */
-  initSlides(7);
+  initSlides(8);
   startProductTimer('self_driving');
 </script>
 </body>
