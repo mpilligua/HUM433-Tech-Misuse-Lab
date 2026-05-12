@@ -101,7 +101,7 @@ function showCompletionCelebration(productKey) {
           <div class="stat-value"><span class="stat-icon">⏱</span>${time}</div>
         </div>
       </div>
-      <button class="completion-btn" onclick="dismissCompletionCelebration()">CLAIM XP</button>
+      <button class="completion-btn" onclick="dismissCompletionCelebration()">CLAIM KNOWLEDGE</button>
     </div>
   `;
   document.body.appendChild(overlay);
@@ -160,7 +160,7 @@ function mountCelebrationSlide(productKey, container) {
           <div class="stat-value"><span class="stat-icon">⏱</span>${time}</div>
         </div>
       </div>
-      <button class="completion-btn" onclick="window.location.href='../index.html'">CLAIM XP</button>
+      <button class="completion-btn" onclick="window.location.href='../index.html'">CLAIM KNOWLEDGE</button>
     </div>
   `;
 

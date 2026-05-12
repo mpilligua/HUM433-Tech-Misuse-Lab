@@ -98,13 +98,24 @@
 
 <script src="js/core.js"></script>
 <script>
-  /* ── Home mode flag ──
-     Default: grid. Activate alternate homes via URL param (persisted in localStorage):
-       index.html?path=1       → serpentine path
-       index.html?path=levels  → level cards (click a level to pick one of two options)
-       index.html?path=0       → grid (clears flag) */
+  /* Visit index.html?reset=1 once to wipe all stored progress
+     (completed:*, survey:*, home_path) and reload at /. */
   (function() {
     const params = new URLSearchParams(window.location.search);
+    if (params.has('reset')) {
+      try {
+        const toRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && (k.startsWith('completed:') || k.startsWith('survey:') || k === 'home_path')) {
+            toRemove.push(k);
+          }
+        }
+        toRemove.forEach(k => localStorage.removeItem(k));
+      } catch (e) {}
+      window.location.replace(window.location.pathname);
+      return;
+    }
     if (params.has('path')) {
       const v = params.get('path');
       try {
@@ -210,9 +221,7 @@
   const PATH_NODES = LEVEL_GROUPS.flatMap(g => g.solo ? [g.node] : g.nodes);
   const NODES_PER_LEVEL = 2;
 
-  // DEBUG: when true, every level is unlocked regardless of completion state.
-  // Flip back to false (or remove) before shipping.
-  const DEBUG_UNLOCK_ALL = true;
+  const DEBUG_UNLOCK_ALL = false;
 
   function isCompleted(id) {
     try { return localStorage.getItem('completed:' + id) === '1'; } catch (e) { return false; }
@@ -300,7 +309,7 @@
         + (open ? '' : ' locked')
         + (opt.locked ? ' tbd' : '')
         + (completed ? ' done' : '');
-      const symbol = !open ? '🔒' : (completed ? '✓' : opt.icon);
+      const symbol = completed ? '✓' : opt.icon;
       node.style.left = `calc(50% + ${positions[idx].x - W / 2}px)`;
       node.style.top  = `${positions[idx].y - NODE_R}px`;
       node.innerHTML = `
@@ -538,7 +547,7 @@
       stop.style.left = `${(positions[idx].x / W) * 100}%`;
       stop.style.top  = `${(positions[idx].y / H) * 100}%`;
 
-      const symbol = !open ? '🔒' : (done ? '✓' : pillIcon);
+      const symbol = done ? '✓' : pillIcon;
       const popoverTitle = group.solo
         ? label
         : `${label}: choose a product`;
