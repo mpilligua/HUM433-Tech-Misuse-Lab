@@ -402,6 +402,17 @@
           </div>
         </div>
 
+        <div class="meta-q-card" style="animation-delay:0.2s">
+          <div class="meta-q-num">Survey 04</div>
+          <div class="meta-q-text">The goal of this tool was to "Explore different strategies on how to identify possible misuses". Would you say you learnt it?</div>
+          <div class="meta-q-sub">A short answer is enough.</div>
+          <textarea
+            class="meta-q-input"
+            id="surveyQ4"
+            placeholder="Yes, because… / Not really, because…"
+            oninput="updateSurveyProgress()"></textarea>
+        </div>
+
         <button id="surveySubmitBtn" disabled style="display:none;" aria-hidden="true"></button>
         <div class="survey-status" id="surveyStatus"></div>
       </div>
@@ -793,10 +804,11 @@ const GOOGLE_FORM_CONFIG = {
   formId:  '1FAIpQLSeHozbYxgG_oYJg5bjVeLEGREzrpIkhA1fCC9W-g-wLGI3C5A',
   entryQ1: 'entry.1030252630', // yes/no - learned new?
   entryQ2: 'entry.687732759',  // free text - what the tool showed
-  entryQ3: 'entry.636194233'   // yes/maybe/no - use again?
+  entryQ3: 'entry.636194233',  // yes/maybe/no - use again?
+  entryQ4: 'entry.1243371912'  // yes/somewhat/no - learnt the stated goal?
 };
 
-const surveyAnswers = { q1: null, q2: '', q3: null };
+const surveyAnswers = { q1: null, q2: '', q3: null, q4: '' };
 
 function selectSurveyChoice(q, val) {
   surveyAnswers['q' + q] = val;
@@ -809,7 +821,9 @@ function selectSurveyChoice(q, val) {
 function updateSurveyProgress() {
   const q2 = document.getElementById('surveyQ2');
   if (q2) surveyAnswers.q2 = q2.value.trim();
-  const ready = surveyAnswers.q1 && surveyAnswers.q2.length > 0 && surveyAnswers.q3;
+  const q4 = document.getElementById('surveyQ4');
+  if (q4) surveyAnswers.q4 = q4.value.trim();
+  const ready = surveyAnswers.q1 && surveyAnswers.q2.length > 0 && surveyAnswers.q3 && surveyAnswers.q4.length > 0;
   const btn = document.getElementById('surveySubmitBtn');
   if (btn) btn.disabled = !ready;
   // Refresh the bottom-nav NEXT button's gated state so the user can press
@@ -850,8 +864,8 @@ async function submitSurvey() {
     goNext();
   };
 
-  const { formId, entryQ1, entryQ2, entryQ3 } = GOOGLE_FORM_CONFIG;
-  if (!formId || !entryQ1 || !entryQ2 || !entryQ3) {
+  const { formId, entryQ1, entryQ2, entryQ3, entryQ4 } = GOOGLE_FORM_CONFIG;
+  if (!formId || !entryQ1 || !entryQ2 || !entryQ3 || !entryQ4) {
     finish('ok', 'Saved locally. (Form not configured.)');
     return;
   }
@@ -861,6 +875,7 @@ async function submitSurvey() {
   body.append(entryQ1, surveyAnswers.q1);
   body.append(entryQ2, surveyAnswers.q2);
   body.append(entryQ3, surveyAnswers.q3);
+  body.append(entryQ4, surveyAnswers.q4);
 
   try {
     await fetch(url, {
