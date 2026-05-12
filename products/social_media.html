@@ -399,21 +399,6 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 
     <div class="chemistry-dashboard">
 
-      <!-- Top Header Area -->
-      <div class="dash-header">
-        <h2 class="dash-title">Misuse Combinations Lab</h2>
-        <div class="dash-status">
-          <div class="status-col">
-            <span class="status-label">BAD USER</span>
-            <span class="status-value" id="statusTarget">NOT CHOSEN</span>
-          </div>
-          <div class="status-col">
-            <span class="status-label">TOOL</span>
-            <span class="status-value" id="statusVector">NOT CHOSEN</span>
-          </div>
-        </div>
-      </div>
-
       <!-- Center Stage Display -->
       <div class="dash-stage" id="labStage">
         <div class="stage-empty">
@@ -445,7 +430,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
         </div>
       </div>
 
-      <button class="select-btn reset-lab-btn" id="addNewCardBtn" onclick="addNewCard()" disabled>ADD NEW CARD</button>
+      <button class="select-btn reset-lab-btn" id="addNewCardBtn" onclick="addNewCard()" disabled>NEW CARD</button>
 
     </div>
   </div>
@@ -479,7 +464,7 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 
     <div class="purpose-box" style="margin-top:40px; border-left: 3px solid var(--accent3);">
       <strong style="color:var(--accent3); font-size: 18px;">Think like a designer</strong><br><br>
-      When you design a platform, try to look at it from the point of view of <span class="accent-word">different</span> kinds of users — including <span class="accent-word">bad users</span>. Imagine the ways the platform could be misused, and find ways to stop it.
+      When you design a platform, try to look at it from the point of view of <span class="accent-word">different</span> kinds of users, including <span class="accent-word">bad users</span>. Imagine the ways the platform could be misused, and find ways to stop it.
       <br><br>
     </div>
 
@@ -565,7 +550,7 @@ function handleActorChange() {
   const statusTarget = document.getElementById('statusTarget');
 
   if (actorSelect.value) {
-    statusTarget.textContent = actorSelect.options[actorSelect.selectedIndex].text;
+    if (statusTarget) statusTarget.textContent = actorSelect.options[actorSelect.selectedIndex].text;
     featureSelect.disabled = false;
   }
 
@@ -577,7 +562,7 @@ function handleFeatureChange() {
   const statusVector = document.getElementById('statusVector');
 
   if (featureSelect.value) {
-    statusVector.textContent = featureSelect.options[featureSelect.selectedIndex].text;
+    if (statusVector) statusVector.textContent = featureSelect.options[featureSelect.selectedIndex].text;
   }
 
   evaluateSMLab();
@@ -601,11 +586,10 @@ function evaluateSMLab() {
           <div class="lethal-stamp">DANGEROUS COMBINATION</div>
           <div class="lethal-title">STEALING USER DATA</div>
           <div class="lethal-section-title" style="color: var(--accent3);">HOW IT WORKS:</div>
-          <div class="lethal-text">They use open app permissions and cheap, fun content like quizzes to trick people. People don't notice, so the attackers can collect huge amounts of private data — from the users and from their friends — without anyone giving real consent.</div>
+          <div class="lethal-text">Quizzes and other fun apps grab your private data and your friends' data.</div>
           <div class="lethal-section-title" style="color: var(--accent2);">REAL CASE:</div>
           <div class="lethal-text">
-            <a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal" target="_blank">The Cambridge Analytica scandal (2010s).</a><br><br>
-            The company used a simple personality quiz app to collect data from up to 87 million Facebook users. They then used this data to send targeted political ads and try to change how people voted. It became a huge privacy scandal.
+            <a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal" target="_blank">Cambridge Analytica</a> harvested 87M Facebook users via a quiz app.
           </div>
         </div>
       `;
@@ -615,11 +599,10 @@ function evaluateSMLab() {
           <div class="lethal-stamp">DANGEROUS COMBINATION</div>
           <div class="lethal-title">CREATING AN ECHO CHAMBER</div>
           <div class="lethal-section-title" style="color: var(--accent3);">HOW IT WORKS:</div>
-          <div class="lethal-text">They act like marketers, testing different posts to see which ones spread fastest. Then they use the platform's recommendation system to show specific content to specific groups (by religion, race, or location). First they build a strong group identity, then they introduce a fake threat to make people angry and divided.</div>
+          <div class="lethal-text">The feed shows specific content to specific groups, then adds a fake threat to make them angry.</div>
           <div class="lethal-section-title" style="color: var(--accent2);">REAL CASE:</div>
           <div class="lethal-text">
-            <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia and the US elections (2016).</a><br><br>
-            A Russian group called the Internet Research Agency posted tailored content on Twitter, Facebook, and Instagram to influence how Americans thought and felt — and ultimately to interfere with the US presidential election.
+            <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=63307" target="_blank">Russia, US elections (2016).</a> The IRA posted targeted content to sway voters.
           </div>
         </div>
       `;
@@ -629,11 +612,10 @@ function evaluateSMLab() {
           <div class="lethal-stamp">DANGEROUS COMBINATION</div>
           <div class="lethal-title">SECRET RECRUITING</div>
           <div class="lethal-section-title" style="color: var(--accent3);">HOW IT WORKS:</div>
-          <div class="lethal-text">They enter young people's online spaces by pretending to share their hobbies. They use the same language, jokes, and memes to feel like part of the group. Then they move the conversation into private messages, where they can isolate one person and slowly push extreme ideas without anyone else noticing.</div>
+          <div class="lethal-text">They join gaming and meme groups, then move targets to private messages to push extreme ideas.</div>
           <div class="lethal-section-title" style="color: var(--accent2);">REAL CASE:</div>
           <div class="lethal-text">
-            <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Extremist groups recruiting online.</a><br><br>
-            Extremist groups have started using gaming culture and memes online to specifically target, isolate, and recruit young women on social media.
+            <a href="https://home-affairs.ec.europa.eu/system/files/2022-03/ad_hoc_young_women_social_media_Lessons-p-cve_022022_en.pdf" target="_blank">Online recruiting</a> of young women via gaming culture and memes.
           </div>
         </div>
       `;
@@ -641,7 +623,7 @@ function evaluateSMLab() {
       stage.innerHTML = `
         <div class="non-lethal-card">
           <div class="non-lethal-title">Not a major risk</div>
-          <div class="non-lethal-desc">This combination has some risk, but it's not one of the big ones. Try to find the three <strong>dangerous combinations</strong> that caused real, well-known security problems.</div>
+          <div class="non-lethal-desc">Some risk, but not a big one. Find the three <strong>dangerous combinations</strong>.</div>
         </div>
       `;
     }
@@ -693,8 +675,8 @@ function resetSMLab() {
   featureSelect.value = "";
   featureSelect.disabled = true;
 
-  document.getElementById('statusTarget').textContent = "NOT CHOSEN";
-  document.getElementById('statusVector').textContent = "NOT CHOSEN";
+  const _t = document.getElementById('statusTarget'); if (_t) _t.textContent = "NOT CHOSEN";
+  const _v = document.getElementById('statusVector'); if (_v) _v.textContent = "NOT CHOSEN";
 
   const stage = document.getElementById('labStage');
   stage.style.opacity = 0;
