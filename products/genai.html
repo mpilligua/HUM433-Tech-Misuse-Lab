@@ -415,7 +415,7 @@ function populateRiskRatings() {
     slider.type = 'range';
     slider.min = 1;
     slider.max = 5;
-    slider.value = 3;
+    slider.value = 1;
     slider.className = 'risk-slider';
     slider.oninput = function() { rateRisk(idx, parseInt(this.value)); };
 
@@ -425,7 +425,7 @@ function populateRiskRatings() {
 
     const valueDisplay = document.createElement('span');
     valueDisplay.dataset.riskItem = idx;
-    valueDisplay.textContent = '3';
+    valueDisplay.textContent = '1';
     valueDisplay.style = 'font-family:"Space Mono",monospace;font-size:13px;color:var(--accent);min-width:16px;text-align:center;';
 
     sliderWrap.appendChild(emojiLow);
@@ -450,7 +450,7 @@ function populateRiskRatings() {
 
   OUR_FIVE.forEach((name, i) => {
     const idx = userEntries.length + i;
-    riskRatings[idx] = 3; // default midpoint
+    riskRatings[idx] = 1;
     addRow(name, idx, true);
   });
 }

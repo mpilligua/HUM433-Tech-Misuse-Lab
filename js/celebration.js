@@ -76,7 +76,6 @@ function showCompletionCelebration(productKey) {
   if (document.getElementById('completion-overlay')) return;
   const line  = _pickLine(productKey);
   const meta  = PRODUCT_META[productKey] || { emoji: "🏆", label: "Lesson" };
-    const time  = _elapsedTime(productKey);
   const acc   = _accuracy(productKey);
 
   const overlay = document.createElement('div');
@@ -95,10 +94,6 @@ function showCompletionCelebration(productKey) {
         <div class="stat-card stat-green">
           <div class="stat-label">ACCURACY</div>
           <div class="stat-value"><span class="stat-icon">🎯</span>${acc}</div>
-        </div>
-        <div class="stat-card stat-blue">
-          <div class="stat-label">TIME</div>
-          <div class="stat-value"><span class="stat-icon">⏱</span>${time}</div>
         </div>
       </div>
       <button class="completion-btn" onclick="dismissCompletionCelebration()">CLAIM KNOWLEDGE</button>
@@ -137,7 +132,6 @@ function mountCelebrationSlide(productKey, container) {
   if (!container || container.dataset.mounted === '1') return;
   const line = _pickLine(productKey);
   const meta = PRODUCT_META[productKey] || { emoji: "🏆", label: "Lesson" };
-  const time = _elapsedTime(productKey);
   const acc  = _accuracy(productKey);
 
   container.innerHTML = `
@@ -154,10 +148,6 @@ function mountCelebrationSlide(productKey, container) {
         <div class="stat-card stat-green">
           <div class="stat-label">ACCURACY</div>
           <div class="stat-value"><span class="stat-icon">🎯</span>${acc}</div>
-        </div>
-        <div class="stat-card stat-blue">
-          <div class="stat-label">TIME</div>
-          <div class="stat-value"><span class="stat-icon">⏱</span>${time}</div>
         </div>
       </div>
       <button class="completion-btn" onclick="window.location.href='../index.html'">CLAIM KNOWLEDGE</button>
