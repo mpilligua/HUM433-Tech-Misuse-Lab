@@ -569,7 +569,12 @@ goTo = function(n) {
   }
   _coreGoTo(n);
   if (n === 4) {
-    try { localStorage.setItem('completed:meta_learning', '1'); } catch (e) {}
+    try {
+      localStorage.setItem('completed:meta_learning', '1');
+      // Path uses node id 'final' for this level; mirror the flag so the
+      // home page shows the last stop as completed (green).
+      localStorage.setItem('completed:final', '1');
+    } catch (e) {}
   }
   if (n === 5) {
     const container = document.querySelector('[data-slide="5"] .completion-slide-inner');
