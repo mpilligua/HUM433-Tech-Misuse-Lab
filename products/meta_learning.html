@@ -807,10 +807,16 @@ async function gradeOne(qKey, apiKey) {
    ════════════════════════════════════════════════════════════════════ */
 const GOOGLE_FORM_CONFIG = {
   formId:  '1FAIpQLSeHozbYxgG_oYJg5bjVeLEGREzrpIkhA1fCC9W-g-wLGI3C5A',
+  // Slide 2 (graded by Groq).
+  entryMetaStrategies: 'entry.2022645949', // checkbox: which strategies the user picked
+  entryMetaQ2: 'entry.1762276976',         // free text - Component Breakdown explanation
+  entryMetaQ3: 'entry.1852455747',         // free text - Scenario Analysis explanation
+  entryMetaQ4: 'entry.1966079576',         // free text - Threat Actor Analysis explanation
+  // Slide 3 (survey).
   entryQ1: 'entry.1030252630', // yes/no - learned new?
   entryQ2: 'entry.687732759',  // free text - what the tool showed
   entryQ3: 'entry.636194233',  // yes/maybe/no - use again?
-  entryQ4: 'entry.1243371912'  // yes/somewhat/no - learnt the stated goal?
+  entryQ4: 'entry.1243371912'  // free text - learnt the stated goal?
 };
 
 const surveyAnswers = { q1: null, q2: '', q3: null, q4: '' };
@@ -869,14 +875,33 @@ async function submitSurvey() {
     goNext();
   };
 
-  const { formId, entryQ1, entryQ2, entryQ3, entryQ4 } = GOOGLE_FORM_CONFIG;
+  const {
+    formId, entryQ1, entryQ2, entryQ3, entryQ4,
+    entryMetaStrategies, entryMetaQ2, entryMetaQ3, entryMetaQ4
+  } = GOOGLE_FORM_CONFIG;
   if (!formId || !entryQ1 || !entryQ2 || !entryQ3 || !entryQ4) {
     finish('ok', 'Saved locally. (Form not configured.)');
     return;
   }
 
+  // Read the slide-2 meta-learning answers (strategies + 3 explanations).
+  const metaStrategyLabels = Q1_STRATEGIES
+    .filter(s => q1Selected.has(s.id))
+    .map(s => s.label);
+  const metaQ2Text = (document.getElementById('metaQ2')?.value || localStorage.getItem('meta:metaQ2') || '').trim();
+  const metaQ3Text = (document.getElementById('metaQ3')?.value || localStorage.getItem('meta:metaQ3') || '').trim();
+  const metaQ4Text = (document.getElementById('metaQ4')?.value || localStorage.getItem('meta:metaQ4') || '').trim();
+
   const url = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
   const body = new URLSearchParams();
+  // Slide 2 — meta-learning answers.
+  if (entryMetaStrategies) {
+    metaStrategyLabels.forEach(label => body.append(entryMetaStrategies, label));
+  }
+  if (entryMetaQ2) body.append(entryMetaQ2, metaQ2Text);
+  if (entryMetaQ3) body.append(entryMetaQ3, metaQ3Text);
+  if (entryMetaQ4) body.append(entryMetaQ4, metaQ4Text);
+  // Slide 3 — survey.
   body.append(entryQ1, surveyAnswers.q1);
   body.append(entryQ2, surveyAnswers.q2);
   body.append(entryQ3, surveyAnswers.q3);
