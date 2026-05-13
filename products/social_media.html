@@ -412,12 +412,14 @@ h2 { font-size: clamp(30px,4.4vw,52px); font-weight: 700; line-height: 1.1; }
 }
 
 .completion-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
   margin-bottom: 28px;
 }
 .stat-card {
+  flex: 0 0 180px;
   border: 2px solid;
   border-radius: 16px;
   padding: 6px 10px 14px;
